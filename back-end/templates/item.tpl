@@ -1,24 +1,220 @@
 <html>
 <head>
-	<title>{{.PG_TITLE}}</title>
+	<title>{{.ActionTitle}}</title>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css">-->
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/bower_components/bootstrap-horizon/bootstrap-horizon.css">
-	<link rel="stylesheet" href="css/mobile.css">
+	<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
 
-	<script language="text/javascript">
-		$(document).ready(function () {
-			$("#price").click(function () {
-				$(this).text("Test");
-			})
+	<script>
+		$(document).ready(function() {
+			$("#bCodeNew").click(function () {
+				$ajax({
+					type: 'GET',
+					url: '/mkBarCode',
+					contentType: 'text/html',
+					success: function(response) {
+						$('#bCodeID').val(response);
+					},
+					error: function(error) {
+						$('#bCodeID').val("Error");
+					}
+				});
+			});
+
+			$("#btnReload").click(function () {
+				location.reload();
+			});	
 		});
-
 	</script>
 
+	<style>
+
+		body {
+			background-color: white;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		.main-content {
+			padding-left: 10px;
+			padding-right: 10px;
+			margin-right: 10px;
+		}
+
+		radio {
+			border-color: black;
+		}
+
+		.header-buttons {
+			font-size: 600%;
+			margin-bottom: 15px;
+			
+		}
+
+		.page-controls {
+			border-radius: 10px;
+			height: 120px;
+			margin-bottom: 30px;
+			padding-bottom: 50px;
+		}
+
+		.category-control {
+			font-size: 500%;
+			text-align: left;
+			border: solid;
+			background-color: #edfffe;
+		}
+		.caret-icon {
+			text-align: right;
+		}
+
+		.category-data {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 600%;
+		}
+
+		.inputs {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			height: 120px;
+			margin-bottom: 30px;
+			border: solid;
+		}
+
+		.title-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			text-decoration: underline;
+		}
+
+		.label-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+		}
+
+		.sublabel-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 50px;
+			font-style: italic;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+		}
+
+		.box {
+			border: solid;
+			border-radius: 10px;
+			padding-bottom: 10px;
+		}
+
+		.box-noborder {
+			border-radius: 10px;
+			padding-left: 50px;
+			padding-right: 50px;
+		}
+
+		.colorPicker {
+			border-radius: 50px;
+			padding-left: 50px;
+			border: solid;
+			margin-right: 50px;
+			height: 10%;
+			overflow: scroll;
+		}
+
+		.radio-lineup {
+			padding-left: 50px;
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 400%;
+		}
+
+		.btn-cons {
+			margin-right: 30px;
+			min-width: 120px;
+			margin-bottom: 20px;
+			width: 350px;
+		}
+
+		.btn-yellow {
+			background: rgb( 253, 169, 0 );
+		}
+
+		.color-buttons {
+			font-size: 70px; 
+		}
+
+		.active {
+  			<!-- background-color:   #737373  !important; -->
+			border: 10px solid black;
+			border-radius: 50px;
+		}
+
+		.inactive {
+			border: 10px solid black;
+			border-radius: 50px;
+		}
+
+		.barcode {
+			border-radius: 10px;
+			height: 120px;
+			margin-bottom: 50px;
+			margin-left: 15px;
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 500%;
+			text-align: left;
+			border: solid;
+			background-color: silver;
+			width: 70%;
+
+		}
+
+		.barcode-btn {
+			border-radius: 10px;
+			border: 1px;
+			border-style: solid;
+			height: 120px;
+			margin-bottom: 50px;
+			margin-top: 10px;
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 500%;
+			border: solid;
+			background-color: {{.BarcodeBtnColor}};
+		}
+
+		.copyright {
+			position:fixed;
+			bottom:0;
+			width:100%;
+			display:block;
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 40px;
+			background-color: #000345;
+			color: white;
+		}
+
+	</style>
 
 </head>
 
@@ -31,21 +227,21 @@
 
 <row>
 	<div class="col-xs-4">
-		<button class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
+		<button onclick="location.href = '/';" class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
 	</div>
 	<div class="col-xs-4">
 		<button class="btn btn-success btn-block fa fa-check header-buttons page-controls" style="background-color: #05B400;"></button>
 	</div>
 	<div class="col-xs-4">
-		<button class="btn btn-yellow btn-block fa fa-refresh header-buttons page-controls"></button>
+		<button id="btnReload" class="btn btn-yellow btn-block fa fa-refresh header-buttons page-controls"></button>
 	</div>	
 </row>
 
 <row>
 	<div class="input-prepend">
-			<input class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
+			<input id="bCodeID" class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
 			<!-- <button class="btn barcode-btn header-buttons"> Scan</button> -->
-			<button class="btn btn-success barcode-btn" style="border: 1px solid black;"> <i class="fa fa-barcode" aria-hidden="true"> Print</i></button>
+			<button id="{{.BarcodeButtonID}}" class="btn btn-success barcode-btn" style="border: 1px solid black;"> <i class="fa fa-barcode" aria-hidden="true"> {{.BarcodeBtnLabel}}</i></button>
 	</div>
 </row>
 
@@ -61,7 +257,7 @@
 					This will include a list of <li></li> items generated from the backend database
 					Might use jquery to do this instead of a template tag
 				-->
-				{{FnMbi-Trk-c}}
+				FnMbi-Trk-c
 			</ul>
 		</div>
 	</div>
@@ -114,8 +310,8 @@
 
 </div>
 
-<div class="copyright">
-	<p>&copy</p>
+<div class="copyright text-center" style="height: 60px;">
+	<p>Copyright &copy 2017 Christopher Morrow </p>
 </div>
 
 </body>
