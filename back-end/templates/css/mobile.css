@@ -1,0 +1,135 @@
+	<style>
+		body {
+			background-color: white;
+		}
+
+		.main-content {
+			padding-top: 25px;
+			padding-left: 10px;
+			padding-right: 10px;
+			margin-right: 10px;
+		}
+
+		.header-buttons {
+			font-size: 600%;
+			margin-top: 10px;
+		}
+
+		.page-controls {
+			border-radius: 10px;
+			height: 120px;
+			margin-bottom: 50px;
+			padding-bottom: 50px;
+		}
+
+		.category-control {
+			font-size: 500%;
+			text-align: left;
+			border: solid;
+			background-color: #edfffe;
+		}
+		.caret-icon {
+			text-align: right;
+		}
+
+		.category-data {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 600%;
+		}
+
+		.inputs {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			height: 120px;
+			margin-bottom: 50px;
+			border: solid;
+		}
+
+		.label-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+			text-decoration: underline;
+		}
+		.sublabel-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 50px;
+			font-style: italic;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+		}
+
+		.box {
+			border: solid;
+			border-radius: 10px;
+			margin-bottom: 50px;
+			padding-bottom: 10px;
+		}
+		.box-noborder {
+			border-radius: 10px;
+			padding-left: 50px;
+		}
+
+		.radio-lineup {
+			padding-left: 50px;
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 400%;
+		}
+		.btn-cons {
+			margin-right: 30px;
+			min-width: 120px;
+			margin-bottom: 20px;
+			width: 350px;
+		}
+
+		.btn-yellow {
+			background: rgb( 253, 169, 0 );
+		}
+
+		.color-buttons {
+			font-size: 70px; 
+		}
+
+		.active {
+  			background-color:   #737373  !important;
+			border-width: 10px;
+		}
+
+		.barcode {
+			border-radius: 10px;
+			height: 120px;
+			margin-bottom: 50px;
+			margin-left: 15px;
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 500%;
+			text-align: left;
+			border: solid;
+			background-color: silver;
+			width: 65%;
+
+		}
+
+		.barcode-btn {
+			border-radius: 10px;
+			border: 1px;
+			border-style: solid;
+			height: 120px;
+			margin-bottom: 50px;
+			margin-top: 10px;
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 500%;
+			border: solid;
+		}
+
+	</style>
