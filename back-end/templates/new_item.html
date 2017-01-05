@@ -1,0 +1,248 @@
+<html>
+<head>
+	<title>{{.PG_TITLE}}</title>
+
+	<link rel="stylesheet" href="css/mobile.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css">-->
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+	<script language="text/javascript">
+		$(document).ready(function () {
+			$("#price").click(function () {
+				$(this).text("Test");
+			})
+		});
+
+		$("button").click(function(){
+		  $("button").removeClass("active");
+		  $(this).addClass("active");
+		  $('#lblColorCodeStatus').html("");
+		});	
+	</script>
+
+	<style>
+		body {
+			background-color: white;
+		}
+
+		.main-content {
+			padding-top: 25px;
+			padding-left: 10px;
+			padding-right: 10px;
+			margin-right: 10px;
+		}
+
+		.header-buttons {
+			font-size: 600%;
+			margin-top: 10px;
+		}
+
+		.page-controls {
+			border-radius: 10px;
+			height: 120px;
+			margin-bottom: 50px;
+			padding-bottom: 50px;
+		}
+
+		.category-control {
+			font-size: 500%;
+			text-align: left;
+			border: solid;
+			background-color: #edfffe;
+		}
+		.caret-icon {
+			text-align: right;
+		}
+
+		.category-data {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 600%;
+		}
+
+		.inputs {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			height: 120px;
+			margin-bottom: 50px;
+			border: solid;
+		}
+
+		.label-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+			text-decoration: underline;
+		}
+		.sublabel-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 50px;
+			font-style: italic;
+			<!-- height: 120px; --//>
+			padding-bottom: 20px;
+			margin-bottom: 20px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+		}
+
+		.box {
+			border: solid;
+			border-radius: 10px;
+			margin-bottom: 50px;
+			padding-bottom: 10px;
+		}
+		.box-noborder {
+			border-radius: 10px;
+			padding-left: 50px;
+		}
+
+		.radio-lineup {
+			padding-left: 50px;
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 400%;
+		}
+		.btn-cons {
+			margin-right: 30px;
+			min-width: 120px;
+			margin-bottom: 20px;
+			width: 350px;
+		}
+
+		.btn-yellow {
+			background: rgb( 253, 169, 0 );
+		}
+
+		.color-buttons {
+			font-size: 70px; 
+		}
+
+		.active {
+  			background-color:   #737373  !important;
+			border-width: 10px;
+		}
+
+		.barcode {
+			border-radius: 10px;
+			height: 120px;
+			margin-bottom: 50px;
+			margin-left: 15px;
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 500%;
+			text-align: left;
+			border: solid;
+			background-color: silver;
+			width: 65%;
+
+		}
+
+		.barcode-btn {
+			border-radius: 10px;
+			border: 1px;
+			border-style: solid;
+			height: 120px;
+			margin-bottom: 50px;
+			margin-top: 10px;
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 500%;
+			border: solid;
+		}
+
+	</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-content">
+<row>
+	<div class="col-xs-4">
+		<button class="btn btn-block btn-primary fa fa-arrow-left header-buttons page-controls"></button>
+	</div>
+	<div class="col-xs-4">
+		<button class="btn btn-success btn-block fa fa-check header-buttons page-controls"></button>
+	</div>
+	<div class="col-xs-4">
+		<button class="btn btn-yellow btn-block fa fa-refresh header-buttons page-controls"></button>
+	</div>	
+</row>
+
+<row>
+	<div class="input-prepend">
+			<input class="barcode" type="text" placeholder="Produce Code" value="{{.barCode}}" disabled>
+			<!-- <button class="btn barcode-btn header-buttons"> Scan</button> -->
+			<button class="btn btn-success barcode-btn" style="border: 1px solid black;"> <i class="fa fa-barcode" aria-hidden="true"> Print</i></button>
+	</div>
+</row>
+
+<row>
+	<div class="col-md-12">
+		<div class="dropdown">
+			<button class="dropdown-toggle btn btn-block btn-default page-controls category-control text-left" type="button" data-toggle="dropdown">Category
+				<i class="fa fa-caret-down" aria-hidden="true"></i>
+			</button>
+
+			<ul class="dropdown-menu category-data" role="menu">
+				<!--
+					This will include a list of <li></li> items generated from the backend database
+					Might use jquery to do this instead of a template tag
+				-->
+				{{FnMbi-Trk-c}}
+			</ul>
+		</div>
+	</div>
+</row>
+
+<row>
+	<div class="col-md-12">
+			<input id="price" class="form-control input-lg inputs" type="number" placeholder="$ Price">
+	</div>
+</row>
+<row>
+	<div class="col-md-12">
+			<input class="form-control input-lg inputs" type="text" placeholder="Item Description (Optional)">
+	</div>
+</row>
+
+<row class="col-xs-12">
+	<div class="box">
+	<center><label class="text-center label-text">Color Codes</label></center>
+		<div class="box-noborder">
+		<p>
+		<div class="btn-group color-buttons" data-toggle="buttons">
+			<label class="color-buttons btn btn-cons active" style="border: 1px solid black; border-radius: 50px; background-color: white;">
+    				<input type="radio" id="idColorCode" value="White" autocomplete="off" checked> White
+			</label>
+			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: orange;">
+    				<input type="radio" id="idColorCode" value="Orange" autocomplete="off"> Orange
+			</label>
+			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: #45b0ff">
+    				<input type="radio" id="idColorCode" value="Blue" autocomplete="off"> Blue
+			</label>
+			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: #ea2232">
+    				<input type="radio" id="idColorCode" value="Red" autocomplete="off"> Red
+			</label>
+			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: yellow">
+    				<input type="radio" id="idColorCode" value="Yellow" autocomplete="off"> Yellow
+			</label>
+			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: pink">
+    				<input type="radio" autocomplete="off"> Pink
+			</label>
+		</div>
+		</p>
+		</div>
+	</div>
+</row>
+
+</div>
+
+</body>
+</html>
