@@ -7,6 +7,7 @@
 	<!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css">-->
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/bower_components/bootstrap-horizon/bootstrap-horizon.css">
 	<link rel="stylesheet" href="css/mobile.css">
 
 	<script language="text/javascript">
@@ -16,25 +17,24 @@
 			})
 		});
 
-		$("button").click(function(){
-		  $("button").removeClass("active");
-		  $(this).addClass("active");
-		  $('#lblColorCodeStatus').html("");
-		});	
 	</script>
 
 
 </head>
 
 <body>
+<row class="col-md-12">
+	<button class="btn btn-block btn-success text-center label-text" style="background-color: #00274D;">{{.ActionTitle}}</button>
+</row>
 
 <div class="container-fluid main-content">
+
 <row>
 	<div class="col-xs-4">
-		<button class="btn btn-block btn-primary fa fa-arrow-left header-buttons page-controls"></button>
+		<button class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
 	</div>
 	<div class="col-xs-4">
-		<button class="btn btn-success btn-block fa fa-check header-buttons page-controls"></button>
+		<button class="btn btn-success btn-block fa fa-check header-buttons page-controls" style="background-color: #05B400;"></button>
 	</div>
 	<div class="col-xs-4">
 		<button class="btn btn-yellow btn-block fa fa-refresh header-buttons page-controls"></button>
@@ -43,7 +43,7 @@
 
 <row>
 	<div class="input-prepend">
-			<input class="barcode" type="text" placeholder="Produce Code" value="{{.barCode}}" disabled>
+			<input class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
 			<!-- <button class="btn barcode-btn header-buttons"> Scan</button> -->
 			<button class="btn btn-success barcode-btn" style="border: 1px solid black;"> <i class="fa fa-barcode" aria-hidden="true"> Print</i></button>
 	</div>
@@ -83,32 +83,39 @@
 	<center><label class="text-center label-text">Color Codes</label></center>
 		<div class="box-noborder">
 		<p>
+		
 		<div class="btn-group color-buttons" data-toggle="buttons">
-			<label class="color-buttons btn btn-cons active" style="border: 1px solid black; border-radius: 50px; background-color: white;">
+		<div class="colorPicker">
+			<label class="color-buttons btn btn-cons active" style="border-radius: 50px; background-color: white;">
     				<input type="radio" id="idColorCode" value="White" autocomplete="off" checked> White
 			</label>
-			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: orange;">
+			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: orange;">
     				<input type="radio" id="idColorCode" value="Orange" autocomplete="off"> Orange
 			</label>
-			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: #45b0ff">
+			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: #45b0ff">
     				<input type="radio" id="idColorCode" value="Blue" autocomplete="off"> Blue
 			</label>
-			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: #ea2232">
+			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: #ea2232">
     				<input type="radio" id="idColorCode" value="Red" autocomplete="off"> Red
 			</label>
-			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: yellow">
+			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: yellow">
     				<input type="radio" id="idColorCode" value="Yellow" autocomplete="off"> Yellow
 			</label>
-			<label class="color-buttons btn btn-cons" style="border: 1px solid black; border-radius: 50px; background-color: pink">
+			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: pink">
     				<input type="radio" autocomplete="off"> Pink
 			</label>
 		</div>
+		</div>
 		</p><p>
-			<label class="sublabel-text">Current discount: {{.selectedDiscount}}</label>
+			<label class="sublabel-text">Discounts: {{.GlobalDiscount1}}, {{.GlobalDiscount2}}</label>
 		</div>
 	</div>
 </row>
 
+</div>
+
+<div class="copyright">
+	<p>&copy</p>
 </div>
 
 </body>
