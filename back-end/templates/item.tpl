@@ -27,7 +27,10 @@
                         }
                     });
                 }
-                else {
+                else if($(this).hasClass('clsScanCode')) {
+                    alert("Scanning bar code");
+                }
+                else if($(this).hasClass('clsPrintCode')) {
                     alert("Printing bar code");
                 }
 			});
@@ -209,12 +212,14 @@
 			border: solid;
 		}
 		.clsNewCode {
-		    background-color: {{.BarcodeBtnColor}};
+		    background-color: #A06100;
 		}
 		.clsPrintCode {
 		    background-color: #1F8603;
 		}
-
+        .clsScanCode {
+            background-color: #A06100;
+        }
 		.copyright {
 			position:fixed;
 			bottom:0;
@@ -253,7 +258,7 @@
 	<div class="input-prepend">
 			<input id="bCodeID" class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
 			<!-- <button class="btn barcode-btn header-buttons"> Scan</button> -->
-			<button id="bCodeBtn" class="btn btn-info barcode-btn fa fa-barcode clsNewCode" aria-hidden="true" style="border: 1px solid black;"> {{.BarcodeBtnLabel}}</button>
+			<button id="bCodeBtn" class="btn btn-info barcode-btn fa fa-barcode {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"> {{.BarcodeBtnLabel}}</button>
 	</div>
 </row>
 

@@ -19,10 +19,10 @@ type PageTags struct {
 	BarCodeID	string
 	GlobalDiscount1	string
 	GlobalDiscount2	string
-	BarcodeBtnColor	string
 	BarcodeBtnLabel string
 	//BarcodeButtonID	string
 	BarcodeButtonFunc string
+	ClsbCodeBtn	string
 }
 
 var (
@@ -32,10 +32,10 @@ var (
 	dbQuery string
 	proxyURL string
 	barCodeID string
-	barCodeBtnColor string
 	barCodeBtnLabel string
 	//barCodeButtonID	string
 	barCodeButtonFunc string
+	clsbCodeBtn string
 )
 
 func setVars() (int) {
@@ -62,16 +62,16 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		case "new-item":
 			pageTitle="Add Inventory"
 			templateName="item.tpl"
-			barCodeBtnColor="#A06100"
 			barCodeBtnLabel="New"
+			clsbCodeBtn="clsNewCode"
 			//barCodeButtonID="bCodeNew"
 			barCodeID="<empty>"
 			barCodeButtonFunc="generateNewCode()"			
 		case "get-item":
 			pageTitle="Item Lookup"
 			templateName="item.tpl"
-			barCodeBtnColor="#1F8603"
-			barCodeBtnLabel="Print"
+			barCodeBtnLabel="Scan"
+			clsbCodeBtn="clsScanCode"
 			//barCodeButtonID="bCodeLookup"
 		default:
 			pageTitle="Mobile Inventory Management"
@@ -82,7 +82,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,BarcodeBtnColor:barCodeBtnColor,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,})
+	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,})
 	if err!=nil {
 		log.Fatalln(err)
 	}
