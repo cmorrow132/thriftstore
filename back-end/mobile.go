@@ -12,6 +12,7 @@ import (
 	//"strings"
 	"strconv"
 	"math/rand"
+	//"os"
 )
 
 type PageTags struct {
@@ -45,8 +46,11 @@ func setVars() (int) {
 	return 8890
 }
 
-func ajaxRequests(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w,strconv.Itoa(rand.Intn(5000)) +"-" + strconv.Itoa(rand.Intn(5000)) + "-" + strconv.Itoa(rand.Intn(5000)))
+func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	bcode_val:=strconv.Itoa(rand.Intn(5000)) +"-" + strconv.Itoa(rand.Intn(5000)) + "-" + strconv.Itoa(rand.Intn(5000))
+	//bcode_val:=rand.Intn(10000);
+	fmt.Println("New bar code generated: " + bcode_val)
+	fmt.Fprintf(w,bcode_val)
 }
 
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -57,7 +61,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	switch pageRequest {
 		case "mkBarCode":
-			ajaxRequests(w,r,ps)
+			generateBarCode(w,r,ps)
 			return
 		case "new-item":
 			pageTitle="Add Inventory"

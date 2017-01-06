@@ -12,6 +12,7 @@
 	<script>
 		$(document).ready(function() {
 			$("#bCodeBtn").click(function () {
+			    $(this).blur();
 			    if($(this).hasClass('clsNewCode')) {
                     $.ajax({
                         url: '/mkBarCode',
@@ -38,6 +39,18 @@
 			$("#btnReload").click(function () {
 				location.reload();
 			});
+
+			/* $('#price').click(function () {
+                var priceValModified="0";
+			    var priceValue=$(this).val();
+			    $.each(priceValue,function() {
+			        if($(this) != "$") {
+			            $priceValModified+=$(this);
+			        }
+			    });
+			    alert(priceValModified);
+			    $('#price').val(priceValModified);
+			}); */
 		});
 	</script>
 
@@ -195,7 +208,7 @@
 			text-align: left;
 			border: solid;
 			background-color: silver;
-			width: 70%;
+			width: 65%;
 
 		}
 
@@ -212,13 +225,13 @@
 			border: solid;
 		}
 		.clsNewCode {
-		    background-color: #A06100;
+		    background-color: #A06100 !important;
 		}
 		.clsPrintCode {
-		    background-color: #1F8603;
+		    background-color: #1F8603 !important;
 		}
         .clsScanCode {
-            background-color: #A06100;
+            background-color: #A06100 !important;
         }
 		.copyright {
 			position:fixed;
@@ -257,7 +270,6 @@
 <row>
 	<div class="input-prepend">
 			<input id="bCodeID" class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
-			<!-- <button class="btn barcode-btn header-buttons"> Scan</button> -->
 			<button id="bCodeBtn" class="btn btn-info barcode-btn fa fa-barcode {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"> {{.BarcodeBtnLabel}}</button>
 	</div>
 </row>
@@ -282,7 +294,7 @@
 
 <row>
 	<div class="col-md-12">
-			<input id="price" class="form-control input-lg inputs" type="number" placeholder="$ Price">
+			<input id="price" class="form-control input-lg inputs" type=text placeholder="$">
 	</div>
 </row>
 <row>
