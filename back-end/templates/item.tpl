@@ -11,23 +11,30 @@
 
 	<script>
 		$(document).ready(function() {
-			$("#bCodeNew").click(function () {
-				$ajax({
-					type: 'GET',
-					url: '/mkBarCode',
-					contentType: 'text/html',
-					success: function(response) {
-						$('#bCodeID').val(response);
-					},
-					error: function(error) {
-						$('#bCodeID').val("Error");
-					}
-				});
+			$("#bCodeBtn").click(function () {
+			    if($(this).hasClass('clsNewCode')) {
+                    $.ajax({
+                        url: '/mkBarCode',
+                        type: 'get',
+                        dataType: 'html',
+                        data : { ajax_post_data: ''},
+                        success : function(data) {
+                            $('#bCodeID').val(data);
+                            $('#bCodeBtn').text(' Print');
+                            $('#bCodeBtn').removeClass('clsNewCode');
+                            $('#bCodeBtn').addClass('clsPrintCode');
+                            $('#bCodeBtn').removeAttr("selected");
+                        }
+                    });
+                }
+                else {
+                    alert("Printing bar code");
+                }
 			});
 
 			$("#btnReload").click(function () {
 				location.reload();
-			});	
+			});
 		});
 	</script>
 
@@ -200,7 +207,12 @@
 			font-family: Arial, Helvetica, Monospace;
 			font-size: 500%;
 			border: solid;
-			background-color: {{.BarcodeBtnColor}};
+		}
+		.clsNewCode {
+		    background-color: {{.BarcodeBtnColor}};
+		}
+		.clsPrintCode {
+		    background-color: #1F8603;
 		}
 
 		.copyright {
@@ -241,7 +253,7 @@
 	<div class="input-prepend">
 			<input id="bCodeID" class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
 			<!-- <button class="btn barcode-btn header-buttons"> Scan</button> -->
-			<button id="{{.BarcodeButtonID}}" class="btn btn-success barcode-btn" style="border: 1px solid black;"> <i class="fa fa-barcode" aria-hidden="true"> {{.BarcodeBtnLabel}}</i></button>
+			<button id="bCodeBtn" class="btn btn-info barcode-btn fa fa-barcode clsNewCode" aria-hidden="true" style="border: 1px solid black;"> {{.BarcodeBtnLabel}}</button>
 	</div>
 </row>
 
