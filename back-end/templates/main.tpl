@@ -217,7 +217,7 @@
 </div>
 
 <div class="copyright text-center" style="height: 60px;">
-	<p>Copyright &copy 2017 Christopher Morrow </p>
+	<p>{{.CopyRight}} </p>
 </div>
 </body>
 </html>

@@ -24,6 +24,7 @@ type PageTags struct {
 	//BarcodeButtonID	string
 	BarcodeButtonFunc string
 	ClsbCodeBtn	string
+	CopyRight	string
 }
 
 var (
@@ -37,6 +38,8 @@ var (
 	//barCodeButtonID	string
 	barCodeButtonFunc string
 	clsbCodeBtn string
+	copyrightMsg string
+	pageTitle string
 )
 
 func setVars() (int) {
@@ -55,7 +58,8 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
-	var pageTitle,templateName string
+	var templateName string
+	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
 
 	pageRequest:=ps.ByName("page")
 
@@ -86,7 +90,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,})
+	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,})
 	if err!=nil {
 		log.Fatalln(err)
 	}
