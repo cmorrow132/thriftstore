@@ -8,9 +8,11 @@
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+	<!-- <script src="/getModalScript" type="text/javascript" charset="utf-8"></script> //-->
 
 	<script>
 		$(document).ready(function() {
+
 			$("#bCodeBtn").click(function () {
 			    $(this).blur();
 			    if($(this).hasClass('clsNewCode')) {
@@ -39,6 +41,32 @@
 			$("#btnReload").click(function () {
 				location.reload();
 			});
+
+            $("#colorLabel").click(function () {
+                if($("#colorOptions").hasClass('hidden')) {
+                    $("#colorOptions").removeClass('hidden');
+                    $("#colorOptions").addClass('visible');
+                }
+                else {
+                    $("#colorOptions").removeClass('visible');
+                    $("#colorOptions").addClass('hidden');
+                }
+            });
+
+            $("[name=color]").click(function() {
+                var itemClicked=$(this).val();
+                //alert(itemClicked);
+                $("#SelectedColorCode").val(itemClicked);
+                //$("#SelectedColorCode").text(itemClicked);
+                $("#SelectedColorCode").css('background-color',$(this).css('background-color'));
+                $("#colorOptions").removeClass('visible');
+                $("#colorOptions").addClass('hidden');
+            });
+
+            /*$(".color-buttons").click(function () {
+                var itemClicked=$(this);
+                alert(itemClicked.attr("value"));
+            });*/
 
 			/* $('#price').click(function () {
                 var priceValModified="0";
@@ -148,6 +176,7 @@
 			border: solid;
 			border-radius: 10px;
 			padding-bottom: 10px;
+			margin-bottom: 200px;
 		}
 
 		.box-noborder {
@@ -155,6 +184,13 @@
 			padding-left: 50px;
 			padding-right: 50px;
 		}
+
+        .hidden {
+            opacity: 0;
+        }
+        .visible {
+            display: block;
+        }
 
 		.colorPicker {
 			border-radius: 50px;
@@ -249,6 +285,7 @@
 </head>
 
 <body>
+
 <row class="col-md-12">
 	<button class="btn btn-block btn-success text-center label-text" style="background-color: #00274D;">{{.ActionTitle}}</button>
 </row>
@@ -305,30 +342,35 @@
 
 <row class="col-xs-12">
 	<div class="box">
-	<center><label class="text-center label-text">Color Codes</label></center>
-		<div class="box-noborder">
+	<center>
+	    <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
+	    <p><label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
+	    <label class="sublabel-text" id="SelectedColorCode" style="border: solid; font-size: 100%; background-color: white; padding-top: 0px; padding-top: 15px; width: 100px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
+	    </p>
+	 </center>
+		<div id="colorOptions" class="box-noborder hidden">
 		<p>
 		
 		<div class="btn-group color-buttons" data-toggle="buttons">
-		<div class="colorPicker">
-			<label class="color-buttons btn btn-cons active" style="border-radius: 50px; background-color: white;">
-    				<input type="radio" id="idColorCode" value="White" autocomplete="off" checked> White
-			</label>
-			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: orange;">
-    				<input type="radio" id="idColorCode" value="Orange" autocomplete="off"> Orange
-			</label>
-			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: #45b0ff">
-    				<input type="radio" id="idColorCode" value="Blue" autocomplete="off"> Blue
-			</label>
-			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: #ea2232">
-    				<input type="radio" id="idColorCode" value="Red" autocomplete="off"> Red
-			</label>
-			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: yellow">
-    				<input type="radio" id="idColorCode" value="Yellow" autocomplete="off"> Yellow
-			</label>
-			<label class="color-buttons btn btn-cons" style="border-radius: 50px; background-color: pink">
-    				<input type="radio" autocomplete="off"> Pink
-			</label>
+		<div id="colorButtonGroup">
+            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
+                White
+            </button>
+            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
+                Orange
+            </button>
+			<button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
+                Blue
+            </button>
+            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
+                Red
+            </button>
+            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
+                Yellow
+            </button>
+            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
+                Pink
+            </button>
 		</div>
 		</div>
 		</p><p>

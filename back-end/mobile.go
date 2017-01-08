@@ -5,6 +5,7 @@ import (
 	"text/template"
 	"net/http"
 	//"io"
+	"io/ioutil"
 	"log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
@@ -13,6 +14,7 @@ import (
 	"strconv"
 	"math/rand"
 	//"os"
+	//"bufio"
 )
 
 type PageTags struct {
@@ -99,13 +101,12 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 func main() {
 	port:=strconv.Itoa(setVars())
 	router:=httprouter.New()
-
 	router.GET("/",pageHandler)
 	//
 	//router.GET("/mkBarCode",generateBarCode)
 	router.GET("/:page",pageHandler)
 	//router.POST("/:page",ajaxRequests)
-	http.Handle("css/", http.StripPrefix("css/", http.FileServer(http.Dir("css"))))
+	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,router)
 }
