@@ -4,11 +4,13 @@
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
 	<!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css">-->
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
 	<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
-	<!-- <script src="/getModalScript" type="text/javascript" charset="utf-8"></script> //-->
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel='stylesheet' type='text/css'>
 
 	<script>
 		$(document).ready(function() {
@@ -64,17 +66,37 @@
                 $("#colorOptions").addClass('hidden');
             });
 
-			/* $('#price').click(function () {
-                var priceValModified="0";
-			    var priceValue=$(this).val();
-			    $.each(priceValue,function() {
-			        if($(this) != "$") {
-			            $priceValModified+=$(this);
-			        }
-			    });
-			    alert(priceValModified);
-			    $('#price').val(priceValModified);
-			}); */
+			$('#price').click(function () {
+                var price=$("#price").val();
+                var priceCents="";
+                var pricePlaceholder=price.split(".");
+                var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)
+                if(pricePlaceholder[1]) {
+                    priceCents=pricePlaceholder[1];
+                }
+                else {
+                    priceCents="00";
+                }
+
+                var priceModifier="$"+priceDollar+"."+priceCents
+                //alert(pricePlaceholder[1]);
+                $('#price').val(priceModifier);
+			});
+
+			$.fn.setCursorPosition = function(pos) {
+              this.each(function(index, elem) {
+                if (elem.setSelectionRange) {
+                  elem.setSelectionRange(pos, pos);
+                } else if (elem.createTextRange) {
+                  var range = elem.createTextRange();
+                  range.collapse(true);
+                  range.moveEnd('character', pos);
+                  range.moveStart('character', pos);
+                  range.select();
+                }
+              });
+              return this;
+            };
 		});
 	</script>
 
@@ -141,7 +163,9 @@
 			padding-bottom: 20px;
 			margin-bottom: 20px;
 			font-weight: normal;
-			padding-left: 20px;
+			padding-left: 20px;<div id = "dialog-1"
+         title = "Dialog Title goes here...">This my first jQuery UI Dialog!</div>
+      <button id = "opener">Open Dialog</button>
 			text-decoration: underline;
 		}
 
@@ -178,7 +202,7 @@
 		.box-noborder {
 			border-radius: 10px;
 			padding-left: 50px;
-			padding-right: 50px;
+			<!-- padding-right: 50px; -->
 		}
 
         .hidden {
@@ -188,14 +212,7 @@
             display: block;
         }
 
-		.colorPicker {
-			border-radius: 50px;
-			padding-left: 50px;
-			border: solid;
-			margin-right: 50px;
-			height: 10%;
-			overflow: scroll;
-		}
+
 
 		.radio-lineup {
 			padding-left: 50px;
@@ -276,11 +293,56 @@
 			color: white;
 		}
 
-	</style>
+		#colorChooser {
+		    top: 20%;
+		}
 
+	</style>
 </head>
 
 <body>
+
+<div class="container">
+<div id="colorChooser" class="modal fade" role="dialog" data-backdrop="true">
+  <div class="modal-dialog modal-lg" style="width: 90%;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title text-center" style="font-size: 50px;">Choose a color code for this item</h4>
+      </div>
+      <div class="modal-body">
+            <div id="colorOptions" class="box-noborder hidden">
+                <div class="btn-group color-buttons" data-toggle="buttons">
+                    <div id="colorButtonGroup">
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
+                            White
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
+                            Orange
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
+                            Blue
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
+                            Red
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
+                            Yellow
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
+                            Pink
+                        </button>
+                    </div>
+                </div>
+            </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
 
 <row class="col-md-12">
 	<button class="btn btn-block btn-success text-center label-text" style="background-color: #00274D;">{{.ActionTitle}}</button>
@@ -319,7 +381,7 @@
 					This will include a list of <li></li> items generated from the backend database
 					Might use jquery to do this instead of a template tag
 				-->
-				FnMbi-Trk-c
+				{{FnMbiTrkc}}
 			</ul>
 		</div>
 	</div>
@@ -342,37 +404,12 @@
             <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
             <p>
                 <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-                <label class="label-text" id="SelectedColorCode" value="{{.SelectedColorCodeName}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCode}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
+                <label class="label-text" id="SelectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCodeName}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCode}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
             </p>
 	    </center>
-		<div id="colorOptions" class="box-noborder hidden">
-            <p>
-                <div class="btn-group color-buttons" data-toggle="buttons">
-                    <div id="colorButtonGroup">
-                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
-                            White
-                        </button>
-                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
-                            Orange
-                        </button>
-                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
-                            Blue
-                        </button>
-                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
-                            Red
-                        </button>
-                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
-                            Yellow
-                        </button>
-                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
-                            Pink
-                        </button>
-                    </div>
-                </div>
-            </p>
-		</div>
+
 		<p>
-		    <label class="sublabel-text">Discounts: {{.GlobalDiscount1}}, {{.GlobalDiscount2}}</label>
+		    <label class="sublabel-text">Current discounts: {{FncGlobalDiscount1}}</label>
 		</p>
 	</div>
 </row>

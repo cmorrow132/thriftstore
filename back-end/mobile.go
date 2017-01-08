@@ -95,6 +95,16 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	}
 
 	tpl:=template.New(templateName)
+	tpl=tpl.Funcs(template.FuncMap{
+		"FncGlobalDiscount1": func() string {
+			//Return list of current discounts for item.tpl
+			return "None";
+		},
+
+		"FnMbiTrkc": func() string {
+			return ""
+		},
+	})
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
