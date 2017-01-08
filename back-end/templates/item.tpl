@@ -42,7 +42,7 @@
 				location.reload();
 			});
 
-            $("#colorLabel").click(function () {
+            $("#SelectedColorCode").click(function () {
                 if($("#colorOptions").hasClass('hidden')) {
                     $("#colorOptions").removeClass('hidden');
                     $("#colorOptions").addClass('visible');
@@ -59,14 +59,10 @@
                 $("#SelectedColorCode").val(itemClicked);
                 //$("#SelectedColorCode").text(itemClicked);
                 $("#SelectedColorCode").css('background-color',$(this).css('background-color'));
+
                 $("#colorOptions").removeClass('visible');
                 $("#colorOptions").addClass('hidden');
             });
-
-            /*$(".color-buttons").click(function () {
-                var itemClicked=$(this);
-                alert(itemClicked.attr("value"));
-            });*/
 
 			/* $('#price').click(function () {
                 var priceValModified="0";
@@ -331,7 +327,7 @@
 
 <row>
 	<div class="col-md-12">
-			<input id="price" class="form-control input-lg inputs" type=text placeholder="$">
+	    <input id="price" class="form-control input-lg inputs" type=text placeholder="$">
 	</div>
 </row>
 <row>
@@ -342,40 +338,42 @@
 
 <row class="col-xs-12">
 	<div class="box">
-	<center>
-	    <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
-	    <p><label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-	    <label class="sublabel-text" id="SelectedColorCode" style="border: solid; font-size: 100%; background-color: white; padding-top: 0px; padding-top: 15px; width: 100px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
-	    </p>
-	 </center>
+	    <center>
+            <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
+            <p>
+                <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
+                <label class="label-text" id="SelectedColorCode" value="{{.SelectedColorCodeName}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCode}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
+            </p>
+	    </center>
 		<div id="colorOptions" class="box-noborder hidden">
+            <p>
+                <div class="btn-group color-buttons" data-toggle="buttons">
+                    <div id="colorButtonGroup">
+                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
+                            White
+                        </button>
+                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
+                            Orange
+                        </button>
+                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
+                            Blue
+                        </button>
+                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
+                            Red
+                        </button>
+                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
+                            Yellow
+                        </button>
+                        <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
+                            Pink
+                        </button>
+                    </div>
+                </div>
+            </p>
+		</div>
 		<p>
-		
-		<div class="btn-group color-buttons" data-toggle="buttons">
-		<div id="colorButtonGroup">
-            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
-                White
-            </button>
-            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
-                Orange
-            </button>
-			<button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
-                Blue
-            </button>
-            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
-                Red
-            </button>
-            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
-                Yellow
-            </button>
-            <button class="color-buttons btn btn-cons active" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
-                Pink
-            </button>
-		</div>
-		</div>
-		</p><p>
-			<label class="sublabel-text">Discounts: {{.GlobalDiscount1}}, {{.GlobalDiscount2}}</label>
-		</div>
+		    <label class="sublabel-text">Discounts: {{.GlobalDiscount1}}, {{.GlobalDiscount2}}</label>
+		</p>
 	</div>
 </row>
 

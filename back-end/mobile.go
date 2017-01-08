@@ -5,7 +5,7 @@ import (
 	"text/template"
 	"net/http"
 	//"io"
-	"io/ioutil"
+	//"io/ioutil"
 	"log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
@@ -27,6 +27,8 @@ type PageTags struct {
 	BarcodeButtonFunc string
 	ClsbCodeBtn	string
 	CopyRight	string
+	SelectedColorCode string
+	SelectedColorCodeName string
 }
 
 var (
@@ -42,6 +44,8 @@ var (
 	clsbCodeBtn string
 	copyrightMsg string
 	pageTitle string
+	selectedColorCode string
+	selectedColorCodeName string
 )
 
 func setVars() (int) {
@@ -76,7 +80,9 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			clsbCodeBtn="clsNewCode"
 			//barCodeButtonID="bCodeNew"
 			barCodeID="<empty>"
-			barCodeButtonFunc="generateNewCode()"			
+			barCodeButtonFunc="generateNewCode()"
+			selectedColorCode="white"
+			selectedColorCodeName="white"
 		case "get-item":
 			pageTitle="Item Lookup"
 			templateName="item.tpl"
@@ -92,7 +98,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,})
+	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,SelectedColorCode:selectedColorCode,SelectedColorCodeName:selectedColorCodeName,})
 	if err!=nil {
 		log.Fatalln(err)
 	}
