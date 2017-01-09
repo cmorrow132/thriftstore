@@ -66,6 +66,12 @@
                 $("#colorOptions").addClass('hidden');
             });
 
+            $("[name=categoryName]").click(function () {
+                var itemClicked=$(this).val();
+                $("#selected_category").val(itemClicked);
+                $("#selected_category").text(itemClicked);
+            });
+
 			$('#price').click(function () {
                 var price=$("#price").val();
                 var priceCents="";
@@ -82,6 +88,25 @@
                 //alert(pricePlaceholder[1]);
                 $('#price').val(priceModifier);
 			});
+
+            $('#NewItemApply').click(function () {
+                //Check that all fields are completed
+                var price=$("#price").val();
+                var priceTotal=parseFloat(price.substr(1,price.length));
+                if(!priceTotal) { priceTotal=0; }
+
+                if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)
+                {
+                    alert("Complete all fields before submitting");
+                }
+                else {
+                    alert("Adding product");
+                }
+            });
+
+            $('#ExItemApply').click(function () {
+                alert("Updating existing item");
+            });
 
 			$.fn.setCursorPosition = function(pos) {
               this.each(function(index, elem) {
@@ -297,6 +322,12 @@
 		    top: 20%;
 		}
 
+		.categorySelections {
+		    border: none;
+		    background-color: white;
+		    padding-left: 50px;
+		}
+
 	</style>
 </head>
 
@@ -355,7 +386,7 @@
 		<button onclick="location.href = '/';" class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
 	</div>
 	<div class="col-xs-4">
-		<button class="btn btn-success btn-block fa fa-check header-buttons page-controls" style="background-color: #05B400;"></button>
+		<button id="{{.ApplyBtnName}}" class="btn btn-success btn-block fa fa-check header-buttons page-controls" style="background-color: #05B400;"></button>
 	</div>
 	<div class="col-xs-4">
 		<button id="btnReload" class="btn btn-yellow btn-block fa fa-refresh header-buttons page-controls"></button>
@@ -364,7 +395,7 @@
 
 <row>
 	<div class="input-prepend">
-			<input id="bCodeID" class="barcode" type="text" placeholder="Produce Code" value="{{.BarCodeID}}" disabled>
+			<input id="bCodeID" class="barcode" type="text" placeholder="Product BarCode" value="{{.BarCodeID}}" disabled>
 			<button id="bCodeBtn" class="btn btn-info barcode-btn fa fa-barcode {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"> {{.BarcodeBtnLabel}}</button>
 	</div>
 </row>
@@ -372,7 +403,7 @@
 <row>
 	<div class="col-md-12">
 		<div class="dropdown">
-			<button class="dropdown-toggle btn btn-block btn-default page-controls category-control text-left" type="button" data-toggle="dropdown">Category
+			<button id="selected_category" value="" class="dropdown-toggle btn btn-block btn-default page-controls category-control text-left" type="button" data-toggle="dropdown">Category
 				<i class="fa fa-caret-down" aria-hidden="true"></i>
 			</button>
 
@@ -381,6 +412,7 @@
 					This will include a list of <li></li> items generated from the backend database
 					Might use jquery to do this instead of a template tag
 				-->
+
 				{{FnMbiTrkc}}
 			</ul>
 		</div>

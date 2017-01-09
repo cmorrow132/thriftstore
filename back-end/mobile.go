@@ -9,7 +9,7 @@ import (
 	"log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
-	//"database/sql"
+	"database/sql"
 	//"strings"
 	"strconv"
 	"math/rand"
@@ -29,6 +29,7 @@ type PageTags struct {
 	CopyRight	string
 	SelectedColorCode string
 	SelectedColorCodeName string
+	ApplyBtnName string
 }
 
 var (
@@ -46,6 +47,7 @@ var (
 	pageTitle string
 	selectedColorCode string
 	selectedColorCodeName string
+	applyBtnName string
 )
 
 func setVars() (int) {
@@ -53,6 +55,39 @@ func setVars() (int) {
 	dbPassword="C7163mwx!"
 	dbLoginString=dbUsername+":"+dbPassword
 	return 8890
+}
+
+func getCategories() (string) {
+	var categoryName, dbQuery string
+	dbResults:=""
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	dbQuery = "select name from categories"
+
+	if err!=nil {
+		panic(err)
+	}
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&categoryName)
+
+		if err!=nil {
+			panic(err)
+		}
+		dbResults+="<li><button name=\"categoryName\" value=\"" + categoryName + "\" class=\"btn-block text-left categorySelections\">" + categoryName + "</button></li>\n"
+	}
+
+	//categoryList:="<li><button name=\"categoryName\" value=\"One\" class=\"categorySelections\">One</button></li>\n<li><button name=\"categoryName\" value=\"Two\" class=\"categorySelections\">Two</button></li>"
+	return dbResults
 }
 
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -79,16 +114,18 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			barCodeBtnLabel="New"
 			clsbCodeBtn="clsNewCode"
 			//barCodeButtonID="bCodeNew"
-			barCodeID="<empty>"
+			barCodeID=""
 			barCodeButtonFunc="generateNewCode()"
 			selectedColorCode="white"
 			selectedColorCodeName="white"
+			applyBtnName="NewItemApply"
 		case "get-item":
 			pageTitle="Item Lookup"
 			templateName="item.tpl"
 			barCodeBtnLabel="Scan"
 			clsbCodeBtn="clsScanCode"
 			//barCodeButtonID="bCodeLookup"
+			applyBtnName="ExItemApply"
 		default:
 			pageTitle="Mobile Inventory Management"
 			templateName="main.tpl"
@@ -102,13 +139,13 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 
 		"FnMbiTrkc": func() string {
-			return ""
+			return getCategories()
 		},
 	})
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,SelectedColorCode:selectedColorCode,SelectedColorCodeName:selectedColorCodeName,})
+	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,SelectedColorCode:selectedColorCode,SelectedColorCodeName:selectedColorCodeName,})
 	if err!=nil {
 		log.Fatalln(err)
 	}
