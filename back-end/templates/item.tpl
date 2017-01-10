@@ -3,127 +3,175 @@
 	<title>{{.ActionTitle}}</title>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-
-	<!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css">-->
+	<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
 
-	<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script> -->
+
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel='stylesheet' type='text/css'>
 
 	<script>
 		$(document).ready(function() {
-
-			$("#bCodeBtn").click(function () {
-			    $(this).blur();
-			    if($(this).hasClass('clsNewCode')) {
-                    $.ajax({
-                        url: '/mkBarCode',
-                        type: 'get',
-                        dataType: 'html',
-                        data : { ajax_post_data: ''},
-                        success : function(data) {
-                            $('#bCodeID').val(data);
-                            $('#bCodeBtn').text(' Print');
-                            $('#bCodeBtn').removeClass('clsNewCode');
-                            $('#bCodeBtn').addClass('clsPrintCode');
-                            $('#bCodeBtn').removeAttr("selected");
+                    $("#bCodeBtn").click(function () {
+                        $(this).blur();                                         //Remove focus to prevent highlighting button, visual thing
+                        if($(this).hasClass('clsNewCode')) {                    //Template is for new items, generate a new bar code
+                            $.ajax({                                            //Send GET request to back end
+                                url: '/mkBarCode',
+                                type: 'get',
+                                dataType: 'html',
+                                data : { ajax_post_data: ''},
+                                success : function(data) {
+                                    $('#bCodeID').val(data);                    //Data returned, set bar code in box
+                                    $('#bCodeBtn').text(' Print');              //Change button to reflect print instead of New
+                                    $('#bCodeBtn').removeClass('clsNewCode');   //Change class for new barcode button
+                                    $('#bCodeBtn').addClass('clsPrintCode');    //Code generated, change to print button
+                                    $('#bCodeBtn').removeAttr("selected");      //Unhighlight button since it was clicked
+                                }
+                            });
+                        }
+                        else if($(this).hasClass('clsScanCode')) {              //Existing item template, set button for scan codes
+                            alert("Scanning bar code");                         //..fill in code here to handle scanning codes and once scanned and returned,
+                                                                                //change to print button, see above for CSS class changes
+                        }
+                        else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
+                            alert("Printing bar code");
                         }
                     });
-                }
-                else if($(this).hasClass('clsScanCode')) {
-                    alert("Scanning bar code");
-                }
-                else if($(this).hasClass('clsPrintCode')) {
-                    alert("Printing bar code");
-                }
-			});
 
-			$("#btnReload").click(function () {
-				location.reload();
-			});
+                    $("#btnReload").click(function () {                         //Reload the page
+                        location.reload();
+                    });
 
-            $("#SelectedColorCode").click(function () {
-                if($("#colorOptions").hasClass('hidden')) {
-                    $("#colorOptions").removeClass('hidden');
-                    $("#colorOptions").addClass('visible');
-                }
-                else {
-                    $("#colorOptions").removeClass('visible');
-                    $("#colorOptions").addClass('hidden');
-                }
-            });
+                    $("[name=color]").click(function() {                                                    //Color chooser opened and color selected
+                        var itemClicked=$(this).val();                                                      //Get selected color
+                        $("#SelectedColorCode").val(itemClicked);                                           //Set value on #SelectedColorCode
+                        $("#SelectedColorCode").css('background-color',$(this).css('background-color'));    //Change background color of selected color code label/button on main page
 
-            $("[name=color]").click(function() {
-                var itemClicked=$(this).val();
-                //alert(itemClicked);
-                $("#SelectedColorCode").val(itemClicked);
-                //$("#SelectedColorCode").text(itemClicked);
-                $("#SelectedColorCode").css('background-color',$(this).css('background-color'));
+                        $("#colorOptions").removeClass('visible');                                          //Remove color chooser modal visibility
+                        $("#colorOptions").addClass('hidden');                                              //Add color chooser modal hidden
+                    });
 
-                $("#colorOptions").removeClass('visible');
-                $("#colorOptions").addClass('hidden');
-            });
+                    $("[name=categoryName]").click(function () {                //Item selected from category modal
+                        var itemClicked=$(this).val();                          //store selected item value in variable
+                        $("#selected_category").val(itemClicked);               //Set value on label for selected category
+                        $("#selected_category").text(itemClicked);              //Set text on label for selected category
+                    });
 
-            $("[name=categoryName]").click(function () {
-                var itemClicked=$(this).val();
-                $("#selected_category").val(itemClicked);
-                $("#selected_category").text(itemClicked);
-            });
+                    $('#price').click(function () {                                                     //Price box clicked
+                        var price=$("#price").val();                                                    //Store contents of price box in variable
+                        var priceCents="";                                                              //Initial null value for cents, in case none was entered
+                        var pricePlaceholder=price.split(".");                                          //Split dollars and cents
+                        var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)        //Remove initial $ and store dollars in priceDollar
+                        if(pricePlaceholder[1]) {                                                       //If cents was entered, store in priceCents
+                            priceCents=pricePlaceholder[1];
+                        }
+                        else {
+                            priceCents="00";                                                            //if no cents was entered, set to "00"
+                        }
 
-			$('#price').click(function () {
-                var price=$("#price").val();
-                var priceCents="";
-                var pricePlaceholder=price.split(".");
-                var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)
-                if(pricePlaceholder[1]) {
-                    priceCents=pricePlaceholder[1];
-                }
-                else {
-                    priceCents="00";
-                }
+                        var priceModifier="$"+priceDollar+"."+priceCents                                //rejoin priceDollar + priceCents with period between
 
-                var priceModifier="$"+priceDollar+"."+priceCents
-                //alert(pricePlaceholder[1]);
-                $('#price').val(priceModifier);
-			});
+                        $('#price').val(priceModifier);                                                 //reset price box text
+                    });
 
-            $('#NewItemApply').click(function () {
-                //Check that all fields are completed
-                var price=$("#price").val();
-                var priceTotal=parseFloat(price.substr(1,price.length));
-                if(!priceTotal) { priceTotal=0; }
 
-                if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)
-                {
-                    alert("Complete all fields before submitting");
-                }
-                else {
-                    alert("Adding product");
-                }
-            });
+                    //########### HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
+                    $('#NewItemApply').click(function () {                                              //New item apply button
+                                                                                                        //Check that all fields are completed
+                        var price=$("#price").val();
+                        var priceTotal=parseFloat(price.substr(1,price.length));
+                        if(!priceTotal) { priceTotal=0; }
 
-            $('#ExItemApply').click(function () {
-                alert("Updating existing item");
-            });
+                        if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)      //Some fields incomplete
+                        {
+                            $("#warningTitle").text("Error");                                       //Set modal title to Error
+                            $('#warningMsg').text("Some fields are incomplete.");                   //Set modal msg to error
+                            $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                            $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                            $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                            $("#dlg-btn").show();                                                   //Finally open the modal
+                            $('#warningBox').modal({
+                                backdrop: 'static',
+                                keyboard: false,
+                                show: true
+                            });
+                        }
+                        else {
+                            $("#warningTitle").text("Adding Product");                              //Data was entered appropriately
+                            $('#warningMsg').text("Sending product to inventory database.");        //Set msg adding products
+                            $("#dlgHeader").removeClass("btn-danger");                              //Remove red title bar
+                            $("#dlgHeader").addClass("btn-success");                                //Add green title bar
+                            $("#dlgProgressSpinner").show();                                        //Show the spinner for status
+                            $("#dlg-btn").hide();                                                   //Hide the OK button, we want this to remain on scree till back end returns a success
+                            $('#warningBox').modal({                                                //Finally open the modal
+                                backdrop: 'static',
+                                keyboard: false,                                                    //Disable clicking outside the modal to make it stay on screen till dismissed by return success
+                                show: true
+                            });
 
-			$.fn.setCursorPosition = function(pos) {
-              this.each(function(index, elem) {
-                if (elem.setSelectionRange) {
-                  elem.setSelectionRange(pos, pos);
-                } else if (elem.createTextRange) {
-                  var range = elem.createTextRange();
-                  range.collapse(true);
-                  range.moveEnd('character', pos);
-                  range.moveStart('character', pos);
-                  range.select();
-                }
-              });
-              return this;
-            };
+                            var price=$("#price").val();                                                //Get the price value
+                            var priceCents="";                                                          //Set sents to null in case none was entered
+                            var pricePlaceholder=price.split(".");                                      //Split dollars and cents
+                            var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)    //Store dollars in priceDollar
+                            if(pricePlaceholder[1]) {                                                   //Store cents in priceCents if it was entered
+                                priceCents=pricePlaceholder[1];
+                            }
+                            else {
+                                priceCents="00";                                                        //Set priceCents to "00" if none was entered
+                            }
+                            var priceModifier=priceDollar+"."+priceCents                                //Set float version of price for DB data type
+
+                                                                                                        //create POST request data
+                            var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+priceModifier+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#SelectedColorCode').val();
+
+                            $.ajax({                                                                    //Send data to the back end
+                                url: '/addProduct',
+                                type: 'post',
+                                dataType: 'text',
+                                data : postData,
+                                success : function(data) {
+                                    if(data=="Success") {
+                                        $('#warningBox').modal('hide');                                 //Hide the modal if back end returned success on adding
+                                    }
+                                    else {                                                              //Change status to error if back end returned error on adding item
+                                        $("#warningTitle").text("Error");
+                                        $('#warningMsg').text(data);
+                                        $("#dlgHeader").addClass("btn-danger");
+                                        $("#dlgHeader").removeClass("btn-success");
+                                        $("#dlgProgressSpinner").hide();
+                                        $("#dlg-btn").show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    //########### END HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
+
+
+                    $('#ExItemApply').click(function () {                       //Existing item, apply any changes
+                        alert("Updating existing item");
+                    });
+
+                    $.fn.setCursorPosition = function(pos) {                    //This function is supposed to handle what happens
+                      this.each(function(index, elem) {                         //when the price box is clicked, for setting the
+                        if (elem.setSelectionRange) {                           //cursor, but needs work
+                          elem.setSelectionRange(pos, pos);
+                        } else if (elem.createTextRange) {
+                          var range = elem.createTextRange();
+                          range.collapse(true);
+                          range.moveEnd('character', pos);
+                          range.moveStart('character', pos);
+                          range.select();
+                        }
+                      });
+                      return this;
+                    };
+
 		});
 	</script>
+
 
 	<style>
 
@@ -205,6 +253,28 @@
 			padding-top: 15px;
 		}
 
+        .dlglabel-msg {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 60px;
+			<!-- height: 120px; --//>
+			padding-bottom: 60px;
+			margin-bottom: 60px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
+
+        }
+
+		.dlglabel-text {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 70px;
+			<!-- height: 120px; --//>
+			padding-bottom: 10px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 10px;
+		}
+
 		.sublabel-text {
 			font-family: Arial, Helvetica, Monospace;
 			font-size: 50px;
@@ -227,7 +297,7 @@
 		.box-noborder {
 			border-radius: 10px;
 			padding-left: 50px;
-			<!-- padding-right: 50px; -->
+			padding-right: 50px;
 		}
 
         .hidden {
@@ -260,6 +330,11 @@
 			font-size: 70px; 
 		}
 
+        .category-buttons {
+            font-size: 70px;
+            background-color: white;
+            text-align: left;
+        }
 		.active {
   			<!-- background-color:   #737373  !important; -->
 			border: 10px solid black;
@@ -322,6 +397,13 @@
 		    top: 20%;
 		}
 
+        #categoryChooser {
+            top: 10%;
+        }
+
+        #warningBox {
+            top: 20%;
+        }
 		.categorySelections {
 		    border: none;
 		    background-color: white;
@@ -333,17 +415,18 @@
 
 <body>
 
+<!-- ################## DIALOG BOXES ################## -->
 <div class="container">
 <div id="colorChooser" class="modal fade" role="dialog" data-backdrop="true">
   <div class="modal-dialog modal-lg" style="width: 90%;">
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header btn-primary">
             <h4 class="modal-title text-center" style="font-size: 50px;">Choose a color code for this item</h4>
       </div>
       <div class="modal-body">
-            <div id="colorOptions" class="box-noborder hidden">
+            <div id="colorOptions" class="box-noborder">
                 <div class="btn-group color-buttons" data-toggle="buttons">
                     <div id="colorButtonGroup">
                         <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
@@ -375,6 +458,55 @@
 </div>
 </div>
 
+<div class="container">
+<div id="categoryChooser" class="modal fade" role="dialog" data-backdrop="true">
+  <div class="modal-dialog modal-lg" style="width: 90%;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header btn-primary">
+            <h4 class="modal-title text-center" style="font-size: 50px;">Choose a category for this item</h4>
+      </div>
+      <div class="modal-body">
+            <div class="categorybox-noborder">
+                <ul>
+                    {{FnMbiTrkc}}
+                </ul>
+            </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="container">
+    <div id="warningBox" class="modal fade" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-lg" style="width: 90%;">
+        <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dlgHeader" class="modal-header">
+                    <h4 id="warningTitle" class="modal-title text-center dlglabel-text"></h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="dlglabel-msg text-center" id="warningMsg"></label>
+                            <div class="text-center label-text" style="padding-bottom: 50px;" id="dlgProgressSpinner">
+                                <i class="fa fa-circle-o-notch fa-spin" style="font-size: 300%;"></i>
+                            </div>
+                    </div>
+                    <div id="dlg-btn" class="text-center" hidden="true">
+                        <button type="button" class="text-center btn btn-primary label-text" style="width: 50%; border: 1px solid;" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ################## END DIALOG BOXES ################## -->
+
 <row class="col-md-12">
 	<button class="btn btn-block btn-success text-center label-text" style="background-color: #00274D;">{{.ActionTitle}}</button>
 </row>
@@ -403,18 +535,11 @@
 <row>
 	<div class="col-md-12">
 		<div class="dropdown">
-			<button id="selected_category" value="" class="dropdown-toggle btn btn-block btn-default page-controls category-control text-left" type="button" data-toggle="dropdown">Category
+			<button id="selected_category" value="" class="dropdown-toggle btn btn-block btn-default page-controls category-control text-left" type="button" data-toggle="modal" data-target="#categoryChooser">Category
 				<i class="fa fa-caret-down" aria-hidden="true"></i>
 			</button>
 
-			<ul class="dropdown-menu category-data" role="menu">
-				<!--
-					This will include a list of <li></li> items generated from the backend database
-					Might use jquery to do this instead of a template tag
-				-->
 
-				{{FnMbiTrkc}}
-			</ul>
 		</div>
 	</div>
 </row>
@@ -426,7 +551,7 @@
 </row>
 <row>
 	<div class="col-md-12">
-			<input class="form-control input-lg inputs" type="text" placeholder="Item Description (Optional)">
+			<input id="itemDescription" class="form-control input-lg inputs" type="text" placeholder="Item Description (Optional)">
 	</div>
 </row>
 

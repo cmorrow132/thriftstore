@@ -83,18 +83,34 @@ func getCategories() (string) {
 		if err!=nil {
 			panic(err)
 		}
-		dbResults+="<li><button name=\"categoryName\" value=\"" + categoryName + "\" class=\"btn-block text-left categorySelections\">" + categoryName + "</button></li>\n"
+		dbResults+="<row><button name=\"categoryName\" value=\"" + categoryName + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + categoryName + "</button></row>"
 	}
 
-	//categoryList:="<li><button name=\"categoryName\" value=\"One\" class=\"categorySelections\">One</button></li>\n<li><button name=\"categoryName\" value=\"Two\" class=\"categorySelections\">Two</button></li>"
 	return dbResults
 }
 
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	bcode_val:=strconv.Itoa(rand.Intn(5000)) +"-" + strconv.Itoa(rand.Intn(5000)) + "-" + strconv.Itoa(rand.Intn(5000))
-	//bcode_val:=rand.Intn(10000);
+
 	fmt.Println("New bar code generated: " + bcode_val)
 	fmt.Fprintf(w,bcode_val)
+}
+
+func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+
+	formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
+	/*frmBarcode:=r.PostFormValue("bcode")
+	frmCategory:=r.PostFormValue("category")
+	frmPrice:=r.PostFormValue("price")
+	frmDescription:=r.PostFormValue("description")
+	frmColorCode:=r.PostFormValue("colorcode")*/
+
+	for _,value:=range formData {
+		fmt.Println(value)
+	}
+
+	fmt.Fprintf(w,"There was some error updating inventory.")
+
 }
 
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -105,6 +121,8 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	pageRequest:=ps.ByName("page")
 
 	switch pageRequest {
+		case "addProduct":
+			addProduct(w,r,ps)
 		case "mkBarCode":
 			generateBarCode(w,r,ps)
 			return
@@ -158,6 +176,7 @@ func main() {
 	//
 	//router.GET("/mkBarCode",generateBarCode)
 	router.GET("/:page",pageHandler)
+	router.POST("/addProduct",addProduct)				//Ajax call to add new item
 	//router.POST("/:page",ajaxRequests)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
