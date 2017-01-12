@@ -128,7 +128,10 @@ func getColors() (string) {
 		}
 		dbResults+="<button class=\"color-buttons btn btn-cons active\" data-dismiss=\"modal\" style=\"border: solid; border-radius: 50px; background-color: "+colorcode+" !important; height: 150px;\" name=\"color\" value=\""+strconv.Itoa(colorID)+"\"></button>"
 	}
+
 	return dbResults
+
+
 }
 
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {

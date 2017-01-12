@@ -4,7 +4,6 @@
     <list default="true" id="96bf5a10-1fce-405e-9089-6e41b5ae84dc" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/mobile.go" afterPath="$PROJECT_DIR$/back-end/mobile.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/templates/item.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/templates/temp" afterPath="$PROJECT_DIR$/back-end/templates/temp" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +21,8 @@
       <file leaf-file-name="mobile.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/mobile.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="217" column="103" lean-forward="false" selection-start-line="217" selection-start-column="103" selection-end-line="217" selection-end-column="103" />
+            <state relative-caret-position="478">
+              <caret line="214" column="41" lean-forward="false" selection-start-line="214" selection-start-column="41" selection-end-line="214" selection-end-column="41" />
               <folding>
                 <element signature="e#14#237#0" expanded="true" />
               </folding>
@@ -34,8 +33,8 @@
       <file leaf-file-name="item.tpl" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="96" column="33" lean-forward="false" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
+            <state relative-caret-position="285">
+              <caret line="19" column="69" lean-forward="true" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
               <folding />
             </state>
           </provider>
@@ -45,7 +44,7 @@
         <entry file="file://$PROJECT_DIR$/back-end/templates/temp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="368">
-              <caret line="73" column="33" lean-forward="true" selection-start-line="71" selection-start-column="24" selection-end-line="73" selection-end-column="33" />
+              <caret line="73" column="33" lean-forward="false" selection-start-line="71" selection-start-column="24" selection-end-line="73" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -67,6 +66,7 @@
     <findStrings>
       <find>CategoryName</find>
       <find>category-buttons</find>
+      <find>#SelectedColorCode</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -213,7 +213,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="0" width="1444" height="881" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2746781" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -365,15 +365,15 @@
     <entry file="file://$PROJECT_DIR$/back-end/templates/temp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
-          <caret line="73" column="33" lean-forward="true" selection-start-line="71" selection-start-column="24" selection-end-line="73" selection-end-column="33" />
+          <caret line="73" column="33" lean-forward="false" selection-start-line="71" selection-start-column="24" selection-end-line="73" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/mobile.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="217" column="103" lean-forward="false" selection-start-line="217" selection-start-column="103" selection-end-line="217" selection-end-column="103" />
+        <state relative-caret-position="478">
+          <caret line="214" column="41" lean-forward="false" selection-start-line="214" selection-start-column="41" selection-end-line="214" selection-end-column="41" />
           <folding>
             <element signature="e#14#237#0" expanded="true" />
           </folding>
@@ -382,8 +382,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="96" column="33" lean-forward="false" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
+        <state relative-caret-position="285">
+          <caret line="19" column="69" lean-forward="true" selection-start-line="19" selection-start-column="69" selection-end-line="19" selection-end-column="69" />
           <folding />
         </state>
       </provider>

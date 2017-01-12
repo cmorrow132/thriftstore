@@ -138,6 +138,7 @@
                             });
                         }
                         else {
+                            alert($('#SelectedColorCode').val());
                             $("#warningTitle").text("Adding Product");                              //Data was entered appropriately
                             $('#warningMsg').text("Sending product to inventory database.");        //Set msg adding products
                             $("#dlgHeader").removeClass("btn-danger");                              //Remove red title bar
@@ -150,19 +151,6 @@
                                 show: true
                             });
 
-                            /* var price=$("#price").val();                                                //Get the price value
-                            var price=getPriceValue();
-                            var priceCents="";                                                          //Set sents to null in case none was entered
-                            var pricePlaceholder=price.split(".");                                      //Split dollars and cents
-                            var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)    //Store dollars in priceDollar
-                            if(pricePlaceholder[1]) {                                                   //Store cents in priceCents if it was entered
-                                priceCents=pricePlaceholder[1];
-                            }
-                            else {
-                                priceCents="00";                                                        //Set priceCents to "00" if none was entered
-                            }
-                            var priceModifier=priceDollar+"."+priceCents                                //Set float version of price for DB data type
-                            */
                             var price=getPriceValue();
                                                                                                       //create POST request data
                             var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#SelectedColorCode').val();
