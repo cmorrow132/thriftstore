@@ -1,0 +1,39 @@
+TEMPLATE GO VARIABLES / FUNCTION
+_________________________
+{{.ActionTitle}}	-  Golang: PageTags:ActionTitle			: page title
+{{FnMbiTrkc}}		-  Golang: func getCategories()			: returns categories from back end/db
+{{.BarCodeID}}		-  Golang: PageTags:BarCodeID			: bar code value
+{{.ClsbCodeBtn}}	-  Golang: PageTags:ClsbCodeBtn			: returns CSS identifier to set bar code button style
+{{.BarcodeBtnLabel}}	-  Golang: PageTags:BarcodeBtnLabel		: Sets the bar code button text
+{{.ApplyBtnName}}	-  Golang: PageTags:ApplyBtnName		: Used by jquery to determine action when clicking Apply (new, existing item)
+{{.SelectedColorCodeName}} -Golang: PageTags:SelectedColorCodeName	: Sets the item color name
+{{.SelectedColorCode}}	- Golang: PageTags:SelectedColorCode		: Sets the html backgroundd color code in the dropdown/selector
+{{FncGlobalDiscount1}}	- Golang: func 					: Returns active discounts from the back end/db
+{{.CopyRight}}		- Golang: PageTags:CopyRight			: sets the copyright message in the page footer
+Dialogs:
+
+#colorOptions:
+	Description: color selector for product codes
+	variables:
+
+#categoryChooser
+	Description: server-generated product categories
+	Go functions: {{FnMbiTrkc}}
+	variables: categoryName, 
+
+
+HTML IDs
+_________
+btnReload:		refresh button
+bCodeID:		barcode box
+bCodeBtn:		barcode button
+selected_category:	item category
+price:			item price
+itemDescription:	item description
+colorLabel:		msg label for color code box
+SelectedColorCode:	value for active color code for the item, used by jquery to get the selected color from $('#SelectedColorCode').val()
+
+JQuery
+_____________
+$("#bCodeBtn").click()			: Actions when barcode button is clicked
+

@@ -1,0 +1,47 @@
++-----------------------+
+| Tables_in_thriftstore |
++-----------------------+
+| category_cd           |
+| colorcodes            |
+| discount_colors       |
+| inventory             |
++-----------------------+
+
+
+CATEGORY_CD
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(30) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+
+
+COLORCODES
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| value | varchar(20) | YES  |     | NULL    |                |
+| name  | varchar(20) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+
+DISCOUNT_COLORS
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| id     | int(11) | NO   | PRI | NULL    |       |    links to COLORCODES.id
+| amount | float   | YES  |     | NULL    |       |
++--------+---------+------+-----+---------+-------+
+
+INVENTORY
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id          | int(11)     | NO   | PRI | NULL    | auto_increment |
+| category    | int(11)     | YES  |     | NULL    |                |	links to CATEGORY_CD.id
+| description | varchar(30) | YES  |     | NULL    |                |
+| colorcode   | int(11)     | YES  |     | NULL    |                |   links to COLORCODES.id
+| barcode     | int(11)     | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+

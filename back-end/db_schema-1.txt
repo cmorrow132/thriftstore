@@ -1,0 +1,40 @@
++-----------------------+
+| Tables_in_thriftstore |
++-----------------------+
+| category_cd           |
+| discount_cd           |
+| inventory             |
++-----------------------+
+
+
+CATEGORY_CD
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(30) | NO   | uni |         |                | * uni=unique
++-------+-------------+------+-----+---------+----------------+
+
+
+DISCOUNT_CD
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| type  | shortint    | NO   | uni |         |                | * uni=unique
+| amount| decimal(2.2)| NO   |     | 0       |                |
+| name  | varchar(20) | NO   | uni |         |                |
++-------+-------------+------+-----+---------+----------------+
+
+
+INVENTORY
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id          | int         | NO   | PRI | NULL    | auto_increment |
+| category    | int         | NO   |     |         |                |	links to CATEGORY_CD.id
+| discount    | int         | YES  |     | NULL    |                |   links to DISCOUNT_CD.id
+| barcode     | int(16)     | YES  |     | NULL    |                |
+| description | varchar(30) | NO   |     |         |                |
++-------------+-------------+------+-----+---------+----------------+
+

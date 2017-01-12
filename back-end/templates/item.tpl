@@ -14,6 +14,14 @@
 
 	<script>
 		$(document).ready(function() {
+		            var pageType="{{.PageType}}";
+		            switch(pageType) {
+		                case "newItem":
+		                    $('#bCodeBtn').addClass('clsDisableBtn');
+		                    $('#bCodeBtn').attr('disabled','disabled');
+		                    //$('#bCodeBtn').blur();
+		            }
+
                     $("#bCodeBtn").click(function () {
                         $(this).blur();                                         //Remove focus to prevent highlighting button, visual thing
                         if($(this).hasClass('clsNewCode')) {                    //Template is for new items, generate a new bar code
@@ -56,32 +64,63 @@
                     $("[name=categoryName]").click(function () {                //Item selected from category modal
                         var itemClicked=$(this).val();                          //store selected item value in variable
                         $("#selected_category").val(itemClicked);               //Set value on label for selected category
-                        $("#selected_category").text(itemClicked);              //Set text on label for selected category
+                        $("#selected_category").text($(this).text());              //Set text on label for selected category
+
+                        if(getPriceValue()>0) {                                 //if a category was selected and price is greater than 0
+                            $('#bCodeBtn').removeClass('clsDisableBtn');        //enable the barcode button
+                            $('#bCodeBtn').removeAttr('disabled');
+                        }
                     });
 
                     $('#price').click(function () {                                                     //Price box clicked
-                        var price=$("#price").val();                                                    //Store contents of price box in variable
-                        var priceCents="";                                                              //Initial null value for cents, in case none was entered
-                        var pricePlaceholder=price.split(".");                                          //Split dollars and cents
-                        var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)        //Remove initial $ and store dollars in priceDollar
-                        if(pricePlaceholder[1]) {                                                       //If cents was entered, store in priceCents
+                        $('#price').val("$"+getPriceValue());
+                    });
+
+                    $('#price').on("change paste keyup", function() {                           //if price goes above $0 and a category is selected
+                        var pageType="{{.PageType}}"
+
+                        if(getPriceValue()>0 && $('#selected_category').val() != "") {
+                            $('#bCodeBtn').removeClass('clsDisableBtn');                        //enable the barcode button for new item pages
+                            $('#bCodeBtn').removeAttr('disabled');
+                            $('#ExItemApply').removeClass('clsDisableBtn');                        //enable the apply button for existing item pages
+                            $('#ExItemApply').removeAttr('disabled');
+                        }
+                        else {                                                                  //if price goes back to 0,
+                            if(getPriceValue()==0) {
+                                switch(pageType) {
+                                    case "newItem":
+                                        $('#bCodeBtn').addClass('clsDisableBtn');                       //disable the barcode button for new items
+                                        $('#bCodeBtn').attr('disabled','disabled');
+                                    case "exItem":
+                                        $('#ExItemApply').addClass('clsDisableBtn');                    //disable the apply button for existing items
+                                        $('#ExItemApply').attr('disabled','disabled');
+                                }
+                            }
+                        }
+                    });
+
+                    function getPriceValue() {
+                        var price=$("#price").val();                                                //Get the price value
+                        var priceCents="";                                                          //Set sents to null in case none was entered
+                        var pricePlaceholder=price.split(".");                                      //Split dollars and cents
+                        var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)    //Store dollars in priceDollar
+                        if(pricePlaceholder[1]) {                                                   //Store cents in priceCents if it was entered
                             priceCents=pricePlaceholder[1];
                         }
                         else {
-                            priceCents="00";                                                            //if no cents was entered, set to "00"
+                            priceCents="00";                                                        //Set priceCents to "00" if none was entered
                         }
+                        var priceModifier=priceDollar+"."+priceCents                                //Set float version of price for DB data type
 
-                        var priceModifier="$"+priceDollar+"."+priceCents                                //rejoin priceDollar + priceCents with period between
-
-                        $('#price').val(priceModifier);                                                 //reset price box text
-                    });
-
+                        return priceModifier;
+                    }
 
                     //########### HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
                     $('#NewItemApply').click(function () {                                              //New item apply button
                                                                                                         //Check that all fields are completed
                         var price=$("#price").val();
                         var priceTotal=parseFloat(price.substr(1,price.length));
+
                         if(!priceTotal) { priceTotal=0; }
 
                         if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)      //Some fields incomplete
@@ -111,7 +150,8 @@
                                 show: true
                             });
 
-                            var price=$("#price").val();                                                //Get the price value
+                            /* var price=$("#price").val();                                                //Get the price value
+                            var price=getPriceValue();
                             var priceCents="";                                                          //Set sents to null in case none was entered
                             var pricePlaceholder=price.split(".");                                      //Split dollars and cents
                             var priceDollar=pricePlaceholder[0].substr(1,pricePlaceholder[0].length)    //Store dollars in priceDollar
@@ -122,9 +162,10 @@
                                 priceCents="00";                                                        //Set priceCents to "00" if none was entered
                             }
                             var priceModifier=priceDollar+"."+priceCents                                //Set float version of price for DB data type
-
-                                                                                                        //create POST request data
-                            var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+priceModifier+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#SelectedColorCode').val();
+                            */
+                            var price=getPriceValue();
+                                                                                                      //create POST request data
+                            var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#SelectedColorCode').val();
 
                             $.ajax({                                                                    //Send data to the back end
                                 url: '/addProduct',
@@ -307,8 +348,6 @@
             display: block;
         }
 
-
-
 		.radio-lineup {
 			padding-left: 50px;
 			font-family: Arial, Helvetica, Monospace;
@@ -327,7 +366,7 @@
 		}
 
 		.color-buttons {
-			font-size: 70px; 
+			font-size: 70px;
 		}
 
         .category-buttons {
@@ -382,6 +421,11 @@
         .clsScanCode {
             background-color: #A06100 !important;
         }
+        .clsDisableBtn {
+            background-color: #c0c0c0 !important;
+            color: #a9a9a9;
+        }
+
 		.copyright {
 			position:fixed;
 			bottom:0;
@@ -429,24 +473,7 @@
             <div id="colorOptions" class="box-noborder">
                 <div class="btn-group color-buttons" data-toggle="buttons">
                     <div id="colorButtonGroup">
-                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
-                            White
-                        </button>
-                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
-                            Orange
-                        </button>
-                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
-                            Blue
-                        </button>
-                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
-                            Red
-                        </button>
-                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
-                            Yellow
-                        </button>
-                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
-                            Pink
-                        </button>
+                    {{GetColors}}
                     </div>
                 </div>
             </div>
@@ -561,7 +588,7 @@
             <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
             <p>
                 <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-                <label class="label-text" id="SelectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCodeName}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCode}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
+                <label class="label-text" id="SelectedColorCode" data-toggle="modal" data-target="#colorChooser" value="1" style="border: solid; font-size: 400%; background-color: white; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
             </p>
 	    </center>
 

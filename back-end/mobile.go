@@ -30,6 +30,7 @@ type PageTags struct {
 	SelectedColorCode string
 	SelectedColorCodeName string
 	ApplyBtnName string
+	PageType string
 }
 
 var (
@@ -48,49 +49,90 @@ var (
 	selectedColorCode string
 	selectedColorCodeName string
 	applyBtnName string
+	pageType string
+
+	//DB Names
+	CATEGORY_DB string
+	DISCOUNT_DB string
 )
 
 func setVars() (int) {
 	dbUsername="goservices"
 	dbPassword="C7163mwx!"
 	dbLoginString=dbUsername+":"+dbPassword
+
+	CATEGORY_DB="CATEGORY_CD"
+	DISCOUNT_DB="DISCOUNT_CD"
 	return 8890
 }
 
 func getCategories() (string) {
+	var category_id int
 	var categoryName, dbQuery string
 	dbResults:=""
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 
 	if err!=nil {
-		panic(err)
+		return "Error loading categories"
 	}
 	defer db.Close()
 
-	dbQuery = "select name from categories"
+	dbQuery = "select id, name from "+CATEGORY_DB
 
 	if err!=nil {
-		panic(err)
+		return "Error loading categories"
 	}
 
 	rows,err := db.Query(dbQuery)
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&categoryName)
+		err = rows.Scan(&category_id,&categoryName)
 
 		if err!=nil {
-			panic(err)
+			return "Error loading categories"
 		}
-		dbResults+="<row><button name=\"categoryName\" value=\"" + categoryName + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + categoryName + "</button></row>"
+		dbResults+="<row><button name=\"categoryName\" value=\"" + strconv.Itoa(category_id) + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + categoryName + "</button></row>"
 	}
 
 	return dbResults
 }
 
+func getColors() (string) {
+	var colorname, colorcode string
+	var colorID int
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	dbResults:=""
+	if err!=nil {
+		return "Error loading colors"
+	}
+	defer db.Close()
+
+	dbQuery = "select id, name, colorcode from "+DISCOUNT_DB + " WHERE type='color'"
+	fmt.Println(dbQuery)
+
+	if err!=nil {
+		return "Error loading colors"
+	}
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&colorID, &colorname,&colorcode)
+
+		if err!=nil {
+			return "Error loading categories"
+		}
+		dbResults+="<button class=\"color-buttons btn btn-cons active\" data-dismiss=\"modal\" style=\"border: solid; border-radius: 50px; background-color: "+colorcode+" !important; height: 150px;\" name=\"color\" value=\""+strconv.Itoa(colorID)+"\"></button>"
+	}
+	return dbResults
+}
+
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
-	bcode_val:=strconv.Itoa(rand.Intn(5000)) +"-" + strconv.Itoa(rand.Intn(5000)) + "-" + strconv.Itoa(rand.Intn(5000))
+	bcode_val:=strconv.Itoa(rand.Intn(10000)) +"-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000))
 
 	fmt.Println("New bar code generated: " + bcode_val)
 	fmt.Fprintf(w,bcode_val)
@@ -98,18 +140,23 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 
 func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
-	formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
+	//formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
 	/*frmBarcode:=r.PostFormValue("bcode")
 	frmCategory:=r.PostFormValue("category")
 	frmPrice:=r.PostFormValue("price")
 	frmDescription:=r.PostFormValue("description")
 	frmColorCode:=r.PostFormValue("colorcode")*/
 
-	for _,value:=range formData {
+	/*for _,value:=range formData {
 		fmt.Println(value)
-	}
+	}*/
 
-	fmt.Fprintf(w,"There was some error updating inventory.")
+	fmt.Println("bdode: " + r.PostFormValue("bcode"))
+	fmt.Println("category: " + r.PostFormValue("category"))
+	fmt.Println("price: " + r.PostFormValue("price"))
+	fmt.Println("description: " + r.PostFormValue("description"))
+	fmt.Println("colorcode: " + r.PostFormValue("colorcode"))
+	fmt.Fprintf(w,"Success")
 
 }
 
@@ -137,6 +184,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			selectedColorCode="white"
 			selectedColorCodeName="white"
 			applyBtnName="NewItemApply"
+			pageType="newItem"
 		case "get-item":
 			pageTitle="Item Lookup"
 			templateName="item.tpl"
@@ -144,6 +192,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			clsbCodeBtn="clsScanCode"
 			//barCodeButtonID="bCodeLookup"
 			applyBtnName="ExItemApply"
+			pageType="exItem"
 		default:
 			pageTitle="Mobile Inventory Management"
 			templateName="main.tpl"
@@ -159,11 +208,14 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		"FnMbiTrkc": func() string {
 			return getCategories()
 		},
+		"GetColors": func() string {
+			return getColors()
+		},
 	})
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,SelectedColorCode:selectedColorCode,SelectedColorCodeName:selectedColorCodeName,})
+	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,})
 	if err!=nil {
 		log.Fatalln(err)
 	}

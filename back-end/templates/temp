@@ -69,6 +69,24 @@
 
 
 
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: white !important;" name="color" value="white">
+                            White
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: orange !important;" name="color" value="orange">
+                            Orange
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: #45b0ff !important;" name="color" value="blue">
+                            Blue
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: #ea2232 !important;" name="color" value="red">
+                            Red
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: yellow !important;" name="color" value="yellow">
+                            Yellow
+                        </button>
+                        <button class="color-buttons btn btn-cons active" data-dismiss="modal" style="border: solid; border-radius: 50px; background-color: pink !important;" name="color" value="pink">
+                            Pink
+                        </button>
 
 
 
