@@ -25,17 +25,35 @@
                     $("#bCodeBtn").click(function () {
                         $(this).blur();                                         //Remove focus to prevent highlighting button, visual thing
                         if($(this).hasClass('clsNewCode')) {                    //Template is for new items, generate a new bar code
+
+                            var postData="category_id="+$('#selected_category').val();
+
                             $.ajax({                                            //Send GET request to back end
                                 url: '/mkBarCode',
-                                type: 'get',
-                                dataType: 'html',
-                                data : { ajax_post_data: ''},
-                                success : function(data) {
-                                    $('#bCodeID').val(data);                    //Data returned, set bar code in box
-                                    $('#bCodeBtn').text(' Print');              //Change button to reflect print instead of New
-                                    $('#bCodeBtn').removeClass('clsNewCode');   //Change class for new barcode button
-                                    $('#bCodeBtn').addClass('clsPrintCode');    //Code generated, change to print button
-                                    $('#bCodeBtn').removeAttr("selected");      //Unhighlight button since it was clicked
+                                type: 'post',
+                                dataType: 'text',
+                                data : postData,
+                                success : function(data) {                  //AJAX request completed, deal with the results below
+                                    if(data.substr(0,5)=="Error") {                         //There was some error creating the bar code
+                                        $("#warningTitle").text("Error");                   //Open the error msg modal
+                                        $('#warningMsg').text(data);
+                                        $("#dlgHeader").addClass("btn-danger");
+                                        $("#dlgHeader").removeClass("btn-success");
+                                        $("#dlgProgressSpinner").hide();
+                                        $("#dlg-btn").show();
+                                        $('#warningBox').modal({
+                                            backdrop: 'static',
+                                            keyboard: false,
+                                            show: true
+                                        });
+                                    }
+                                    else {
+                                        $('#bCodeID').val(data);                        //Bar code returned, set bar code in box
+                                        $('#bCodeBtn').text(' Print');                  //Change button to reflect print instead of New
+                                        $('#bCodeBtn').removeClass('clsNewCode');       //Change class for new barcode button
+                                        $('#bCodeBtn').addClass('clsPrintCode');        //Code generated, change to print button
+                                        $('#bCodeBtn').removeAttr("selected");          //Unhighlight button since it was clicked
+                                    }
                                 }
                             });
                         }
@@ -160,7 +178,7 @@
                                 type: 'post',
                                 dataType: 'text',
                                 data : postData,
-                                success : function(data) {
+                                success : function(data) {                          //AJAX request completed, deal with the results below
                                     if(data=="Success") {
                                         $('#warningBox').modal('hide');                                 //Hide the modal if back end returned success on adding
                                     }

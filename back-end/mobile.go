@@ -54,6 +54,7 @@ var (
 	//DB Names
 	CATEGORY_DB string
 	DISCOUNT_DB string
+	BARCODE_DB string
 )
 
 func setVars() (int) {
@@ -63,6 +64,8 @@ func setVars() (int) {
 
 	CATEGORY_DB="CATEGORY_CD"
 	DISCOUNT_DB="DISCOUNT_CD"
+	BARCODE_DB="BARCODE_CD"
+
 	return 8890
 }
 
@@ -135,9 +138,55 @@ func getColors() (string) {
 }
 
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
-	bcode_val:=strconv.Itoa(rand.Intn(10000)) +"-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000))
+	category_id:=r.PostFormValue("category_id")
+	var bcode_val string
+	existing_barcode:=""
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	//Generate a new random bar code until there are no matches in the BARCODE_CD database
+	for {
+		//bcode_val="1002-8081-7887-1847-4059"
+		bcode_val=category_id +"-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000))
+
+		dbQuery = "select barcode from " + BARCODE_DB + " where barcode='" + bcode_val + "'"
+
+		if err!=nil {
+			fmt.Fprintf(w,"Error: Could not query database")
+			break
+		}
+
+		rows,err := db.Query(dbQuery)
+		defer rows.Close()
+
+		for rows.Next() {
+			err = rows.Scan(&existing_barcode)
+			if err != nil {
+				fmt.Fprintf(w,"Error: Could not query the database for barcodes")
+				break
+			}
+		}
+
+		fmt.Println(existing_barcode)
+		if(existing_barcode=="") {
+			break			//No bar code found, good to use the randomly generated code
+		} else {
+			//The randomly generated code was already in the database
+			//Clear the db results (existing_barcode) so it doesn't get stuck in a loop at the rows.Next()
+			existing_barcode=""
+		}
+	}
+	//Check the BARCODE_CD database to be sure this barcode is unique, and if not regenerate
 
 	fmt.Println("New bar code generated: " + bcode_val)
+	fmt.Println("Category ID: " + category_id)
 	fmt.Fprintf(w,bcode_val)
 }
 
@@ -171,11 +220,6 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	pageRequest:=ps.ByName("page")
 
 	switch pageRequest {
-		case "addProduct":
-			addProduct(w,r,ps)
-		case "mkBarCode":
-			generateBarCode(w,r,ps)
-			return
 		case "new-item":
 			pageTitle="Add Inventory"
 			templateName="item.tpl"
@@ -232,6 +276,7 @@ func main() {
 	//router.GET("/mkBarCode",generateBarCode)
 	router.GET("/:page",pageHandler)
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
+	router.POST("/mkBarCode",generateBarCode)
 	//router.POST("/:page",ajaxRequests)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
