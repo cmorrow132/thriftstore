@@ -114,7 +114,7 @@ func getColors() (string) {
 	defer db.Close()
 
 	dbQuery = "select id, name, colorcode from "+DISCOUNT_DB + " WHERE type='color'"
-	fmt.Println(dbQuery)
+	//fmt.Println(dbQuery)
 
 	if err!=nil {
 		return "Error loading colors"
@@ -185,8 +185,8 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 	}
 	//Check the BARCODE_CD database to be sure this barcode is unique, and if not regenerate
 
-	fmt.Println("New bar code generated: " + bcode_val)
-	fmt.Println("Category ID: " + category_id)
+	//fmt.Println("New bar code generated: " + bcode_val)
+	//fmt.Println("Category ID: " + category_id)
 	fmt.Fprintf(w,bcode_val)
 }
 
@@ -271,13 +271,11 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 func main() {
 	port:=strconv.Itoa(setVars())
 	router:=httprouter.New()
-	router.GET("/",pageHandler)
-	//
-	//router.GET("/mkBarCode",generateBarCode)
-	router.GET("/:page",pageHandler)
+	router.GET("/",pageHandler)					//Main page handler with no pages named
+	router.GET("/:page",pageHandler)				//Allows for specific pages using json format
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
-	router.POST("/mkBarCode",generateBarCode)
-	//router.POST("/:page",ajaxRequests)
+	router.POST("/mkBarCode",generateBarCode)			//Ajax call to generate new bar codes
+
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,router)
