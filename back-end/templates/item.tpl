@@ -63,6 +63,10 @@
                         }
                         else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
                             alert("Printing bar code");
+
+                            $(this).removeClass('clsPrintCode');
+                            $(this).addClass('clsDisableBtn');
+                            $(this).attr('disabled','disabled');
                         }
                     });
 
@@ -72,8 +76,8 @@
 
                     $("[name=color]").click(function() {                                                    //Color chooser opened and color selected
                         var itemClicked=$(this).val();                                                      //Get selected color
-                        $("#SelectedColorCode").val(itemClicked);                                           //Set value on #SelectedColorCode
-                        $("#SelectedColorCode").css('background-color',$(this).css('background-color'));    //Change background color of selected color code label/button on main page
+                        $("#selectedColorCode").val(itemClicked);                                           //Set value on #SelectedColorCode
+                        $("#selectedColorCode").css('background-color',$(this).css('background-color'));    //Change background color of selected color code label/button on main page
 
                         $("#colorOptions").removeClass('visible');                                          //Remove color chooser modal visibility
                         $("#colorOptions").addClass('hidden');                                              //Add color chooser modal hidden
@@ -133,6 +137,39 @@
                         return priceModifier;
                     }
 
+                    /############ HOME PAGE BUTTON CLICKED #######################//
+                    $('#homeButton').click(function () {
+                        //Check to see if the print button is enabled, if so info has been generated but bar code not printed yet
+
+                        var bCodeBtnColor=$('#bCodeBtn').css('background-color');
+                        if($('#bCodeBtn').hasClass('clsPrintCode') && bCodeBtnColor=="rgb(31, 134, 3)") {
+                                        var msgText="A bar code has not been printed for this item.";
+                                        var msgSubText="Use the reload button to clear changes first.";
+                                        $("#warningTitle").text("Warning");                   //Open the error msg modal
+                                        $('#warningMsg').text(msgText);
+                                        $('#warningSubMsg').text(msgSubText);
+                                        $("#dlgHeader").addClass("btn-danger");
+                                        $("#dlgHeader").removeClass("btn-success");
+                                        $("#dlgProgressSpinner").hide();
+                                        $("#dlg-btn").show();
+                                        $('#warningBox').modal({
+                                            backdrop: 'static',
+                                            keyboard: false,
+                                            show: true
+                                        });
+                        }
+
+                        //Bar code was printed but data has not been saved to the database
+                        else {
+                            var colorCode=$('#NewItemApply').css('background-color');
+                            if(colorCode=="rgb(5, 180, 0)") {
+                                if($("#selected_category").val() != "" || getPriceValue() !=0 || $('#itemDescription').val()!="") {
+                                    alert("You will lose any unsubmitted data");
+                                }
+                            }
+                        }
+                    });
+
                     //########### HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
                     $('#NewItemApply').click(function () {                                              //New item apply button
                                                                                                         //Check that all fields are completed
@@ -156,7 +193,6 @@
                             });
                         }
                         else {
-                            alert($('#SelectedColorCode').val());
                             $("#warningTitle").text("Adding Product");                              //Data was entered appropriately
                             $('#warningMsg').text("Sending product to inventory database.");        //Set msg adding products
                             $("#dlgHeader").removeClass("btn-danger");                              //Remove red title bar
@@ -171,7 +207,7 @@
 
                             var price=getPriceValue();
                                                                                                       //create POST request data
-                            var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#SelectedColorCode').val();
+                            var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#selectedColorCode').val();
 
                             $.ajax({                                                                    //Send data to the back end
                                 url: '/addProduct',
@@ -181,6 +217,11 @@
                                 success : function(data) {                          //AJAX request completed, deal with the results below
                                     if(data=="Success") {
                                         $('#warningBox').modal('hide');                                 //Hide the modal if back end returned success on adding
+                                        $('#NewItemApply').removeClass('');
+                                        $('#NewItemApply').addClass('clsDisableBtn');                     //Disable the add item button to prevent re-adding
+                                        $('#NewItemApply').attr('disabled','disabled');
+                                        $('#btnReload').addClass('clsDisableBtn');               //Item has been submitted
+                                        $('#btnReload').attr('disabled','disabled');            //Do not allow reloading to clear data at this point
                                     }
                                     else {                                                              //Change status to error if back end returned error on adding item
                                         $("#warningTitle").text("Error");
@@ -305,11 +346,21 @@
 			font-size: 60px;
 			<!-- height: 120px; --//>
 			padding-bottom: 60px;
-			margin-bottom: 60px;
+			margin-bottom: 0px;
 			font-weight: normal;
 			padding-left: 20px;
 			padding-top: 15px;
+        }
 
+        .dlglabel-submsg {
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 40px;
+			<!-- height: 120px; --//>
+			padding-bottom: 60px;
+			margin-bottom: 30px;
+			font-weight: normal;
+			padding-left: 20px;
+			padding-top: 15px;
         }
 
 		.dlglabel-text {
@@ -525,6 +576,7 @@
                 <div class="modal-body">
                     <div>
                         <label class="dlglabel-msg text-center" id="warningMsg"></label>
+                        <label class="dlglabel-submsg" style="font-style: italic; font-weight: bold;" id="warningSubMsg"></label>
                             <div class="text-center label-text" style="padding-bottom: 50px;" id="dlgProgressSpinner">
                                 <i class="fa fa-circle-o-notch fa-spin" style="font-size: 300%;"></i>
                             </div>
@@ -548,7 +600,7 @@
 
 <row>
 	<div class="col-xs-4">
-		<button onclick="location.href = '/';" class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
+		<button id="homeButton" class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
 	</div>
 	<div class="col-xs-4">
 		<button id="{{.ApplyBtnName}}" class="btn btn-success btn-block fa fa-check header-buttons page-controls" style="background-color: #05B400;"></button>
@@ -594,7 +646,7 @@
             <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
             <p>
                 <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-                <label class="label-text" id="SelectedColorCode" data-toggle="modal" data-target="#colorChooser" value="1" style="border: solid; font-size: 400%; background-color: white; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</label>
+                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCode}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCodeHtml}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
             </p>
 	    </center>
 

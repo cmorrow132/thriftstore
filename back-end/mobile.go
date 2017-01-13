@@ -15,6 +15,7 @@ import (
 	"math/rand"
 	//"os"
 	//"bufio"
+	"time"
 )
 
 type PageTags struct {
@@ -28,7 +29,7 @@ type PageTags struct {
 	ClsbCodeBtn	string
 	CopyRight	string
 	SelectedColorCode string
-	SelectedColorCodeName string
+	SelectedColorCodeHtml string
 	ApplyBtnName string
 	PageType string
 }
@@ -102,9 +103,45 @@ func getCategories() (string) {
 	return dbResults
 }
 
+func getDefaultColor(requestId int, colorName string) (string) {
+	colorID:=0
+	colorCode:=""
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		return "Error reading color codes"
+	}
+	defer db.Close()
+
+	dbQuery = "select id, colorcode from "+DISCOUNT_DB + " WHERE name='" + colorName + "'"
+	//fmt.Println(dbQuery)
+
+	if err!=nil {
+		return "Error reading color codes"
+	}
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&colorID,&colorCode)
+
+		if err!=nil {
+			return "Error reading color codes"
+		}
+	}
+
+	if(requestId==1) {
+		return strconv.Itoa(colorID)
+	} else {
+		return colorCode
+	}
+}
+
 func getColors() (string) {
 	var colorname, colorcode string
-	var colorID int
+	var colorID int		//singleColor returns request to populate the default color selection on the item template at the back end
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	dbResults:=""
@@ -127,14 +164,13 @@ func getColors() (string) {
 		err = rows.Scan(&colorID, &colorname,&colorcode)
 
 		if err!=nil {
-			return "Error loading categories"
+			return "Error loading color"
 		}
+
 		dbResults+="<button class=\"color-buttons btn btn-cons active\" data-dismiss=\"modal\" style=\"border: solid; border-radius: 50px; background-color: "+colorcode+" !important; height: 150px;\" name=\"color\" value=\""+strconv.Itoa(colorID)+"\"></button>"
 	}
 
 	return dbResults
-
-
 }
 
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -174,7 +210,6 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 			}
 		}
 
-		fmt.Println(existing_barcode)
 		if(existing_barcode=="") {
 			break			//No bar code found, good to use the randomly generated code
 		} else {
@@ -193,21 +228,13 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	//formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
-	/*frmBarcode:=r.PostFormValue("bcode")
-	frmCategory:=r.PostFormValue("category")
-	frmPrice:=r.PostFormValue("price")
-	frmDescription:=r.PostFormValue("description")
-	frmColorCode:=r.PostFormValue("colorcode")*/
+	//frmBarcode:=r.PostFormValue("bcode")
+	//frmCategory:=r.PostFormValue("category")
+	//frmPrice:=r.PostFormValue("price")
+	//frmDescription:=r.PostFormValue("description")
+	//frmColorCode:=r.PostFormValue("colorcode")
 
-	/*for _,value:=range formData {
-		fmt.Println(value)
-	}*/
-
-	fmt.Println("bdode: " + r.PostFormValue("bcode"))
-	fmt.Println("category: " + r.PostFormValue("category"))
-	fmt.Println("price: " + r.PostFormValue("price"))
-	fmt.Println("description: " + r.PostFormValue("description"))
-	fmt.Println("colorcode: " + r.PostFormValue("colorcode"))
+	time.Sleep(2*time.Second)
 	fmt.Fprintf(w,"Success")
 
 }
@@ -262,7 +289,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,})
+	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
 		log.Fatalln(err)
 	}
