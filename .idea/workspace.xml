@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96bf5a10-1fce-405e-9089-6e41b5ae84dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/mobile.go" afterPath="$PROJECT_DIR$/back-end/mobile.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/templates/item.tpl" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,8 +35,8 @@
       <file leaf-file-name="item.tpl" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2243">
-              <caret line="223" column="148" lean-forward="false" selection-start-line="223" selection-start-column="148" selection-end-line="223" selection-end-column="148" />
+            <state relative-caret-position="278">
+              <caret line="173" column="22" lean-forward="false" selection-start-line="173" selection-start-column="22" selection-end-line="173" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -436,8 +435,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2243">
-          <caret line="223" column="148" lean-forward="false" selection-start-line="223" selection-start-column="148" selection-end-line="223" selection-end-column="148" />
+        <state relative-caret-position="278">
+          <caret line="173" column="22" lean-forward="false" selection-start-line="173" selection-start-column="22" selection-end-line="173" selection-end-column="22" />
           <folding />
         </state>
       </provider>
