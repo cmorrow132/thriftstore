@@ -170,8 +170,6 @@
                         }
                     });
 
-
-                    //
                     //########### HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
                     $('#NewItemApply').click(function () {                                              //New item apply button
                                                                                                         //Check that all fields are completed
