@@ -95,7 +95,13 @@
                     });
 
                     $('#price').click(function () {                                                     //Price box clicked
-                        $('#price').val("$"+getPriceValue());
+                        //$('#price').val("$"+getPriceValue());
+                        $('#numberBox').modal({
+                            backdrop: 'static',
+                            //keyboard: false,
+                            show: true
+                        });
+
                     });
 
                     $('#price').on("change paste keyup", function() {                           //if price goes above $0 and a category is selected
@@ -170,6 +176,7 @@
                         }
                     });
 
+                    //
                     //########### HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
                     $('#NewItemApply').click(function () {                                              //New item apply button
                                                                                                         //Check that all fields are completed
@@ -222,6 +229,15 @@
                                         $('#NewItemApply').attr('disabled','disabled');
                                         $('#btnReload').addClass('clsDisableBtn');               //Item has been submitted
                                         $('#btnReload').attr('disabled','disabled');            //Do not allow reloading to clear data at this point
+
+                                        $('#selected_category').attr('disabled','disabled');
+                                        $('#selected_category').addClass('clsDisableBtn');
+                                        $('#price').attr('disabled','disabled');
+                                        $('#price').addClass('clsDisableBtn');
+                                        $('#itemDescription').attr('disabled','disabled');
+                                        $('#itemDescription').addClass('clsDisableBtn');
+                                        $('#selectedColorCode').attr('disabled','disabled');
+                                        //$('#selectedColorCode').addClass('clsDisableBtn');
                                     }
                                     else {                                                              //Change status to error if back end returned error on adding item
                                         $("#warningTitle").text("Error");
@@ -511,6 +527,19 @@
 		    padding-left: 50px;
 		}
 
+		.numberBtn {
+		    border-radius: 10px;
+		    border: 1px solid;
+		    padding-left: 10px;
+		    padding-right: 10px;
+		    padding-top: 10px;
+		    padding-bottom: 10px;
+		    background-color: white;
+		    font-size: 70px;
+		    font-family: Arial, Helvetica, Monospace;
+		    font-style: bold;
+		}
+
 	</style>
 </head>
 
@@ -590,6 +619,18 @@
     </div>
 </div>
 
+
+<div class="container">
+    <div id="numberBox" class="modal fade" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div id="dlgHeader" class="modal-header btn-primary">
+                    <h2 id="" class="modal-title text-center dlglabel-text">Price</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- ################## END DIALOG BOXES ################## -->
 
 <row class="col-md-12">

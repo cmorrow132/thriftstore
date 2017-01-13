@@ -228,12 +228,18 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	//formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
-	//frmBarcode:=r.PostFormValue("bcode")
-	//frmCategory:=r.PostFormValue("category")
-	//frmPrice:=r.PostFormValue("price")
-	//frmDescription:=r.PostFormValue("description")
-	//frmColorCode:=r.PostFormValue("colorcode")
+	frmBarcode:=r.PostFormValue("bcode")
+	frmCategory:=r.PostFormValue("category")
+	frmPrice:=r.PostFormValue("price")
+	frmDescription:=r.PostFormValue("description")
+	frmColorCode:=r.PostFormValue("colorcode")
 
+	fmt.Println("Barcode: " + frmBarcode)
+	fmt.Println("Category: " + frmCategory)
+	fmt.Println("Price: " + frmPrice)
+	fmt.Println("Description: " + frmDescription)
+	fmt.Println("Color code: " + frmColorCode)
+	fmt.Println("")
 	time.Sleep(2*time.Second)
 	fmt.Fprintf(w,"Success")
 
