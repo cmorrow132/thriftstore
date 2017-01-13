@@ -95,36 +95,21 @@
                     });
 
                     $('#price').click(function () {                                                     //Price box clicked
-                        //$('#price').val("$"+getPriceValue());
-                        $('#numberBox').modal({
+                        $(this).blur();
+                        $('#priceInputLabel').text($('#price').val());                                  //Set the price value in the price modal based on
+                                                                                                        //the price label in the main page
+                        $('#numberBox').modal({                                                         //Open the price modal
                             backdrop: 'static',
-                            //keyboard: false,
+                            keyboard: false,
                             show: true
                         });
 
                     });
 
-                    $('#price').on("change paste keyup", function() {                           //if price goes above $0 and a category is selected
-                        var pageType="{{.PageType}}"
+                    $('#btnPriceSubmit').click(function () {                            //Submit button pressed on the price modal
+                        $('#price').val($('#priceInputLabel').text());                  //Set the price label on the main page with the new value
+                        $('#numberBox').modal('hide');                                  //and hide the modal
 
-                        if(getPriceValue()>0 && $('#selected_category').val() != "") {
-                            $('#bCodeBtn').removeClass('clsDisableBtn');                        //enable the barcode button for new item pages
-                            $('#bCodeBtn').removeAttr('disabled');
-                            $('#ExItemApply').removeClass('clsDisableBtn');                        //enable the apply button for existing item pages
-                            $('#ExItemApply').removeAttr('disabled');
-                        }
-                        else {                                                                  //if price goes back to 0,
-                            if(getPriceValue()==0) {
-                                switch(pageType) {
-                                    case "newItem":
-                                        $('#bCodeBtn').addClass('clsDisableBtn');                       //disable the barcode button for new items
-                                        $('#bCodeBtn').attr('disabled','disabled');
-                                    case "exItem":
-                                        $('#ExItemApply').addClass('clsDisableBtn');                    //disable the apply button for existing items
-                                        $('#ExItemApply').attr('disabled','disabled');
-                                }
-                            }
-                        }
                     });
 
                     function getPriceValue() {
@@ -439,7 +424,7 @@
 		}
 
 		.color-buttons {
-			font-size: 70px;
+			font-size: 50px;
 		}
 
         .category-buttons {
@@ -527,19 +512,39 @@
 		    padding-left: 50px;
 		}
 
-		.numberBtn {
-		    border-radius: 10px;
-		    border: 1px solid;
-		    padding-left: 10px;
-		    padding-right: 10px;
-		    padding-top: 10px;
-		    padding-bottom: 10px;
-		    background-color: white;
-		    font-size: 70px;
-		    font-family: Arial, Helvetica, Monospace;
-		    font-style: bold;
+        .numberBox {
+            width: auto;
+        }
+
+		.number-buttons {
+			border-radius: 5px;
+			border: 1px;
+			border-style: solid;
+			//height: 120px;
+
+			<!-- padding-bottom: 50px; //-->
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 120px;
+			border: solid;
+			margin-right: 10px;
+			padding-left: 70px;
+			padding-right: 70px;
+			margin-bottom: 10px;
+			background-color: #adc0d0;
 		}
 
+        .numberboxValue {
+			border-radius: 5px;
+			border: 2px;
+			border-style: solid;
+			font-family: Arial, Helvetica, Monospace;
+			font-size: 120px;
+			border: solid;
+			margin-left: 30px;
+			margin-right: 20px;
+			margin-bottom: 10px;
+			padding-left: 20px;
+        }
 	</style>
 </head>
 
@@ -556,7 +561,7 @@
             <h4 class="modal-title text-center" style="font-size: 50px;">Choose a color code for this item</h4>
       </div>
       <div class="modal-body">
-            <div id="colorOptions" class="box-noborder">
+            <div id="colorOptions" class="box-noborder" style="padding-left: 20px;">
                 <div class="btn-group color-buttons" data-toggle="buttons">
                     <div id="colorButtonGroup">
                     {{GetColors}}
@@ -620,13 +625,37 @@
 </div>
 
 
-<div class="container">
-    <div id="numberBox" class="modal fade" role="dialog" data-backdrop="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div id="dlgHeader" class="modal-header btn-primary">
-                    <h2 id="" class="modal-title text-center dlglabel-text">Price</h2>
-                </div>
+<div id="numberBox" class="modal fade" role="dialog" data-backdrop="true">
+    <div class="modal-dialog modal-lg" style="width: 80%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header btn-primary" style="padding-top: 10px; padding-bottom: 10px;">
+                <h4 class="modal-title label-text text-center dlglabel-text">Price Input</h4>
+            </div>
+            <div class="modal-body" style="width: 100%;">
+                <label id="priceInputLabel" class="numberboxValue" style="width: 55%;"></label>
+                <button id="btnPriceSubmit" class="number-buttons fa fa-arrow-right btn-success" style="background-color: #5cb85c; padding-top: 25px; padding-bottom: 30px; border: 2px solid;"></button>
+                <center>
+                <p>
+                    <button name="priceNumBtn" value="7" class="btn number-buttons">7</button>
+                    <button name="priceNumBtn" value="8" class="btn number-buttons">8</button>
+                    <button name="priceNumBtn" value="9" class="btn number-buttons">9</button>
+                </p>
+                <p>
+                    <button name="priceNumBtn" value="4" class="btn number-buttons">4</button>
+                    <button name="priceNumBtn" value="5" class="btn number-buttons">5</button>
+                    <button name="priceNumBtn" value="6" class="btn number-buttons">6</button>
+                </p>
+                <p>
+                    <button name="priceNumBtn" value="1" class="btn number-buttons">1</button>
+                    <button name="priceNumBtn" value="2" class="btn number-buttons">2</button>
+                    <button name="priceNumBtn" value="3" class="btn number-buttons">3</button>
+                </p>
+                <p>
+                    <button name="priceNumBtn" value="0" class="btn number-buttons">0</button>
+                    <button name="priceNumBtn" value="." class="btn number-buttons">.</button>
+                    <button id="btnPriceBkspc" class="btn number-buttons fa fa-arrow-left" style="background-color: #f0ad4e; color: white;"></button>
+                </p>
+                </center>
             </div>
         </div>
     </div>
@@ -672,7 +701,7 @@
 
 <row>
 	<div class="col-md-12">
-	    <input id="price" class="form-control input-lg inputs" type=text placeholder="$">
+	    <input id="price" class="form-control input-lg inputs" type=text placeholder="$" value="{{.ItemPrice}}">
 	</div>
 </row>
 <row>

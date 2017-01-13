@@ -10,6 +10,7 @@ _________________________
 {{.SelectedColorCode}}	- Golang: PageTags:SelectedColorCode		: Sets the html backgroundd color code in the dropdown/selector
 {{FncGlobalDiscount1}}	- Golang: func 					: Returns active discounts from the back end/db
 {{.CopyRight}}		- Golang: PageTags:CopyRight			: sets the copyright message in the page footer
+{{.itemPrice}}		- Goland: PageTags:ItemPrice			: Price pulled from the database, or empty if new item
 Dialogs:
 
 #colorOptions:

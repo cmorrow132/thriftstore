@@ -32,6 +32,7 @@ type PageTags struct {
 	SelectedColorCodeHtml string
 	ApplyBtnName string
 	PageType string
+	ItemPrice string;
 }
 
 var (
@@ -51,6 +52,7 @@ var (
 	selectedColorCodeName string
 	applyBtnName string
 	pageType string
+	itemPrice string
 
 	//DB Names
 	CATEGORY_DB string
@@ -265,6 +267,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			selectedColorCodeName="white"
 			applyBtnName="NewItemApply"
 			pageType="newItem"
+			itemPrice="";
 		case "get-item":
 			pageTitle="Item Lookup"
 			templateName="item.tpl"
@@ -273,6 +276,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			//barCodeButtonID="bCodeLookup"
 			applyBtnName="ExItemApply"
 			pageType="exItem"
+			itemPrice="";
 		default:
 			pageTitle="Mobile Inventory Management"
 			templateName="main.tpl"
@@ -295,7 +299,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	tpl,err:=tpl.ParseFiles("templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
+	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
 		log.Fatalln(err)
 	}
