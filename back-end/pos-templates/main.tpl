@@ -27,10 +27,45 @@
 
         .navbar-buttons {
             background-color: white;
-            font-size: 300%;
+            font-size: 250%;
         }
         .navbar-buttons:hover {
             color: #0741A0;
+        }
+
+        .content {
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-top: 50px;
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 200%;
+        }
+
+        .button-container {
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+
+        .content-buttons {
+            margin-bottom: 20px;
+            width: 50%;
+            padding-top: 10px;
+        }
+
+        .label-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 40px;
+        <!-- height: 120px; --//>
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            font-weight: normal;
+            padding-left: 20px;
+            padding-top: 15px;
+        }
+
+        .branding-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 30px;
         }
     </style>
 </head>
@@ -38,12 +73,22 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Thriftstore Inventory Mgmt</a>
+                <a class="navbar-brand branding-text" href="#">Product Management System</a>
             </div>
             <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
             <button class="btn glyphicon glyphicon-edit pull-right navbar-buttons"></button>
         </div>
     </nav>
+
+    <div class="content">
+        <div class="button-container">
+            <center>
+                <button onclick="location.href = '/font/pos';" class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Point Of Sale</button></a>
+                <button onclick="location.href = '/m/get-item';"class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Management</button>
+                <button class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Configuration</button>
+            </center>
+        </div>
+    </div>
 
     <div class="copyright text-center" style="height: 20px;">
         <p>{{.CopyRight}} </p>

@@ -9,6 +9,7 @@ import (
 	"log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/sessions"
 	"database/sql"
 	//"strings"
 	"strconv"
@@ -16,7 +17,10 @@ import (
 	//"os"
 	//"bufio"
 	"time"
+	//"sync"
 )
+
+var store = sessions.NewCookieStore([]byte("secret-password"))
 
 type mPageTags struct {						//Mobile page tags
 	ActionTitle	string
@@ -63,6 +67,7 @@ var (
 	CATEGORY_DB string
 	DISCOUNT_DB string
 	BARCODE_DB string
+	CREDENTIALS_DB string
 )
 
 func setVars() (int) {
@@ -75,6 +80,7 @@ func setVars() (int) {
 	CATEGORY_DB="CATEGORY_CD"
 	DISCOUNT_DB="DISCOUNT_CD"
 	BARCODE_DB="BARCODE_CD"
+	CREDENTIALS_DB="CREDENTIALS"
 
 	return 8890
 }
@@ -182,6 +188,43 @@ func getColors() (string) {
 	return dbResults
 }
 
+func doLogin(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	username:=r.PostFormValue("username");
+	password:=r.PostFormValue("password");
+	dbMatch:=0
+
+	session,err:=store.Get(r,"auth")
+	fmt.Println(session.Values["username"])
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	dbQuery = "select * from "+CREDENTIALS_DB + " WHERE username='" + username + "' AND password=MD5('" + password + "')"
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err=rows.Scan()
+		dbMatch++;
+	}
+
+	if(dbMatch > 0) {
+		session.Save(r, w)
+		fmt.Fprintf(w, "Success");
+		session.Values["username"] = username;
+		session.Values["password"] = password;
+
+	} else {
+		fmt.Fprintf(w,"Invalid login")
+	}
+}
+
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	category_id:=r.PostFormValue("category_id")
 	var bcode_val string
@@ -275,6 +318,7 @@ func posPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params)
 }
 func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
+
 	var templateName string
 	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
 
@@ -308,6 +352,17 @@ func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			templateName="main.tpl"
 	}
 
+	/*session,err:=store.Get(r,"auth")
+	if err!= nil {
+		fmt.Println(err.Error)
+	}
+
+	if(session.Values["username"] == nil) {
+		//Not logged in, redirect to the login page
+		templateName="mlogin.tpl"
+	}*/
+
+
 	tpl:=template.New(templateName)
 	tpl=tpl.Funcs(template.FuncMap{
 		"FncGlobalDiscount1": func() string {
@@ -333,6 +388,7 @@ func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 func main() {
 	port:=strconv.Itoa(setVars())
+
 	router:=httprouter.New()
 	router.GET("/m",mPageHandler)					//Main page handler with no pages named
 	router.GET("/m/:page",mPageHandler)				//Allows for specific pages using json format
@@ -341,7 +397,7 @@ func main() {
 
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
 	router.POST("/mkBarCode",generateBarCode)			//Ajax call to generate new bar codes
-
+	router.POST("/login",doLogin)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,router)
