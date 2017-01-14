@@ -205,8 +205,8 @@
 
 <row>
 	<div class="box-noborder">
-		<button onclick="location.href = 'new-item';" class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">New Product Inventory</button></a>
-		<button onclick="location.href = 'get-item';"class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Product Lookup</button>
+		<button onclick="location.href = '/m/new-item';" class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">New Product Inventory</button></a>
+		<button onclick="location.href = '/m/get-item';"class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Product Lookup</button>
 		<button class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Inventory Configuration</button>
 	</div>
 </row>

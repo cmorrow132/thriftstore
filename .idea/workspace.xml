@@ -2,9 +2,61 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96bf5a10-1fce-405e-9089-6e41b5ae84dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/mobile.go" afterPath="$PROJECT_DIR$/back-end/mobile.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/templates/item.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/variables.txt" afterPath="$PROJECT_DIR$/back-end/variables.txt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/mobile.go" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/css/mobile.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/doxygen_sqlite3.db" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/bc_s.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/bdwn.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/closed.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/doxygen.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/doxygen.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/dynsections.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2blank.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2doc.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2folderclosed.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2folderopen.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2lastnode.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2link.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2mlastnode.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2mnode.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2node.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2plastnode.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2pnode.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2splitbar.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/ftv2vertline.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/graph_legend.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/graph_legend.md5" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/graph_legend.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/jquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/nav_f.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/nav_g.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/nav_h.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/open.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/close.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/mag_sel.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/nomatches.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/search.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/search.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/search_l.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/search_m.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/search/search_r.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/sync_off.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/sync_on.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/tab_a.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/tab_b.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/tab_h.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/tab_s.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/html/tabs.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/item.tpl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/item_tpl.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/latex/Makefile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/latex/doxygen.sty" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/latex/refman.tex" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/main.tpl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/temp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/templates/templates.conf" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,34 +74,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="mobile.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/back-end/mobile.go">
+      <file leaf-file-name="engine.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/back-end/engine.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="269" column="35" lean-forward="false" selection-start-line="269" selection-start-column="35" selection-end-line="269" selection-end-column="35" />
-              <folding>
-                <element signature="e#14#245#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="390">
+              <caret line="270" column="83" lean-forward="false" selection-start-line="270" selection-start-column="83" selection-end-line="270" selection-end-column="83" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.tpl" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="539">
+              <caret line="47" column="55" lean-forward="false" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="item.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
+        <entry file="file://$PROJECT_DIR$/back-end/m-templates/item.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="107" column="0" lean-forward="true" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="temp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/back-end/templates/temp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="73" column="33" lean-forward="false" selection-start-line="71" selection-start-column="24" selection-end-line="73" selection-end-column="33" />
-              <folding />
+            <state relative-caret-position="217">
+              <caret line="573" column="23" lean-forward="true" selection-start-line="573" selection-start-column="23" selection-end-line="573" selection-end-column="23" />
+              <folding>
+                <element signature="n#style#0;n#div#5;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -89,8 +141,12 @@
       <list>
         <option value="$PROJECT_DIR$/back-end/templates/temp" />
         <option value="$PROJECT_DIR$/back-end/templates/item_tpl.html" />
-        <option value="$PROJECT_DIR$/back-end/templates/item.tpl" />
         <option value="$PROJECT_DIR$/back-end/mobile.go" />
+        <option value="$PROJECT_DIR$/back-end/templates/main.tpl" />
+        <option value="$PROJECT_DIR$/back-end/templates/item.tpl" />
+        <option value="$PROJECT_DIR$/back-end/main.tpl.html" />
+        <option value="$PROJECT_DIR$/back-end/engine.go" />
+        <option value="$PROJECT_DIR$/back-end/pos-templates/main.tpl" />
       </list>
     </option>
   </component>
@@ -160,7 +216,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
+              <option name="myItemId" value="pos-templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thriftstore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thriftstore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="back-end" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="m-templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -174,6 +248,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../go/projects/github-goprojects/go-templates/address_book.go" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/back-end/pos-templates" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
@@ -263,9 +342,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -273,9 +350,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3540">
           <caret line="236" column="20" lean-forward="false" selection-start-line="236" selection-start-column="20" selection-end-line="236" selection-end-column="20" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -307,9 +382,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3540">
           <caret line="236" column="20" lean-forward="false" selection-start-line="236" selection-start-column="20" selection-end-line="236" selection-end-column="20" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -341,9 +414,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -375,9 +446,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -409,9 +478,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1275">
           <caret line="85" column="121" lean-forward="false" selection-start-line="85" selection-start-column="121" selection-end-line="85" selection-end-column="121" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -443,9 +510,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#245#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -473,13 +538,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/templates/main.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2780">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/templates/item_tpl.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-330">
@@ -503,21 +561,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
+    <entry file="file://$PROJECT_DIR$/back-end/mobile.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="107" column="0" lean-forward="true" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
+        <state relative-caret-position="580">
+          <caret line="278" column="36" lean-forward="false" selection-start-line="278" selection-start-column="36" selection-end-line="278" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/mobile.go">
+    <entry file="file://$PROJECT_DIR$/back-end/templates/main.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="269" column="35" lean-forward="false" selection-start-line="269" selection-start-column="35" selection-end-line="269" selection-end-column="35" />
+        <state relative-caret-position="340">
+          <caret line="208" column="45" lean-forward="false" selection-start-line="208" selection-start-column="45" selection-end-line="208" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="300" column="69" lean-forward="false" selection-start-line="300" selection-start-column="69" selection-end-line="300" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/m-templates/item.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="573" column="23" lean-forward="true" selection-start-line="573" selection-start-column="23" selection-end-line="573" selection-end-column="23" />
           <folding>
-            <element signature="e#14#245#0" expanded="true" />
+            <element signature="n#style#0;n#div#5;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="270" column="83" lean-forward="false" selection-start-line="270" selection-start-column="83" selection-end-line="270" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="47" column="55" lean-forward="false" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>

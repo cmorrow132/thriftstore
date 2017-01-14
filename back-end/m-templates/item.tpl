@@ -14,6 +14,7 @@
 
 	<script>
 		$(document).ready(function() {
+
 		            var pageType="{{.PageType}}";
 		            switch(pageType) {
 		                case "newItem":
@@ -21,7 +22,7 @@
 		                    $('#bCodeBtn').attr('disabled','disabled');
 		                    //$('#bCodeBtn').blur();
 		            }
-
+``
                     $("#bCodeBtn").click(function () {
                         $(this).blur();                                         //Remove focus to prevent highlighting button, visual thing
                         if($(this).hasClass('clsNewCode')) {                    //Template is for new items, generate a new bar code
@@ -64,7 +65,7 @@
                         else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
                             alert("Printing bar code");
 
-                            $(this).removeClass('clsPrintCode');
+                            //$(this).removeClass('clsPrintCode');
                             $(this).addClass('clsDisableBtn');
                             $(this).attr('disabled','disabled');
                         }
@@ -91,12 +92,15 @@
                         if(getPriceValue()>0) {                                 //if a category was selected and price is greater than 0
                             $('#bCodeBtn').removeClass('clsDisableBtn');        //enable the barcode button
                             $('#bCodeBtn').removeAttr('disabled');
+                            $('#ExItemApply').removeClass('clsDisableBtn');                        //enable the apply button for existing item pages
+                            $('#ExItemApply').removeAttr('disabled');
                         }
                     });
 
+                    //################# PRICE DIALOG ###############
                     $('#price').click(function () {                                                     //Price box clicked
                         $(this).blur();
-                        $('#priceInputLabel').text($('#price').val());                                  //Set the price value in the price modal based on
+                        $('#priceInputLabel').text("");                                  //Set the price value in the price modal based on
                                                                                                         //the price label in the main page
                         $('#numberBox').modal({                                                         //Open the price modal
                             backdrop: 'static',
@@ -107,8 +111,36 @@
                     });
 
                     $('#btnPriceSubmit').click(function () {                            //Submit button pressed on the price modal
-                        $('#price').val($('#priceInputLabel').text());                  //Set the price label on the main page with the new value
+                        var price=$("#priceInputLabel").text();                                                //Get the price value
+                        var priceCents="";                                                          //Set cents to null in case none was entered
+                        var priceDollar="";
+                        var pricePlaceholder=price.split(".");                                      //Split dollars and cents
+
+                        if(pricePlaceholder[0]) {
+                            priceDollar=pricePlaceholder[0];
+                        }
+                        else {
+                            priceDollar="0";
+                        }
+                        //var priceDollar=pricePlaceholder[0].substr(0,pricePlaceholder[0].length)    //Store dollars in priceDollar
+                        if(pricePlaceholder[1]) {                                                   //Store cents in priceCents if it was entered
+                            priceCents=pricePlaceholder[1];
+                            if(priceCents.length==1) { priceCents=priceCents+"0"; }
+                        }
+                        else {
+                            priceCents="00";                                                        //Set priceCents to "00" if none was entered
+                        }
+                        var priceModifier=priceDollar+"."+priceCents                                //Set float version of price for DB data type
+
+                        $('#price').val("$"+priceModifier);                  //Set the price label on the main page with the new value
                         $('#numberBox').modal('hide');                                  //and hide the modal
+
+                        if(getPriceValue()>0 && $('#selected_category').val() != "") {
+                            $('#bCodeBtn').removeClass('clsDisableBtn');                        //enable the barcode button for new item pages
+                            $('#bCodeBtn').removeAttr('disabled');
+                            $('#ExItemApply').removeClass('clsDisableBtn');                        //enable the apply button for existing item pages
+                            $('#ExItemApply').removeAttr('disabled');
+                        }
 
                     });
 
@@ -128,40 +160,67 @@
                         return priceModifier;
                     }
 
-                    /############ HOME PAGE BUTTON CLICKED #######################//
-                    $('#homeButton').click(function () {
-                        //Check to see if the print button is enabled, if so info has been generated but bar code not printed yet
+                    $("[name=priceNumBtn]").click(function() {
+                        var numVal=$(this).val();
+                        var exValue=$('#priceInputLabel').text();
 
-                        var bCodeBtnColor=$('#bCodeBtn').css('background-color');
-                        if($('#bCodeBtn').hasClass('clsPrintCode') && bCodeBtnColor=="rgb(31, 134, 3)") {
-                                        var msgText="A bar code has not been printed for this item.";
-                                        var msgSubText="Use the reload button to clear changes first.";
-                                        $("#warningTitle").text("Warning");                   //Open the error msg modal
-                                        $('#warningMsg').text(msgText);
-                                        $('#warningSubMsg').text(msgSubText);
-                                        $("#dlgHeader").addClass("btn-danger");
-                                        $("#dlgHeader").removeClass("btn-success");
-                                        $("#dlgProgressSpinner").hide();
-                                        $("#dlg-btn").show();
-                                        $('#warningBox').modal({
-                                            backdrop: 'static',
-                                            keyboard: false,
-                                            show: true
-                                        });
-                        }
+                        $('#priceInputLabel').text(exValue+numVal);
 
-                        //Bar code was printed but data has not been saved to the database
-                        else {
-                            var colorCode=$('#NewItemApply').css('background-color');
-                            if(colorCode=="rgb(5, 180, 0)") {
-                                if($("#selected_category").val() != "" || getPriceValue() !=0 || $('#itemDescription').val()!="") {
-                                    alert("You will lose any unsubmitted data");
-                                }
-                            }
-                        }
                     });
 
+                    $('#btnPriceBkspc').click( function () {
+                        priceValue=$("#priceInputLabel").text();
+
+                        if(priceValue.length>0) {
+                            $("#priceInputLabel").text(priceValue.substr(0,priceValue.length-1));
+                        }
+                    });
+                    /############ HOME PAGE BUTTON CLICKED #######################//
+                    $('#homeButton').click(function () {
+
+                        bCodeBtnColor=$('#bCodeBtn').css('background-color');
+                        submitBtnColor=$('#NewItemApply').css('background-color');
+
+                        //Bar code printed, but item not submitted yet
+                        if($('#bCodeBtn').hasClass("clsPrintCode") && bCodeBtnColor=="rgb(192, 192, 192)" && submitBtnColor=="rgb(5, 180, 0)") {
+                             $("#warningTitle").text("Error");                                       //Set modal title to Error
+                             $('#warningMsg').text("A bar code has been printed, this item must be added to the system.");                   //Set modal msg to error
+                             $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                             $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                             $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                             $("#dlg-btn").show();                                                   //Finally open the modal
+                             $('#warningBox').modal({
+                                 backdrop: 'static',
+                                 keyboard: false,
+                                 show: true
+                             });
+                        }
+
+                        //Values changed, bar code not printed, but item has not been added
+                        else if(submitBtnColor=="rgb(5, 180, 0)") {
+                             if(getPriceValue()>0 || $('#selected_category').val() != "")
+                             {
+                                 $("#warningTitle").text("Error");                                       //Set modal title to Error
+                                 $('#warningMsg').text("You will lose any unsaved data.");                   //Set modal msg to error
+                                 $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                                 $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                                 $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                                 $("#dlg-btn").show();                                                   //Finally open the modal
+                                 $('#warningBox').modal({
+                                     backdrop: 'static',
+                                     keyboard: false,
+                                     show: true
+                                 });
+                             }
+
+                             else {
+                                $(location).attr('href', '/m')
+                             }
+                        }
+
+                    });
                     //
+
                     //########### HANDLE ADDING NEW ITEMS TO THE DATABASE ##################
                     $('#NewItemApply').click(function () {                                              //New item apply button
                                                                                                         //Check that all fields are completed
@@ -170,7 +229,22 @@
 
                         if(!priceTotal) { priceTotal=0; }
 
-                        if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)      //Some fields incomplete
+                        var bCodeBtnColor=$('#bCodeBtn').css('background-color');
+                        if($("#bCodeBtn").hasClass('clsPrintCode') && bCodeBtnColor=="rgb(31, 134, 3)") {
+                            $("#warningTitle").text("Error");                                       //Set modal title to Error
+                            $('#warningMsg').text("You must print the bar code before adding the product.");                   //Set modal msg to error
+                            $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                            $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                            $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                            $("#dlg-btn").show();                                                   //Finally open the modal
+                            $('#warningBox').modal({
+                                backdrop: 'static',
+                                keyboard: false,
+                                show: true
+                            });
+                        }
+
+                        else if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)      //Some fields incomplete
                         {
                             $("#warningTitle").text("Error");                                       //Set modal title to Error
                             $('#warningMsg').text("Some fields are incomplete.");                   //Set modal msg to error
@@ -223,6 +297,8 @@
                                         $('#itemDescription').addClass('clsDisableBtn');
                                         $('#selectedColorCode').attr('disabled','disabled');
                                         //$('#selectedColorCode').addClass('clsDisableBtn');
+
+                                        $(location).attr('href', '/m/new-item')                           //Item added, reload blank new item page
                                     }
                                     else {                                                              //Change status to error if back end returned error on adding item
                                         $("#warningTitle").text("Error");

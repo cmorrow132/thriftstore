@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-type PageTags struct {
+type mPageTags struct {						//Mobile page tags
 	ActionTitle	string
 	BarCodeID	string
 	GlobalDiscount1	string
@@ -33,6 +33,11 @@ type PageTags struct {
 	ApplyBtnName string
 	PageType string
 	ItemPrice string;
+}
+
+type pPageTags struct {
+	ActionTitle	string
+	CopyRight	string
 }
 
 var (
@@ -64,6 +69,8 @@ func setVars() (int) {
 	dbUsername="goservices"
 	dbPassword="C7163mwx!"
 	dbLoginString=dbUsername+":"+dbPassword
+
+	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
 
 	CATEGORY_DB="CATEGORY_CD"
 	DISCOUNT_DB="DISCOUNT_CD"
@@ -247,7 +254,26 @@ func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 }
 
-func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+func posPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	var templateName string
+
+	pageRequest:=ps.ByName("page")
+
+	switch (pageRequest) {
+		default:
+			templateName="main.tpl"
+			pageTitle="Front End "
+	}
+
+	tpl:=template.New(templateName)
+	tpl,err:=tpl.ParseFiles("pos-templates/"+templateName)
+	if err!=nil { log.Fatalln(err.Error()) }
+	err = tpl.Execute(w,pPageTags{ActionTitle:pageTitle,CopyRight:copyrightMsg,})
+	if err!=nil {
+		log.Fatalln(err)
+	}
+}
+func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
 	var templateName string
 	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
@@ -267,7 +293,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			selectedColorCodeName="white"
 			applyBtnName="NewItemApply"
 			pageType="newItem"
-			itemPrice="";
+			itemPrice="$0.00";
 		case "get-item":
 			pageTitle="Item Lookup"
 			templateName="item.tpl"
@@ -276,9 +302,9 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			//barCodeButtonID="bCodeLookup"
 			applyBtnName="ExItemApply"
 			pageType="exItem"
-			itemPrice="";
+			itemPrice="$";
 		default:
-			pageTitle="Mobile Inventory Management"
+			pageTitle="Inventory Management"
 			templateName="main.tpl"
 	}
 
@@ -297,9 +323,9 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 	})
 
-	tpl,err:=tpl.ParseFiles("templates/"+templateName)
+	tpl,err:=tpl.ParseFiles("m-templates/"+templateName)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
+	err = tpl.Execute(w,mPageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
 		log.Fatalln(err)
 	}
@@ -308,8 +334,11 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 func main() {
 	port:=strconv.Itoa(setVars())
 	router:=httprouter.New()
-	router.GET("/",pageHandler)					//Main page handler with no pages named
-	router.GET("/:page",pageHandler)				//Allows for specific pages using json format
+	router.GET("/m",mPageHandler)					//Main page handler with no pages named
+	router.GET("/m/:page",mPageHandler)				//Allows for specific pages using json format
+	router.GET("/front",posPageHandler)
+	router.GET("/front/:page",posPageHandler)
+
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
 	router.POST("/mkBarCode",generateBarCode)			//Ajax call to generate new bar codes
 
