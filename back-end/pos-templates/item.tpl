@@ -72,14 +72,47 @@
                                                                                 //change to print button, see above for CSS class changes
                         }
                         else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
-                            alert("Printing bar code");
-                            $('#btnReload').addClass('clsDisableBtn');
-                            $('#btnReload').attr('disabled','disabled');
-                            $('#pageSelector').attr('disabled','disabled');
 
-                            //$(this).removeClass('clsPrintCode');
-                            $(this).addClass('clsDisableBtn');
-                            $(this).attr('disabled','disabled');
+
+                            $("#warningTitle").text("Printing");                   //Open the error msg modal
+                            $('#warningMsg').text("Printing bar code");
+                            $("#dlgHeader").removeClass("btn-danger");
+                            $("#dlgHeader").addClass("btn-success");
+                            $("#dlgProgressSpinner").show();
+                            $("#dlg-btn").hide();
+                            $('#warningBox').modal({
+                                backdrop: 'static',
+                                keyboard: false,
+                                show: true
+                            });
+
+                            var postData="";
+                            $.ajax({                                                                    //Send data to the back end
+                                url: '/printCode',
+                                type: 'post',
+                                dataType: 'text',
+                                data: postData,
+                                success: function (data) {                          //AJAX request completed, deal with the results below
+                                    if (data == "Success") {
+                                        $('#warningBox').modal('hide');
+
+                                        $('#bCodeBtn').removeClass('clsPrintCode');
+                                        $('#bCodeBtn').addClass('clsDisableBtn');
+                                        $('#bCodeBtn').attr('disabled','disabled');
+                                        $('#bCodeBtn').blur();
+
+                                        $('#btnReload').addClass('clsDisableBtn');
+                                        $('#btnReload').attr('disabled','disabled');
+                                        $('#pageSelector').attr('disabled','disabled');
+                                        $('#selected_category').attr('disabled','disabled');
+                                        $('#itemDescription').attr('disabled','disabled');
+                                        $('#price').attr('disabled','disabled');
+                                        $('#selectedColorCode').attr('disabled','disabled');
+
+
+                                    }
+                                }
+                            });
                         }
                     });
 
@@ -116,7 +149,7 @@
                                                                                                         //the price label in the main page
                         $('#numberBox').modal({                                                         //Open the price modal
                             backdrop: 'static',
-                            keyboard: false,
+                            keyboard: true,
                             show: true
                         });
 
@@ -208,6 +241,20 @@
                              });
                         }
 
+                        else if($('#bCodeBtn').hasClass('clsDisableBtn') && $('#bCodeBtn').text()==" Print")
+                        {
+                            $("#warningTitle").text("Error");                                       //Set modal title to Error
+                            $('#warningMsg').text("A bar code has been printed. You must submit this item to inventory.");                   //Set modal msg to error
+                            $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                            $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                            $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                            $("#dlg-btn").show();                                                   //Finally open the modal
+                            $('#warningBox').modal({
+                                backdrop: 'static',
+                                keyboard: false,
+                                show: true
+                            });
+                        }
                         //Values changed, bar code not printed, but item has not been added
                         else if(getPriceValue()>0 || $('#selected_category').val() != "")
                         {
@@ -441,20 +488,17 @@
 
         .dlglabel-msg {
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 30px;
-			<!-- height: 120px; --//>
-			padding-bottom: 60px;
+			font-size: 20px;
+			padding-bottom: 30px;
 			margin-bottom: 0px;
-			font-weight: normal;
 			padding-left: 20px;
-			padding-top: 15px;
         }
 
         .dlglabel-submsg {
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 40px;
+			font-size: 30px;
 			<!-- height: 120px; --//>
-			padding-bottom: 60px;
+			padding-bottom: 20px;
 			margin-bottom: 30px;
 			font-weight: normal;
 			padding-left: 20px;
@@ -463,12 +507,11 @@
 
 		.dlglabel-text {
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 70px;
-			<!-- height: 120px; --//>
-			padding-bottom: 10px;
+			font-size: 20px;
+
 			font-weight: normal;
 			padding-left: 20px;
-			padding-top: 10px;
+
 		}
 
 		.sublabel-text {
@@ -777,7 +820,7 @@
 
 <div class="container">
     <div id="warningBox" class="modal fade" role="dialog" data-backdrop="true">
-        <div class="modal-dialog modal-lg" style="width: 90%;">
+        <div class="modal-dialog modal-md">
         <!-- Modal content-->
             <div class="modal-content">
                 <div id="dlgHeader" class="modal-header">
@@ -787,12 +830,12 @@
                     <div>
                         <label class="dlglabel-msg text-center" id="warningMsg"></label>
                         <label class="dlglabel-submsg" style="font-style: italic; font-weight: bold;" id="warningSubMsg"></label>
-                            <div class="text-center label-text" style="padding-bottom: 50px;" id="dlgProgressSpinner">
-                                <i class="fa fa-circle-o-notch fa-spin" style="font-size: 300%;"></i>
+                            <div class="text-center label-text" style="padding-bottom: 10px;" id="dlgProgressSpinner">
+                                <i class="fa fa-circle-o-notch fa-spin" style="font-size: 200%;"></i>
                             </div>
                     </div>
                     <div id="dlg-btn" class="text-center" hidden="true">
-                        <button type="button" class="text-center btn btn-primary label-text" style="width: 50%; border: 1px solid;" data-dismiss="modal">OK</button>
+                        <button type="button" class="text-center btn btn-primary label-text" style="width: 30%; border: 1px solid; font-size: 30px; font-style: bold;" data-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
@@ -802,7 +845,7 @@
 
 
 <div id="numberBox" class="modal fade" role="dialog" data-backdrop="true">
-    <div class="modal-dialog modal-lg" style="width: 80%;">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content" style="width: 100%;">
             <div class="modal-header btn-primary" style="padding-top: 10px; padding-bottom: 10px;">
                 <h4 class="modal-title label-text text-center dlglabel-text">Price Input</h4>

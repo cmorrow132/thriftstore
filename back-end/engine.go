@@ -340,6 +340,10 @@ func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 	fmt.Fprintf(w,bcode_val)
 }
 
+func printBarCode (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	time.Sleep(2*time.Second)
+	fmt.Fprintf(w,"Success")
+}
 func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	//formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
@@ -358,6 +362,36 @@ func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	time.Sleep(2*time.Second)
 	fmt.Fprintf(w,"Success")
 
+}
+
+func checkSetupComplete() (bool){
+	//fmt.Println("Setup has not been completed.")
+	var dbMatch int
+	var dbQuery string
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Println("Error: Could not open the database")
+	}
+
+	defer db.Close()
+
+	dbQuery = "select * from "+CREDENTIALS_DB + " WHERE username='setup'";
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err=rows.Scan()
+		dbMatch++;
+	}
+
+	if(dbMatch > 0) {
+		return false
+	} else {
+		return true
+	}
 }
 
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -415,6 +449,20 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		templateName="mlogin.tpl"
 	}*/
 
+	if(checkSetupComplete()==false) {
+		//Setup has not been completed, load that page
+		templateName="config.tpl"
+		templatePath="sys-templates/config.tpl"
+
+	} else {
+		if (mobile) {
+			templatePath = "m-templates/" + templateName
+			mobOrPcHomeBtn = "/m"
+		} else {
+			templatePath = "pos-templates/" + templateName
+			mobOrPcHomeBtn = "/front"
+		}
+	}
 
 	tpl:=template.New(templateName)
 	tpl=tpl.Funcs(template.FuncMap{
@@ -431,13 +479,6 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 	})
 
-	if(mobile) {
-		templatePath="m-templates/" + templateName
-		mobOrPcHomeBtn="/m"
-	} else {
-		templatePath="pos-templates/" + templateName
-		mobOrPcHomeBtn="/front"
-	}
 	tpl,err:=tpl.ParseFiles(templatePath)
 	if err!=nil { log.Fatalln(err.Error()) }
 	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
@@ -458,6 +499,7 @@ func main() {
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
 	router.POST("/mkBarCode",generateBarCode)			//Ajax call to generate new bar codes
 	router.POST("/login",doLogin)
+	router.POST("/printCode", printBarCode)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,router)
