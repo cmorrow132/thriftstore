@@ -11,7 +11,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/gorilla/sessions"
 	"database/sql"
-	//"strings"
+	"strings"
 	"strconv"
 	"math/rand"
 	//"os"
@@ -22,8 +22,9 @@ import (
 
 var store = sessions.NewCookieStore([]byte("secret-password"))
 
-type mPageTags struct {						//Mobile page tags
+type PageTags struct {						//Mobile page tags
 	ActionTitle	string
+	MobOrPcHomeBtn	string
 	BarCodeID	string
 	GlobalDiscount1	string
 	GlobalDiscount2	string
@@ -39,17 +40,13 @@ type mPageTags struct {						//Mobile page tags
 	ItemPrice string;
 }
 
-type pPageTags struct {
-	ActionTitle	string
-	CopyRight	string
-}
-
 var (
 	dbUsername string
 	dbPassword string
 	dbLoginString string
 	dbQuery string
 	proxyURL string
+	mobOrPcHomeBtn string
 	barCodeID string
 	barCodeBtnLabel string
 	//barCodeButtonID	string
@@ -154,6 +151,68 @@ func getDefaultColor(requestId int, colorName string) (string) {
 	}
 }
 
+func getDiscounts() (string) {
+	var colorcode string
+	var discountAmount string;
+	var discountDollars int
+	var discountCents int
+	var priceString string
+
+	//var tmpDiscountDollars string
+	//var tmpDiscountCents string
+
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	dbResults:=""
+	if err!=nil {
+		return "Error loading discounts"
+	}
+	defer db.Close()
+
+	dbQuery="SELECT colorcode, amount FROM DISCOUNT_CD WHERE type='color'";
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&colorcode, &discountAmount)
+
+		if err!=nil {
+			return "Error loading color"
+		}
+
+
+		discountSplit:=strings.Split(discountAmount,".")
+		discountDollars,_=strconv.Atoi(discountSplit[0])	//Convert dollar string to int
+		discountCents,_=strconv.Atoi(discountSplit[1])
+
+		priceString=""
+
+		if(discountDollars==0 && discountCents > 0) { //Dollars is 0, so discount is a percentage
+			priceString = strconv.Itoa(discountCents) + "%"
+		} else if(discountDollars>0) {
+			priceString="$"
+			priceString += strconv.Itoa(discountDollars)
+
+			if(discountCents > 0) {
+				priceString +="." + strconv.Itoa(discountCents)
+			}
+		}
+
+		if(priceString != "") {
+			dbResults+="<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px; border-radius: 50px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + priceString + " , "
+		}
+
+		fmt.Println(priceString)
+	}
+
+	if(dbResults=="") {
+		dbResults="No discounts defined"
+	}
+
+	return dbResults
+}
+
 func getColors() (string) {
 	var colorname, colorcode string
 	var colorID int		//singleColor returns request to populate the default color selection on the item template at the back end
@@ -182,7 +241,11 @@ func getColors() (string) {
 			return "Error loading color"
 		}
 
-		dbResults+="<button class=\"color-buttons btn btn-cons active\" data-dismiss=\"modal\" style=\"border: solid; border-radius: 50px; background-color: "+colorcode+" !important; height: 150px;\" name=\"color\" value=\""+strconv.Itoa(colorID)+"\"></button>"
+		dbResults+="<button class=\"color-buttons btn btn-cons active\" data-dismiss=\"modal\" style=\"background-color: "+colorcode+" !important;\" name=\"color\" value=\""+strconv.Itoa(colorID)+"\"></button>"
+	}
+
+	if(dbResults=="") {
+		dbResults="<p class=\"dlglabel-msg\">No color codes defined</p>"
 	}
 
 	return dbResults
@@ -297,29 +360,19 @@ func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 }
 
-func posPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
-	var templateName string
-
-	pageRequest:=ps.ByName("page")
-
-	switch (pageRequest) {
-		default:
-			templateName="main.tpl"
-			pageTitle="Front End "
-	}
-
-	tpl:=template.New(templateName)
-	tpl,err:=tpl.ParseFiles("pos-templates/"+templateName)
-	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,pPageTags{ActionTitle:pageTitle,CopyRight:copyrightMsg,})
-	if err!=nil {
-		log.Fatalln(err)
-	}
-}
-func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
+	var mobile bool
 
-	var templateName string
+	urlPath:=strings.Split(r.URL.Path,"/")
+	mobOrPC:=urlPath[1]				//Detect if mobile or pc version is request (/m, or /front)
+	if(mobOrPC=="m") {
+		mobile=true
+	} else {
+		mobile=false
+	}
+
+	var templateName, templatePath string
 	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
 
 	pageRequest:=ps.ByName("page")
@@ -367,7 +420,7 @@ func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	tpl=tpl.Funcs(template.FuncMap{
 		"FncGlobalDiscount1": func() string {
 			//Return list of current discounts for item.tpl
-			return "None";
+			return getDiscounts();
 		},
 
 		"FnMbiTrkc": func() string {
@@ -378,9 +431,16 @@ func mPageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 	})
 
-	tpl,err:=tpl.ParseFiles("m-templates/"+templateName)
+	if(mobile) {
+		templatePath="m-templates/" + templateName
+		mobOrPcHomeBtn="/m"
+	} else {
+		templatePath="pos-templates/" + templateName
+		mobOrPcHomeBtn="/front"
+	}
+	tpl,err:=tpl.ParseFiles(templatePath)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,mPageTags{PageType:pageType,ActionTitle:pageTitle,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
+	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
 		log.Fatalln(err)
 	}
@@ -390,10 +450,10 @@ func main() {
 	port:=strconv.Itoa(setVars())
 
 	router:=httprouter.New()
-	router.GET("/m",mPageHandler)					//Main page handler with no pages named
-	router.GET("/m/:page",mPageHandler)				//Allows for specific pages using json format
-	router.GET("/front",posPageHandler)
-	router.GET("/front/:page",posPageHandler)
+	router.GET("/m",pageHandler)					//Main page handler with no pages named
+	router.GET("/m/:page",pageHandler)				//Allows for specific pages using json format
+	router.GET("/front",pageHandler)
+	router.GET("/front/:page",pageHandler)
 
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
 	router.POST("/mkBarCode",generateBarCode)			//Ajax call to generate new bar codes

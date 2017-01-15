@@ -20,9 +20,18 @@
 		                case "newItem":
 		                    $('#bCodeBtn').addClass('clsDisableBtn');
 		                    $('#bCodeBtn').attr('disabled','disabled');
+		                    break;
 		                    //$('#bCodeBtn').blur();
+                        case "exItem":
+                            $('#selected_category').attr('disabled','disabled');
+                            $('#price').attr('disabled','disabled');
+                            $('#itemDescription').attr('disabled','disabled');
+                            $('#selectedColorCode').attr('disabled','disabled');
+                            $('#ExItemApply').attr('disabled','disabled');
+                            $('#ExItemApply').addClass('clsDisableBtn');
+                            break;
 		            }
-``
+
                     $("#bCodeBtn").click(function () {
                         $(this).blur();                                         //Remove focus to prevent highlighting button, visual thing
                         if($(this).hasClass('clsNewCode')) {                    //Template is for new items, generate a new bar code
@@ -66,6 +75,7 @@
                             alert("Printing bar code");
                             $('#btnReload').addClass('clsDisableBtn');
                             $('#btnReload').attr('disabled','disabled');
+                            $('#pageSelector').attr('disabled','disabled');
 
                             //$(this).removeClass('clsPrintCode');
                             $(this).addClass('clsDisableBtn');
@@ -184,7 +194,7 @@
                         submitBtnColor=$('#NewItemApply').css('background-color');
 
                         //Bar code printed, but item not submitted yet
-                        if($('#bCodeBtn').hasClass("clsPrintCode") && bCodeBtnColor=="rgb(192, 192, 192)" && submitBtnColor=="rgb(5, 180, 0)") {
+                        if($('#bCodeBtn').hasClass("clsPrintCode") && bCodeBtnColor=="rgb(192, 192, 192)") {
                              $("#warningTitle").text("Error");                                       //Set modal title to Error
                              $('#warningMsg').text("A bar code has been printed, this item must be added to the system.");                   //Set modal msg to error
                              $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
@@ -199,25 +209,24 @@
                         }
 
                         //Values changed, bar code not printed, but item has not been added
-                        else if(submitBtnColor=="rgb(5, 180, 0)") {
-                             if(getPriceValue()>0 || $('#selected_category').val() != "")
-                             {
-                                 $("#warningTitle").text("Error");                                       //Set modal title to Error
-                                 $('#warningMsg').text("You will lose any unsaved data.");                   //Set modal msg to error
-                                 $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
-                                 $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
-                                 $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
-                                 $("#dlg-btn").show();                                                   //Finally open the modal
-                                 $('#warningBox').modal({
-                                     backdrop: 'static',
-                                     keyboard: false,
-                                     show: true
-                                 });
-                             }
+                        else if(getPriceValue()>0 || $('#selected_category').val() != "")
+                        {
+                            $("#warningTitle").text("Error");                                       //Set modal title to Error
+                            $('#warningMsg').text("You will lose any unsaved data.");                   //Set modal msg to error
+                            $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                            $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                            $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                            $("#dlg-btn").show();                                                   //Finally open the modal
+                            $('#warningBox').modal({
+                                backdrop: 'static',
+                                keyboard: false,
+                                show: true
+                            });
+                        }
 
-                             else {
-                                $(location).attr('href', '{{.MobOrPcHomeBtn}}');
-                             }
+                        else {
+                            $(location).attr('href', '{{.MobOrPcHomeBtn}}');
+                             //}
                         }
 
                     });
@@ -351,9 +360,7 @@
 		}
 
 		.main-content {
-			padding-left: 10px;
-			padding-right: 10px;
-			margin-right: 10px;
+			padding-left: 100px;
 		}
 
 		radio {
@@ -361,24 +368,36 @@
 		}
 
 		.header-buttons {
-			font-size: 600%;
-			margin-bottom: 15px;
-			
+			font-size: 220%;
+            width: 90px;
+            border: 0px;
+			padding-top: 0px;
+            padding-bottom: 0px;
+            color: #ffffff;
+            background-color: #428bca;
 		}
 
 		.page-controls {
 			border-radius: 10px;
-			height: 120px;
-			margin-bottom: 30px;
-			padding-bottom: 50px;
+			height: 50px;
+			margin-bottom: 20px;
+            padding-bottom: 45px;
 		}
 
 		.category-control {
-			font-size: 500%;
+			font-size: 200%;
 			text-align: left;
-			border: solid;
+			border: 1px solid;
 			background-color: #edfffe;
+            width: 76%;
 		}
+
+        .menu-dropdown {
+            font-size: 150%;
+            text-align: left;
+            border: 1px solid;
+            background-color: #edfffe;
+        }
 		.caret-icon {
 			text-align: right;
 		}
@@ -389,11 +408,14 @@
 		}
 
 		.inputs {
+            width: 76%;
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 70px;
-			height: 120px;
-			margin-bottom: 30px;
-			border: solid;
+			font-size: 200%;
+			height: 50px;
+			margin-bottom: 20px;
+			border: 1px solid;
+            border-radius: 10px;
+            padding-left: 20px;
 		}
 
 		.title-text {
@@ -409,27 +431,17 @@
 			text-decoration: underline;
 		}
 
-		.label-text {
-			font-family: Arial, Helvetica, Monospace;
-			font-size: 70px;
-			padding-bottom: 20px;
-			margin-bottom: 20px;
-			font-weight: normal;
-			padding-left: 20px;
-			padding-top: 15px;
-		}
-
         .discountlabel-text {
             font-family: Arial, Helvetica, Monospace;
-            font-size: 60px;
+            font-size: 40px;
             font-weight: normal;
             padding-left: 20px;
-            width: 100px;
+            width: 65px;
          }
 
         .dlglabel-msg {
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 60px;
+			font-size: 30px;
 			<!-- height: 120px; --//>
 			padding-bottom: 60px;
 			margin-bottom: 0px;
@@ -461,7 +473,7 @@
 
 		.sublabel-text {
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 50px;
+			font-size: 20px;
 			font-style: italic;
 			<!-- height: 120px; --//>
 			padding-bottom: 20px;
@@ -472,16 +484,17 @@
 		}
 
 		.box {
-			border: solid;
-			border-radius: 10px;
+			border: 1px solid;
+			border-radius: 5px;
 			padding-bottom: 10px;
 			margin-bottom: 200px;
+            width: 500px;
 		}
 
 		.box-noborder {
 			border-radius: 10px;
 			padding-left: 50px;
-			padding-right: 10px;
+			padding-right: 50px;
 		}
 
         .hidden {
@@ -510,15 +523,21 @@
 
 		.color-buttons {
 			font-size: 50px;
-            height: 150px;
+            height: 50px;
             border-radius: 50px;
-            border: solid;
+            width: 50px;
+            border: 1px solid;
 		}
 
         .category-buttons {
-            font-size: 70px;
+            font-size: 20px;
             background-color: white;
             text-align: left;
+        }
+
+        .category-buttons:hover {
+            background-color: #3071a9;
+            color: white;
         }
 		.active {
   			<!-- background-color:   #737373  !important; -->
@@ -532,17 +551,16 @@
 		}
 
 		.barcode {
-			border-radius: 10px;
-			height: 120px;
-			margin-bottom: 50px;
+			border-radius: 5px;
+			height: 50px;
 			margin-left: 15px;
-			<!-- padding-bottom: 50px; //-->
+            padding-left: 20px;
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 500%;
+			font-size: 200%;
 			text-align: left;
-			border: solid;
+			border: 1px solid;
 			background-color: silver;
-			width: 65%;
+			width: 55%;
 
 		}
 
@@ -550,13 +568,11 @@
 			border-radius: 10px;
 			border: 1px;
 			border-style: solid;
-			height: 120px;
-			margin-bottom: 50px;
-			margin-top: 10px;
-			<!-- padding-bottom: 50px; //-->
+			height: 50px;
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 500%;
+			font-size: 200%;
 			border: solid;
+            margin-bottom: 10px;
 		}
 		.clsNewCode {
 		    background-color: #A06100 !important;
@@ -572,16 +588,16 @@
             color: #a9a9a9;
         }
 
-		.copyright {
-			position:fixed;
-			bottom:0;
-			width:100%;
-			display:block;
-			font-family: Arial, Helvetica, Monospace;
-			font-size: 40px;
-			background-color: #000345;
-			color: white;
-		}
+        .copyright {
+            position:fixed;
+            bottom:0;
+            width:100%;
+            display:block;
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 15px;
+            background-color: #000345;
+            color: white;
+        }
 
 		#colorChooser {
 		    top: 20%;
@@ -633,6 +649,80 @@
 			margin-bottom: 10px;
 			padding-left: 20px;
         }
+
+        .navbar-buttons {
+            background-color: white;
+            font-size: 250%;
+        }
+        .navbar-buttons:hover {
+            color: #0741A0;
+        }
+
+        .content {
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-top: 50px;
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 200%;
+        }
+
+        .button-container {
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+
+        .content-buttons {
+            margin-bottom: 0px;
+            width: 50%;
+            padding-top: 10px;
+        }
+
+        .label-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 30px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            font-weight: normal;
+            padding-left: 20px;
+            padding-top: 15px;
+        }
+
+        .branding-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 30px;
+        }
+
+        .col-1 {
+            width: 50%;
+        }
+        .col-2 {
+            width: 50%;
+            padding-left: 50px;
+        }
+
+        .discountbox-col1 {
+            width: 50%;
+            padding-left: 20px;
+        }
+
+        .discountbox-col2 {
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        [class*="col-"] {
+            float: left;
+        }
+
+        #homeButton {
+            margin-left: 50px;
+        }
+
 	</style>
 </head>
 
@@ -640,39 +730,36 @@
 
 <!-- ################## DIALOG BOXES ################## -->
 <div class="container">
-<div id="colorChooser" class="modal fade" role="dialog" data-backdrop="true">
-  <div class="modal-dialog modal-lg" style="width: 90%;">
+    <div id="colorChooser" class="modal fade" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-md">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header btn-primary">
-            <h4 class="modal-title text-center" style="font-size: 50px;">Choose a color code for this item</h4>
-      </div>
-      <div class="modal-body">
-            <div id="colorOptions" class="box-noborder" style="padding-left: 20px;">
-                <div class="btn-group" data-toggle="buttons">
-                    <div id="colorButtonGroup">
-                    {{GetColors}}
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header btn-primary">
+                    <h4 class="modal-title text-center" style="font-size: 20px;">Choose a category for this item</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="categorybox-noborder" style="padding-left: 20px;">
+                        <ul>
+                            {{GetColors}}
+                        </ul>
                     </div>
                 </div>
+
             </div>
-      </div>
 
+        </div>
     </div>
-
-  </div>
 </div>
-</div>
-
 
 <div class="container">
 <div id="categoryChooser" class="modal fade" role="dialog" data-backdrop="true">
-  <div class="modal-dialog modal-lg" style="width: 90%;">
+  <div class="modal-dialog modal-md">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header btn-primary">
-            <h4 class="modal-title text-center" style="font-size: 50px;">Choose a category for this item</h4>
+            <h4 class="modal-title text-center" style="font-size: 20px;">Choose a category for this item</h4>
       </div>
       <div class="modal-body">
             <div class="categorybox-noborder">
@@ -751,74 +838,100 @@
 </div>
 <!-- ################## END DIALOG BOXES ################## -->
 
-<row class="col-md-12">
-	<button class="btn btn-block btn-success text-center label-text" style="background-color: #00274D;">{{.ActionTitle}}</button>
-</row>
 
-<div class="container-fluid main-content">
-
-<row>
-	<div class="col-xs-4">
-		<button id="homeButton" class="btn btn-block btn-primary fa fa-home page-controls header-buttons"></button>
-	</div>
-	<div class="col-xs-4">
-		<button id="{{.ApplyBtnName}}" class="btn btn-success btn-block fa fa-check header-buttons page-controls" style="background-color: #05B400;"></button>
-	</div>
-	<div class="col-xs-4">
-		<button id="btnReload" class="btn btn-yellow btn-block fa fa-refresh header-buttons page-controls"></button>
-	</div>
-
-</row>
-
-<row>
-	<div class="input-prepend">
-			<input id="bCodeID" class="barcode" type="text" placeholder="Product BarCode" value="{{.BarCodeID}}" disabled>
-			<button id="bCodeBtn" class="btn btn-info barcode-btn fa fa-barcode {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"> {{.BarcodeBtnLabel}}</button>
-	</div>
-</row>
-
-<row>
-	<div class="col-md-12">
-		<div class="dropdown">
-			<button id="selected_category" value="" class="dropdown-toggle btn btn-block btn-default page-controls category-control text-left" type="button" data-toggle="modal" data-target="#categoryChooser">Category
-				<i class="fa fa-caret-down" aria-hidden="true"></i>
-			</button>
+<nav class="navbar navbar-default" style="margin-bottom: 0px;">
+    <div class="container-fluid">
+        <div class="navbar-header" style="margin-bottom: 0px;">
+            <a class="navbar-brand branding-text" href="#">Produce Management System - {{.ActionTitle}}</a>
+        </div>
+        <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
+    </div>
+</nav>
 
 
-		</div>
-	</div>
-</row>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid btn-primary">
+            <div class="navbar-header">
+                <row class="cox-xs-12">
+                    <button id="homeButton" class="btn btn-default fa fa-home header-buttons"></button>
+                    <button id="{{.ApplyBtnName}}" class="btn btn-default fa fa-check header-buttons"></button>
+                    <button id="btnReload" class="btn btn-default fa fa-refresh header-buttons"></button>
+                </row>
 
-<row>
-	<div class="col-md-12">
-	    <input id="price" class="form-control input-lg inputs" type=text placeholder="$" value="{{.ItemPrice}}">
-	</div>
-</row>
-<row>
-	<div class="col-md-12">
-			<input id="itemDescription" class="form-control input-lg inputs" type="text" placeholder="Item Description (Optional)">
-	</div>
-</row>
+        </div>
+            <div class="dropdown pull-right">
+                <a href="#" id="pageSelector" class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{.ActionTitle}} <span class="caret" style="font-size: 50px;"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/front/new-item">Add Item</a></li>
+                    <li><a href="/front/get-item">Item Lookup</a></li>
+                </ul>
+            </div>
+    </nav>
 
-<row class="col-xs-12">
-	<div class="box">
-	    <center>
-            <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
+<div class="container-fluid main-content" style="margin-top: 0px; padding-top: 0px;">
+
+<div class="row"><div class="col-1">
+    <p>
+        <div class="input-prepend">
+                <input id="bCodeID" class="barcode" type="text" placeholder="Product BarCode" value="{{.BarCodeID}}" disabled>
+        <button id="bCodeBtn" class="btn btn-info barcode-btn {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"><i class="fa fa-barcode "> {{.BarcodeBtnLabel}}</i></button>
+        </div>
+    </p>
+
+    <row>
+        <div class="col-md-12">
+            <div class="dropdown">
+                <button id="selected_category" value="" class="dropdown-toggle btn btn-default page-controls category-control text-left" type="button" data-toggle="modal" data-target="#categoryChooser">Category
+                    <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </button>
+
+
+            </div>
+        </div>
+    </row>
+
+    <row>
+        <div class="col-md-12">
+            <input id="price" class="inputs" type=text placeholder="$" value="{{.ItemPrice}}">
+        </div>
+    </row>
+
+    <row>
+        <div class="col-md-12">
+                <input id="itemDescription" class="form-control inputs" type="text" placeholder="Item Description (Optional)">
+        </div>
+    </row>
+
+</div><div class="col-2">           <!-- Column 2 -->
+        <div class="box">
+            <center>
+                <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
+            </center>
             <p>
-                <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCode}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCodeHtml}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
+                <label class="text-center label-text" style="padding-top: 0px; margin-top: 0px; margin-bottom: 0px; padding-bottom: 0px;">Selected Color Code: </label>
+            </p><p>
+            <center>
+                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCode}}" style="border: 1px solid; font-size: 40%; background-color: {{.SelectedColorCodeHtml}}; margin-top: 0px; width: 100px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
+            </center>
             </p>
-	    </center>
 
-		<p>
-		    <label class="sublabel-text">Current discounts: {{FncGlobalDiscount1}}</label>
-		</p>
-	</div>
-</row>
+            <div class="row">
+                <div class="discountbox-col1">
+                    <p>
+                        <label class="sublabel-text">Current discounts: </label>
+                    </p>
+                </div><div class="discountbox-col2 text-center">
+                    {{FncGlobalDiscount1}}
+                </div>
+            </div>
+
+
+        </div>
+    </div>          <!-- end column 2 -->
+</div>              <!-- end row -->
 
 </div>
-
-<div class="copyright text-center" style="height: 60px;">
+<div class="copyright text-center" style="height: 20px;">
 	<p>{{.CopyRight}} </p>
 </div>
 

@@ -76,15 +76,14 @@
                 <a class="navbar-brand branding-text" href="#">Product Management System</a>
             </div>
             <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
-            <button class="btn glyphicon glyphicon-edit pull-right navbar-buttons"></button>
         </div>
     </nav>
 
     <div class="content">
         <div class="button-container">
             <center>
-                <button onclick="location.href = '/font/pos';" class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Point Of Sale</button></a>
-                <button onclick="location.href = '/m/get-item';"class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Management</button>
+                <button onclick="location.href = '/front/pos';" class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Point Of Sale</button></a>
+                <button onclick="location.href = '/front/new-item';"class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Management</button>
                 <button class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Configuration</button>
             </center>
         </div>

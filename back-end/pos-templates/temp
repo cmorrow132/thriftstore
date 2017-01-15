@@ -1,0 +1,22 @@
+<div class="col2">
+
+
+	<div class="box">
+	    <center>
+            <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
+        </center>
+        <p>
+            <label class="text-center label-text" style="padding-top: 0px; margin-top: 0px; margin-bottom: 0px; padding-bottom: 0px;">Selected Color Code: </label>
+        </p><p>
+            <center>
+                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCode}}" style="border: 1px solid; font-size: 40%; background-color: {{.SelectedColorCodeHtml}}; margin-top: 0px; width: 100px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
+            </center>
+        </p>
+        <p>
+		    <label class="sublabel-text">Current discounts: {{FncGlobalDiscount1}}</label>
+		</p>
+	</div>
+</div></div>
+    <!--
+</div>
+//-->
