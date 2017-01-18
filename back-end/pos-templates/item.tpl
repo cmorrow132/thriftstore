@@ -392,6 +392,24 @@
                       return this;
                     };
 
+            $('#logout').click(function() {
+                $.ajax({                                            //Send GET request to back end
+                    url: '/logout',
+                    type: 'post',
+                    dataType: 'text',
+                    data: "",
+                    success: function (data) {                  //AJAX request completed, deal with the results below
+                        var pageURL=window.location.href.split("/");
+
+                        if (data == "Logout") {                         //Logout completed on server side
+
+
+                            $(location).attr('href', "/"+pageURL[3]);
+                        }
+                    }
+                });
+            });
+
 		});
 	</script>
 
@@ -489,7 +507,7 @@
         .dlglabel-msg {
 			font-family: Arial, Helvetica, Monospace;
 			font-size: 20px;
-			padding-bottom: 30px;
+			padding-bottom: 20px;
 			margin-bottom: 0px;
 			padding-left: 20px;
         }
@@ -661,34 +679,30 @@
 
         .numberBox {
             width: auto;
+            margin-left: 20px;
         }
 
 		.number-buttons {
 			border-radius: 5px;
 			border: 1px;
 			border-style: solid;
-			//height: 120px;
-
-			<!-- padding-bottom: 50px; //-->
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 120px;
-			border: solid;
+			font-size: 30px;
+			border: 1px solid;
 			margin-right: 10px;
-			padding-left: 70px;
-			padding-right: 70px;
-			margin-bottom: 10px;
+			padding-left: 20px;
+			padding-right: 20px;
+			margin-bottom: 5px;
 			background-color: #adc0d0;
 		}
 
         .numberboxValue {
 			border-radius: 5px;
-			border: 2px;
-			border-style: solid;
 			font-family: Arial, Helvetica, Monospace;
-			font-size: 120px;
-			border: solid;
-			margin-left: 30px;
-			margin-right: 20px;
+			font-size: 30px;
+			border: 1px solid;
+			margin-left: 20px;
+			margin-right: 10px;
 			margin-bottom: 10px;
 			padding-left: 20px;
         }
@@ -733,6 +747,7 @@
         .branding-text {
             font-family: Arial, Helvetica, Monospace;
             font-size: 30px;
+            padding-top: 25px;
         }
 
         .col-1 {
@@ -835,7 +850,7 @@
                             </div>
                     </div>
                     <div id="dlg-btn" class="text-center" hidden="true">
-                        <button type="button" class="text-center btn btn-primary label-text" style="width: 30%; border: 1px solid; font-size: 30px; font-style: bold;" data-dismiss="modal">OK</button>
+                        <button type="button" class="text-center btn btn-primary label-text" style="width: 30%; border: 1px solid; font-size: 30px; font-style: bold; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;" data-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
@@ -845,15 +860,15 @@
 
 
 <div id="numberBox" class="modal fade" role="dialog" data-backdrop="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-sm" style="width: 25%;">
         <div class="modal-content" style="width: 100%;">
-            <div class="modal-header btn-primary" style="padding-top: 10px; padding-bottom: 10px;">
-                <h4 class="modal-title label-text text-center dlglabel-text">Price Input</h4>
+            <div class="modal-header btn-primary" style="padding-top: 10px;">
+                <h4 class="modal-title label-text text-center dlglabel-text" style="margin-bottom: 0px; padding-botton: 10px;">Price Input</h4>
             </div>
             <div class="modal-body" style="width: 100%;">
-                <label id="priceInputLabel" class="numberboxValue" style="width: 55%;"></label>
-                <button id="btnPriceSubmit" class="number-buttons fa fa-arrow-right btn-success" style="background-color: #5cb85c; padding-top: 25px; padding-bottom: 30px; border: 2px solid;"></button>
-                <center>
+                <label id="priceInputLabel" class="numberboxValue" style="width: 60%;"></label>
+                <button id="btnPriceSubmit" class="fa fa-arrow-right btn-success" style="font-size: 30px; background-color: #5cb85c; padding-top: 5px; padding-bottom: 5px;"></button>
+                <div class="numberBox">
                 <p>
                     <button name="priceNumBtn" value="7" class="btn number-buttons">7</button>
                     <button name="priceNumBtn" value="8" class="btn number-buttons">8</button>
@@ -872,9 +887,9 @@
                 <p>
                     <button name="priceNumBtn" value="0" class="btn number-buttons">0</button>
                     <button name="priceNumBtn" value="." class="btn number-buttons">.</button>
-                    <button id="btnPriceBkspc" class="btn number-buttons fa fa-arrow-left" style="background-color: #f0ad4e; color: white;"></button>
+                    <button id="btnPriceBkspc" class="btn fa fa-arrow-left" style="font-size: 30px; background-color: #f0ad4e; color: white;"></button>
                 </p>
-                </center>
+                </div>
             </div>
         </div>
     </div>
@@ -888,6 +903,7 @@
             <a class="navbar-brand branding-text" href="#">Produce Management System - {{.ActionTitle}}</a>
         </div>
         <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
+        <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
     </div>
 </nav>
 
@@ -936,12 +952,38 @@
     <row>
         <div class="col-md-12">
             <input id="price" class="inputs" type=text placeholder="$" value="{{.ItemPrice}}">
+            <!-- <button id="price" value="" class="dropdown-toggle btn btn-default page-controls category-control text-left" type="button" data-toggle="dropdown">Price</button>
+            <div class="dropdown-menu" style="margin-top: 0px; margin-left: 20px; padding: 15px; padding-bottom: 0px;">
+
+                    <p>
+                        <button name="priceNumBtn" value="7" class="btn number-buttons">7</button>
+                        <button name="priceNumBtn" value="8" class="btn number-buttons">8</button>
+                        <button name="priceNumBtn" value="9" class="btn number-buttons">9</button>
+                        <button id="btnPriceSubmit" class="number-buttons fa fa-arrow-right btn-success" style="background-color: #5cb85c; padding-top: 25px; padding-bottom: 30px; border: 2px solid;"></button>
+                    </p>
+                    <p>
+                        <button name="priceNumBtn" value="4" class="btn number-buttons">4</button>
+                        <button name="priceNumBtn" value="5" class="btn number-buttons">5</button>
+                        <button name="priceNumBtn" value="6" class="btn number-buttons">6</button>
+                    </p>
+                    <p>
+                        <button name="priceNumBtn" value="1" class="btn number-buttons">1</button>
+                        <button name="priceNumBtn" value="2" class="btn number-buttons">2</button>
+                        <button name="priceNumBtn" value="3" class="btn number-buttons">3</button>
+                    </p>
+                    <p>
+                        <button name="priceNumBtn" value="0" class="btn number-buttons">0</button>
+                        <button name="priceNumBtn" value="." class="btn number-buttons">.</button>
+                        <button id="btnPriceBkspc" class="btn number-buttons fa fa-arrow-left" style="background-color: #f0ad4e; color: white;"></button>
+                    </p>
+
+            </div> -->
         </div>
     </row>
 
     <row>
         <div class="col-md-12">
-                <input id="itemDescription" class="form-control inputs" type="text" placeholder="Item Description (Optional)">
+            <input id="itemDescription" class="form-control inputs" type="text" placeholder="Item Description (Optional)">
         </div>
     </row>
 

@@ -53,8 +53,7 @@
                     data: postData,
                     success: function (data) {                          //AJAX request completed, deal with the results below
                         if (data == "Success") {
-                            alert("login successful");
-                            location.href("/m");
+                            $(location).attr('href',"/m");
                         }
                         else {
                             $('#errLbl').text(data);             //Login unsuccessful
@@ -140,7 +139,7 @@
             <input id="username" class="input-box btn-block text-left" placeholder="Username"></input>
         </row>
         <row>
-            <input id="password" type="password" class="input-box btn-block text-left" placeholder="Password"></input>
+            <input id="password" type="password" class="input-box btn-block text-left" placeholder="Password" autocomplete="new-password"></input>
         </row>
         <row>
             <label id="errLbl" class="errLbl">&nbsp;</label>

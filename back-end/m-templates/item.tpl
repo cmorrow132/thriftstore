@@ -63,13 +63,52 @@
                                                                                 //change to print button, see above for CSS class changes
                         }
                         else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
-                            alert("Printing bar code");
+                            $("#warningTitle").text("Printing");                   //Open the error msg modal
+                            $('#warningMsg').text("Printing bar code");
+                            $("#dlgHeader").removeClass("btn-danger");
+                            $("#dlgHeader").addClass("btn-success");
+                            $("#dlgProgressSpinner").show();
+                            $("#dlg-btn").hide();
+                            $('#warningBox').modal({
+                                backdrop: 'static',
+                                keyboard: false,
+                                show: true
+                            });
+
+                            var postData="";
+                            $.ajax({                                                                    //Send data to the back end
+                                url: '/printCode',
+                                type: 'post',
+                                dataType: 'text',
+                                data: postData,
+                                success: function (data) {                          //AJAX request completed, deal with the results below
+                                    if (data == "Success") {
+                                        $('#warningBox').modal('hide');
+
+                                        $('#bCodeBtn').removeClass('clsPrintCode');
+                                        $('#bCodeBtn').addClass('clsDisableBtn');
+                                        $('#bCodeBtn').attr('disabled','disabled');
+                                        $('#bCodeBtn').blur();
+
+                                        $('#btnReload').addClass('clsDisableBtn');
+                                        $('#btnReload').attr('disabled','disabled');
+                                        $('#pageSelector').attr('disabled','disabled');
+                                        $('#selected_category').attr('disabled','disabled');
+                                        $('#itemDescription').attr('disabled','disabled');
+                                        $('#price').attr('disabled','disabled');
+                                        $('#selectedColorCode').attr('disabled','disabled');
+
+
+                                    }
+                                }
+                            });
+                            /*alert("Printing bar code");
                             $('#btnReload').addClass('clsDisableBtn');
                             $('#btnReload').attr('disabled','disabled');
 
                             //$(this).removeClass('clsPrintCode');
                             $(this).addClass('clsDisableBtn');
-                            $(this).attr('disabled','disabled');
+                            $(this).attr('disabled','disabled');*/
                         }
                     });
 

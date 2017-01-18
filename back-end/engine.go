@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
 	"github.com/gorilla/sessions"
+	"github.com/gorilla/context"
 	"database/sql"
 	"strings"
 	"strconv"
@@ -18,9 +19,11 @@ import (
 	//"bufio"
 	"time"
 	//"sync"
+	"github.com/nu7hatch/gouuid"
 )
 
-var store = sessions.NewCookieStore([]byte("secret-password"))
+var session_id,_ =uuid.NewV4()
+var sessionStore = sessions.NewCookieStore([]byte(session_id.String()))
 
 type PageTags struct {						//Mobile page tags
 	ActionTitle	string
@@ -200,10 +203,8 @@ func getDiscounts() (string) {
 		}
 
 		if(priceString != "") {
-			dbResults+="<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px; border-radius: 50px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + priceString + " , "
+			dbResults+="<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px; border-radius: 50px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + priceString
 		}
-
-		fmt.Println(priceString)
 	}
 
 	if(dbResults=="") {
@@ -256,8 +257,8 @@ func doLogin(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	password:=r.PostFormValue("password");
 	dbMatch:=0
 
-	session,err:=store.Get(r,"auth")
-	fmt.Println(session.Values["username"])
+	session,err:=sessionStore.Get(r,"auth")
+
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 
 	if err!=nil {
@@ -267,25 +268,42 @@ func doLogin(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	defer db.Close()
 
-	dbQuery = "select * from "+CREDENTIALS_DB + " WHERE username='" + username + "' AND password=MD5('" + password + "')"
+	dbQuery = "select * from "+CREDENTIALS_DB + " WHERE username='" + username + "' AND password=SHA('" + password + "')"
 
 	rows,err := db.Query(dbQuery)
 	defer rows.Close()
 
 	for rows.Next() {
 		err=rows.Scan()
-		dbMatch++;
+		dbMatch++
 	}
 
 	if(dbMatch > 0) {
+		session.Values["username"] = username
+		session.Values["password"] = password
+
+		session.Options = &sessions.Options{
+			MaxAge: 1800,
+			HttpOnly: true,
+		}
+
 		session.Save(r, w)
-		fmt.Fprintf(w, "Success");
-		session.Values["username"] = username;
-		session.Values["password"] = password;
+		fmt.Fprintf(w, "Success")
 
 	} else {
 		fmt.Fprintf(w,"Invalid login")
 	}
+}
+
+func doLogout(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	session,err:=sessionStore.Get(r,"auth")
+	if err!= nil {
+		fmt.Println(err);
+	}
+	session.Values["username"] = nil
+	session.Values["password"] = ""
+	session.Save(r,w);
+	fmt.Fprintf(w,"Logout")
 }
 
 func generateBarCode(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -439,15 +457,15 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			templateName="main.tpl"
 	}
 
-	/*session,err:=store.Get(r,"auth")
+	session,err:=sessionStore.Get(r,"auth")
 	if err!= nil {
 		fmt.Println(err.Error)
 	}
 
 	if(session.Values["username"] == nil) {
 		//Not logged in, redirect to the login page
-		templateName="mlogin.tpl"
-	}*/
+		templateName="login.tpl"
+	}
 
 	if(checkSetupComplete()==false) {
 		//Setup has not been completed, load that page
@@ -479,7 +497,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 	})
 
-	tpl,err:=tpl.ParseFiles(templatePath)
+	tpl,err=tpl.ParseFiles(templatePath)
 	if err!=nil { log.Fatalln(err.Error()) }
 	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
@@ -495,12 +513,12 @@ func main() {
 	router.GET("/m/:page",pageHandler)				//Allows for specific pages using json format
 	router.GET("/front",pageHandler)
 	router.GET("/front/:page",pageHandler)
-
 	router.POST("/addProduct",addProduct)				//Ajax call to add new item
 	router.POST("/mkBarCode",generateBarCode)			//Ajax call to generate new bar codes
 	router.POST("/login",doLogin)
+	router.POST("/logout",doLogout)
 	router.POST("/printCode", printBarCode)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
-	http.ListenAndServe(":"+port,router)
+	http.ListenAndServe(":"+port,context.ClearHandler(router))
 }

@@ -13,6 +13,27 @@
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel='stylesheet' type='text/css'>
 
+    <script>
+        $(document).ready(function() {
+            $('#logout').click(function() {
+                $.ajax({                                            //Send GET request to back end
+                    url: '/logout',
+                    type: 'post',
+                    dataType: 'text',
+                    data: "",
+                    success: function (data) {                  //AJAX request completed, deal with the results below
+                        var pageURL=window.location.href.split("/");
+
+                        if (data == "Logout") {                         //Logout completed on the server side
+                            $(location).attr('href', "/"+pageURL[3]);
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
     <style>
         .copyright {
             position:fixed;
@@ -66,6 +87,7 @@
         .branding-text {
             font-family: Arial, Helvetica, Monospace;
             font-size: 30px;
+            padding-top: 25px;
         }
     </style>
 </head>
@@ -76,6 +98,7 @@
                 <a class="navbar-brand branding-text" href="#">Product Management System</a>
             </div>
             <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
+            <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
         </div>
     </nav>
 
