@@ -43,27 +43,36 @@
             });
 
             $('#loginBtn').click(function() {
-                $('#errLbl').text("");
-               var username=$('#username').val();
-               var password=$('#password').val();
+                if($('#loginBtn').is(':disabled')==false) {
+                    $('#errLbl').text("");
+                    var username = $('#username').val();
+                    var password = $('#password').val();
 
-               var postData="username\=" + username + "&password\=" + password;
-                $.ajax({                                                                    //Send data to the back end
-                    url: '/login',
-                    type: 'post',
-                    dataType: 'text',
-                    data: postData,
-                    success: function (data) {                          //AJAX request completed, deal with the results below
-                        if (data == "Success") {
-                            $(location).attr('href',"/front");
+                    var postData = "username\=" + username + "&password\=" + password;
+                    $.ajax({                                                                    //Send data to the back end
+                        url: '/login',
+                        type: 'post',
+                        dataType: 'text',
+                        data: postData,
+                        success: function (data) {                          //AJAX request completed, deal with the results below
+                            if (data == "Success") {
+                                $(location).attr('href', "/front");
+                            }
+                            else {
+                                $('#errLbl').text(data);             //Login unsuccessful
+                                $('#password').val("");
+                            }
                         }
-                        else {
-                            $('#errLbl').text(data);             //Login unsuccessful
-                            $('#password').val("");
-                        }
-                    }
-                });
+                    });
+                }
             });
+
+            $(document).keyup(function (e) {
+               if($(".input:focus") && (e.keyCode==13)) {
+                   $('#loginBtn').click();
+               }
+            });
+
         });
     </script>
 

@@ -68,6 +68,7 @@ var (
 	DISCOUNT_DB string
 	BARCODE_DB string
 	CREDENTIALS_DB string
+	GROUPS_DB string
 )
 
 func setVars() (int) {
@@ -81,6 +82,7 @@ func setVars() (int) {
 	DISCOUNT_DB="DISCOUNT_CD"
 	BARCODE_DB="BARCODE_CD"
 	CREDENTIALS_DB="CREDENTIALS"
+	GROUPS_DB="GROUPS"
 
 	return 8890
 }
@@ -383,35 +385,36 @@ func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 
 func checkSetupComplete() (bool){
-	//fmt.Println("Setup has not been completed.")
-	var dbMatch int
-	var dbQuery string
+	return true
+}
 
+func checkPerms(username string, groupName string) bool {
+	var groups=""
+
+
+	fmt.Println(username)
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
-
 	if err!=nil {
 		fmt.Println("Error: Could not open the database")
 	}
 
 	defer db.Close()
 
-	dbQuery = "select * from "+CREDENTIALS_DB + " WHERE username='setup'";
+	dbQuery = "select groups from GROUPS WHERE username='admin'"
 
 	rows,err := db.Query(dbQuery)
 	defer rows.Close()
 
 	for rows.Next() {
-		err=rows.Scan()
-		dbMatch++;
+		err=rows.Scan(&groups)
 	}
 
-	if(dbMatch > 0) {
-		return false
-	} else {
+	if(strings.Contains(groups,groupName)) {
 		return true
+	} else {
+		return false
 	}
 }
-
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
 	var mobile bool
@@ -429,6 +432,11 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	pageRequest:=ps.ByName("page")
 
+	session,_:=sessionStore.Get(r,"auth")
+	/*if err!= nil {
+		//fmt.Println(err)
+	}*/
+
 	switch pageRequest {
 		case "new-item":
 			pageTitle="Add Inventory"
@@ -445,6 +453,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			itemPrice="$0.00";
 		case "get-item":
 			pageTitle="Item Lookup"
+
 			templateName="item.tpl"
 			barCodeBtnLabel="Scan"
 			clsbCodeBtn="clsScanCode"
@@ -457,22 +466,19 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			templateName="main.tpl"
 	}
 
-	session,err:=sessionStore.Get(r,"auth")
-	if err!= nil {
-		fmt.Println(err.Error)
-	}
+
 
 	if(session.Values["username"] == nil) {
 		//Not logged in, redirect to the login page
 		templateName="login.tpl"
 	}
 
-	if(checkSetupComplete()==false) {
+	/*if(checkSetupComplete()==false) {
 		//Setup has not been completed, load that page
 		templateName="config.tpl"
 		templatePath="sys-templates/config.tpl"
 
-	} else {
+	} else {*/
 		if (mobile) {
 			templatePath = "m-templates/" + templateName
 			mobOrPcHomeBtn = "/m"
@@ -480,7 +486,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			templatePath = "pos-templates/" + templateName
 			mobOrPcHomeBtn = "/front"
 		}
-	}
+	//}
 
 	tpl:=template.New(templateName)
 	tpl=tpl.Funcs(template.FuncMap{
@@ -497,7 +503,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 	})
 
-	tpl,err=tpl.ParseFiles(templatePath)
+	tpl,err:=tpl.ParseFiles(templatePath)
 	if err!=nil { log.Fatalln(err.Error()) }
 	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
