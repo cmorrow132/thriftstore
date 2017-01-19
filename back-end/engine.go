@@ -285,7 +285,7 @@ func doLogin(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		session.Values["password"] = password
 
 		session.Options = &sessions.Options{
-			MaxAge: 1800,
+			MaxAge: 0,
 			HttpOnly: true,
 		}
 
@@ -302,9 +302,10 @@ func doLogout(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	if err!= nil {
 		fmt.Println(err);
 	}
-	session.Values["username"] = nil
-	session.Values["password"] = ""
+
+	session.Options.MaxAge=-1		//Delete the session
 	session.Save(r,w);
+
 	fmt.Fprintf(w,"Logout")
 }
 
@@ -391,8 +392,6 @@ func checkSetupComplete() (bool){
 func checkPerms(username string, groupName string) bool {
 	var groups=""
 
-
-	fmt.Println(username)
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	if err!=nil {
 		fmt.Println("Error: Could not open the database")
@@ -400,7 +399,7 @@ func checkPerms(username string, groupName string) bool {
 
 	defer db.Close()
 
-	dbQuery = "select groups from GROUPS WHERE username='admin'"
+	dbQuery = "select groups from GROUPS WHERE username='" + username + "'"
 
 	rows,err := db.Query(dbQuery)
 	defer rows.Close()
@@ -415,9 +414,19 @@ func checkPerms(username string, groupName string) bool {
 		return false
 	}
 }
+
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
 	var mobile bool
+	var loggedInUser string
+
+	session,_:=sessionStore.Get(r,"auth")
+
+	if(session.Values["username"] != nil) {
+		loggedInUser = session.Values["username"].(string)
+	} else {
+		loggedInUser="none"
+	}
 
 	urlPath:=strings.Split(r.URL.Path,"/")
 	mobOrPC:=urlPath[1]				//Detect if mobile or pc version is request (/m, or /front)
@@ -432,15 +441,15 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	pageRequest:=ps.ByName("page")
 
-	session,_:=sessionStore.Get(r,"auth")
-	/*if err!= nil {
-		//fmt.Println(err)
-	}*/
-
 	switch pageRequest {
 		case "new-item":
 			pageTitle="Add Inventory"
-			templateName="item.tpl"
+			if(checkPerms(loggedInUser,"inv")==false) {
+				templateName="access_denied.tpl"
+			} else {
+				templateName="item.tpl"
+			}
+
 			barCodeBtnLabel="New"
 			clsbCodeBtn="clsNewCode"
 			//barCodeButtonID="bCodeNew"
@@ -473,12 +482,12 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		templateName="login.tpl"
 	}
 
-	/*if(checkSetupComplete()==false) {
+	if(checkSetupComplete()==false) {
 		//Setup has not been completed, load that page
 		templateName="config.tpl"
 		templatePath="sys-templates/config.tpl"
 
-	} else {*/
+	} else {
 		if (mobile) {
 			templatePath = "m-templates/" + templateName
 			mobOrPcHomeBtn = "/m"
@@ -486,7 +495,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			templatePath = "pos-templates/" + templateName
 			mobOrPcHomeBtn = "/front"
 		}
-	//}
+	}
 
 	tpl:=template.New(templateName)
 	tpl=tpl.Funcs(template.FuncMap{

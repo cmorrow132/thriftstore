@@ -10,6 +10,26 @@
 	<link rel="stylesheet" href="/bower_components/bootstrap-horizon/bootstrap-horizon.css">
 	<link rel="stylesheet" href="css/mobile.css">
 
+	<script>
+		$(document).ready(function () {
+
+			$('#logout').click(function() {
+				$.ajax({                                            //Send GET request to back end
+					url: '/logout',
+					type: 'post',
+					dataType: 'text',
+					data: "",
+					success: function (data) {                  //AJAX request completed, deal with the results below
+						var pageURL=window.location.href.split("/");
+
+						if (data == "Logout") {                         //Logout completed on the server side
+							$(location).attr('href', "/"+pageURL[3]);
+						}
+					}
+				});
+			});
+        });
+	</script>
 	<style>
 		body {
 			background-color: white;
@@ -206,8 +226,11 @@
 <row>
 	<div class="box-noborder">
 		<button onclick="location.href = '/m/new-item';" class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">New Product Inventory</button></a>
-		<button onclick="location.href = '/m/get-item';"class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Product Lookup</button>
-		<button class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Inventory Configuration</button>
+		<button onclick="location.href = '/m/get-item';" class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Product Lookup</button>
+		<p>
+			<br>
+			<button id="logout" class="btn btn-primary btn-block label-text" style="border-radius: 50px; padding-top: 5%; padding-bottom: 5%;">Logout</button>
+		</p>
 	</div>
 </row>
 

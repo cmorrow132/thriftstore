@@ -76,8 +76,7 @@
         .label-text {
             font-family: Arial, Helvetica, Monospace;
             font-size: 40px;
-        <!-- height: 120px; --//>
-            padding-bottom: 20px;
+             padding-bottom: 20px;
             margin-bottom: 20px;
             font-weight: normal;
             padding-left: 20px;

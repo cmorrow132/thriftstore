@@ -75,38 +75,41 @@
 
         .label-text {
             font-family: Arial, Helvetica, Monospace;
-            font-size: 20px;
-            padding-bottom: 0px;
-            margin-bottom: 0px;
+            font-size: 70px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
             font-weight: normal;
             padding-left: 20px;
+            padding-top: 15px;
         }
 
         a {
-            color: #0741A0;
+            text-decoration: none;
         }
-        a:hover {
-            color: deepskyblue;
+
+        .main-content {
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-right: 10px;
         }
+
     </style>
 
 </head>
 <body>
 
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand branding-text" href="#">Product Management System</a>
-            </div>
-            <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
-        </div>
-    </nav>
-
-    <div class="content">
+    <div class="container-fluid main-content">
         <p>
-            <label class="label-text">You do not have permission to access this module. See your administrator for assistance.</label>
-            <br>
-            <a href="#" id="return"><label class="label-text">Return.</label></a>
+            <row>
+                <label class="label-text">You do not have permission to access this module. See your administrator for assistance.</label>
+            </row>
+        </p>
+        <p>
+            <row>
+                <center>
+                    <button id="return" class="btn btn-primary label-text">Return</button>
+                </center>
+            </row>
         </p>
     </div>
 
