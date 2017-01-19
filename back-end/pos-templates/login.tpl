@@ -56,7 +56,13 @@
                         data: postData,
                         success: function (data) {                          //AJAX request completed, deal with the results below
                             if (data == "Success") {
-                                $(location).attr('href', "/front");
+                                if(password=="none") {
+                                    //Redirect to first time login
+                                    $(location).attr('href', "/front/firstLogin");
+                                }
+                                else {
+                                    $(location).attr('href', "/front");
+                                }
                             }
                             else {
                                 $('#errLbl').text(data);             //Login unsuccessful

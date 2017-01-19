@@ -254,6 +254,75 @@ func getColors() (string) {
 	return dbResults
 }
 
+func setAdminPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	adminPassword:=r.PostFormValue("password")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	dbQuery:="INSERT INTO " + CREDENTIALS_DB + " VALUES(DEFAULT,'admin',SHA('" + adminPassword +"'))"
+	stmt,err:=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Println(err)
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Println(err)
+	}
+
+
+	dbQuery="DELETE FROM " + CREDENTIALS_DB + " WHERE username='setup'"
+	stmt,err=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Println(err)
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Println(err)
+	}
+
+	fmt.Fprintf(w,"Success")
+
+}
+
+func chPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+
+	session,err:=sessionStore.Get(r,"auth")
+	username:=session.Values["username"].(string)
+	password:=r.PostFormValue("password")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	dbQuery:="UPDATE " + CREDENTIALS_DB + " SET password=SHA('" + password +"') WHERE username='" + username + "'"
+	stmt,err:=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	fmt.Fprintf(w,"Success")
+
+}
+
 func doLogin(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	username:=r.PostFormValue("username");
 	password:=r.PostFormValue("password");
@@ -386,7 +455,23 @@ func addProduct (w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 
 func checkSetupComplete() (bool){
-	return true
+	setupComplete:=true
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Println("Error: Could not open the database")
+	}
+	defer db.Close()
+
+	dbQuery = "select * from " + CREDENTIALS_DB + " WHERE username='setup'"
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		setupComplete=false;
+	}
+
+	return setupComplete
 }
 
 func checkPerms(username string, groupName string) bool {
@@ -442,6 +527,9 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	pageRequest:=ps.ByName("page")
 
 	switch pageRequest {
+		case "firstLogin":
+			pageTitle="First Login"
+			templateName="first_login.tpl"
 		case "new-item":
 			pageTitle="Add Inventory"
 			if(checkPerms(loggedInUser,"inv")==false) {
@@ -484,8 +572,8 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	if(checkSetupComplete()==false) {
 		//Setup has not been completed, load that page
-		templateName="config.tpl"
-		templatePath="sys-templates/config.tpl"
+		templateName="first_setup.tpl"
+		templatePath="sys-templates/first_setup.tpl"
 
 	} else {
 		if (mobile) {
@@ -533,6 +621,8 @@ func main() {
 	router.POST("/login",doLogin)
 	router.POST("/logout",doLogout)
 	router.POST("/printCode", printBarCode)
+	router.POST("/setAdminPwd", setAdminPwd)
+	router.POST("/chPwd",chPwd)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,context.ClearHandler(router))
