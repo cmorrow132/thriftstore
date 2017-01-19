@@ -46,6 +46,10 @@
             color: white;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         .navbar-buttons {
             background-color: white;
             font-size: 250%;
@@ -96,7 +100,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand branding-text" href="#">Product Management System</a>
             </div>
-            <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
+            <a href="/front/config"> <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button></a>
             <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
         </div>
     </nav>

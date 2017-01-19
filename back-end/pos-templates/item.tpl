@@ -902,7 +902,6 @@
         <div class="navbar-header" style="margin-bottom: 0px;">
             <a class="navbar-brand branding-text" href="#">Produce Management System - {{.ActionTitle}}</a>
         </div>
-        <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
         <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
     </div>
 </nav>

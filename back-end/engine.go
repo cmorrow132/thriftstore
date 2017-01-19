@@ -530,6 +530,12 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		case "firstLogin":
 			pageTitle="First Login"
 			templateName="first_login.tpl"
+		case "config":
+			if(checkPerms(loggedInUser,"admin")==false) {
+				templateName="access_denied.tpl"
+			} else {
+				templateName="config.tpl"
+			}
 		case "new-item":
 			pageTitle="Add Inventory"
 			if(checkPerms(loggedInUser,"inv")==false) {
