@@ -15,6 +15,31 @@
     <meta charset="UTF-8">
     <title>Product Management System - Config</title>
 
+    <script>
+        $(document).ready(function() {
+           $('#home').click(function() {
+              $(location).attr('href','/front');
+           });
+
+           $('#pageSelectorUsers').click(function() {
+               $('#main-content').html("");
+
+               $.ajax({                                                                    //Send data to the back end
+                   url: '/getConfig/users',
+                   type: 'post',
+                   dataType: 'text',
+                   data: "",
+                   success: function (data) {                          //AJAX request completed, deal with the results below
+                       $('#main-content').html("");
+                       $('#main-content').html(data);
+
+                   }
+               });
+           });
+        });
+
+    </script>
+
     <style>
         .copyright {
             position:fixed;
@@ -61,6 +86,67 @@
 
         .main-content {
             padding-left: 100px;
+            padding-right: 100px;
+            margin-top: 50px;
+        }
+
+        .branding-sublabel-text {
+            font-family: Arial, Helvetica, Monospace;
+            color: #575757;
+            font-size: 20px;
+            font-weight: normal;
+            margin-left: 20px;
+            padding-top: 0px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
+
+        .label-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 30px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            font-weight: normal;
+            padding-left: 20px;
+            padding-top: 15px;
+        }
+
+        .dynContent-label-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 30px;
+
+            font-weight: normal;
+            padding-left: 20px;
+            padding-top: 15px;
+        }
+
+        .dynContent-sublabel-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 25px;
+            font-weight: normal;
+        }
+
+        .dynContent-dropdown-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 20px;
+            font-weight: normal;
+            padding-left: 10px;
+        }
+
+        .underline {
+            width: 100%;
+            border-bottom: 1px solid;
+            display: block;
+        }
+
+        .tplSubContentDetail {
+            padding-left: 20px;
+            padding-right: 20px;
+            border: 2px solid;
+            padding-top: 30px;
+            padding-bottom: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
         }
 
     </style>
@@ -72,21 +158,24 @@
             <div class="navbar-header" style="margin-bottom: 0px;">
                 <a class="navbar-brand branding-text" href="#">Produce Management System</a>
                 <a class="pull-right navbar-brand branding-subtext">Configuration</a>
+                <p><label class="branding-sublabel-text">User: {{.CurrentUser}}</label></p>
             </div>
-            <button id="logout" class="btn fa fa-home pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
+            <button id="home" class="btn fa fa-home pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
         </div>
     </nav>
 
     <div class="btn-primary">
         <div class="dropdown pull-right">
-            <a href="#" id="pageSelector" class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu <span class="caret" style="font-size: 50px;"></span></a>
+            <a class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu <span class="caret" style="font-size: 50px;"></span></a>
             <ul class="dropdown-menu">
-                <li><a href="/front/new-item">Users</a></li>
-                <li><a href="/front/get-item"></a></li>
+                <li class="dynContent-dropdown-text"><a id="pageSelectorUsers">Users</a></li>
             </ul>
         </div>
     </div>
 
+    <div id="main-content" class="main-content">
+        <label class="label-text">Select a module from the dropdown.</label>
+    </div>
 
     <div class="copyright text-center" style="height: 20px;">
         <p>{{.CopyRight}} </p>

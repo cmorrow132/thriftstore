@@ -27,6 +27,7 @@ var sessionStore = sessions.NewCookieStore([]byte(session_id.String()))
 
 type PageTags struct {						//Mobile page tags
 	ActionTitle	string
+	CurrentUser	string
 	MobOrPcHomeBtn	string
 	BarCodeID	string
 	GlobalDiscount1	string
@@ -500,6 +501,65 @@ func checkPerms(username string, groupName string) bool {
 	}
 }
 
+func getUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	fmt.Fprintf(w,"No groups configured")
+}
+
+func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	var templateName, templatePath string
+	var users string
+	//var userName string
+
+	pageRequest:=ps.ByName("page")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Println("Error: Could not open the database")
+	}
+
+	defer db.Close()
+
+
+	switch pageRequest {
+		case "users":
+			templateName="user-config.tpl"
+	}
+
+	templatePath="sys-templates/config/" + templateName
+
+	tpl:=template.New(templateName)
+
+	tpl=tpl.Funcs(template.FuncMap{
+		"GetUserList": func() string {
+
+			var userList string
+			//Return list of current discounts for item.tpl
+			dbQuery = "select username from " + CREDENTIALS_DB + " WHERE username!='admin'"
+			rows,err := db.Query(dbQuery)
+
+			if(err!=nil) {
+				return(err.Error())
+			}
+			defer rows.Close()
+
+			for rows.Next() {
+				err=rows.Scan(&users)
+
+				userList+="<li class=\"dynContent-dropdown-text\" name=\"user\">" + users + "</li>\n"
+			}
+
+			return userList
+		},
+	})
+
+	tpl,err=tpl.ParseFiles(templatePath)
+	if err!=nil { log.Fatalln(err.Error()) }
+	err = tpl.Execute(w,"")
+	if err!=nil {
+		log.Fatalln(err)
+	}
+}
+
 func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	//Load the main template
 	var mobile bool
@@ -608,7 +668,7 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	tpl,err:=tpl.ParseFiles(templatePath)
 	if err!=nil { log.Fatalln(err.Error()) }
-	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
+	err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,CurrentUser:loggedInUser,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
 	if err!=nil {
 		log.Fatalln(err)
 	}
@@ -629,6 +689,8 @@ func main() {
 	router.POST("/printCode", printBarCode)
 	router.POST("/setAdminPwd", setAdminPwd)
 	router.POST("/chPwd",chPwd)
+	router.POST("/getConfig/:page",getConfig)
+	router.POST("/getUserDetails",getUserDetails)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,context.ClearHandler(router))

@@ -30,6 +30,10 @@
                     }
                 });
             });
+
+            $('#config').click(function() {
+                $(location).attr('href','/front/config');
+            });
         });
 
     </script>
@@ -87,6 +91,17 @@
             padding-top: 15px;
         }
 
+        .branding-sublabel-text {
+            font-family: Arial, Helvetica, Monospace;
+            color: #575757;
+            font-size: 20px;
+            font-weight: normal;
+            margin-left: 20px;
+            padding-top: 0px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
+
         .branding-text {
             font-family: Arial, Helvetica, Monospace;
             font-size: 30px;
@@ -99,8 +114,9 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand branding-text" href="#">Product Management System</a>
+                <p><label class="branding-sublabel-text">User: {{.CurrentUser}}</label></p>
             </div>
-            <a href="/front/config"> <button class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button></a>
+             <button id="config" class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
             <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
         </div>
     </nav>

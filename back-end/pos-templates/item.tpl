@@ -781,6 +781,17 @@
             margin-left: 50px;
         }
 
+        .branding-sublabel-text {
+            font-family: Arial, Helvetica, Monospace;
+            color: #575757;
+            font-size: 20px;
+            font-weight: normal;
+            margin-left: 20px;
+            padding-top: 0px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
+
 	</style>
 </head>
 
@@ -901,6 +912,7 @@
     <div class="container-fluid">
         <div class="navbar-header" style="margin-bottom: 0px;">
             <a class="navbar-brand branding-text" href="#">Produce Management System - {{.ActionTitle}}</a>
+            <p><label class="branding-sublabel-text">User: {{.CurrentUser}}</label></p>
         </div>
         <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
     </div>
