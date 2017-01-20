@@ -502,7 +502,51 @@ func checkPerms(username string, groupName string) bool {
 }
 
 func getUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w,"No groups configured")
+	username:=r.PostFormValue("user")
+	var groups string
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Println("Error: Could not open the database")
+	}
+
+	defer db.Close()
+	dbQuery = "select groups from " + GROUPS_DB + " WHERE username='" + username + "'"
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err=rows.Scan(&groups)
+	}
+
+	fmt.Fprintf(w,groups)
+
+}
+
+func saveUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	user:=r.PostFormValue("user")
+	groups:=r.PostFormValue("groups");
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Println("Error: Could not open the database")
+	}
+
+	defer db.Close()
+	dbQuery = "update " + GROUPS_DB + " SET groups='" + groups + "' WHERE username='" + user + "'"
+
+	stmt,err:=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Println(err)
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Println(err)
+	}
+
+	fmt.Fprintf(w,"Success");
 }
 
 func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -691,6 +735,7 @@ func main() {
 	router.POST("/chPwd",chPwd)
 	router.POST("/getConfig/:page",getConfig)
 	router.POST("/getUserDetails",getUserDetails)
+	router.POST("/saveUserDetails",saveUserDetails)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,context.ClearHandler(router))
