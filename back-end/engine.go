@@ -612,7 +612,7 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			for rows.Next() {
 				err=rows.Scan(&groups,&groupDescription)
 
-				groupList+=groups + " : " + groupDescription
+				groupList+="<p><label class='dynContent-sublabel-text' style='margin-left: 30px; padding-bottom: 0px; margin-bottom: 0px; font-size: 20px;'>" + groups + ": " + groupDescription + "</label></p>"
 			}
 			return groupList
 		},

@@ -32,6 +32,7 @@
             });
 
             $('#userContent').removeAttr('hidden');
+            $('#groupDescriptionList').removeAttr('hidden');
         });
 
         $('#saveUserData').click(function() {
@@ -103,6 +104,11 @@
         color: #d9534f;
     }
 
+    .groupDescriptionList {
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+
 </style>
 <p>
     <span class="underline">
@@ -140,11 +146,12 @@
                 <label id="serverMsg" class="dynContent-sublabel-text" style="float: left;"></label>
                 <button id="saveUserData" class="btn btn-primary dynContent-sublabel-text" style="float: right; margin-right: 20px;">Save</button>
             </span>
+
         </p>
-
-        <span>
-            <label class="dynContent-sublabel-text" style="font-size: 20px;">Group Descriptions: {{GetGroupList}}</label>
-        </span>
-
     </div>
+    <div id="groupDescriptionList" class="groupDescriptionList" hidden>
+        <label class="dynContent-sublabel-text" style="font-size: 20px;">Group Descriptions: {{GetGroupList}}</label>
+    </div>
+
+
 </p>
