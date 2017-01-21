@@ -143,7 +143,7 @@
         </p>
 
         <span>
-            <label class="dynContent-sublabel-text" style="font-size: 20px;">Group Descriptions:</label>
+            <label class="dynContent-sublabel-text" style="font-size: 20px;">Group Descriptions: {{GetGroupList}}</label>
         </span>
 
     </div>

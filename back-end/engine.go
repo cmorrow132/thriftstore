@@ -70,6 +70,7 @@ var (
 	BARCODE_DB string
 	CREDENTIALS_DB string
 	GROUPS_DB string
+	GROUPS_CD_DB string
 )
 
 func setVars() (int) {
@@ -84,6 +85,7 @@ func setVars() (int) {
 	BARCODE_DB="BARCODE_CD"
 	CREDENTIALS_DB="CREDENTIALS"
 	GROUPS_DB="GROUPS"
+	GROUPS_CD_DB="GROUPS_CD"
 
 	return 8890
 }
@@ -551,7 +553,7 @@ func saveUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 
 func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	var templateName, templatePath string
-	var users string
+	var users,groups,groupDescription string
 	//var userName string
 
 	pageRequest:=ps.ByName("page")
@@ -593,6 +595,26 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			}
 
 			return userList
+		},
+
+		"GetGroupList": func() string {
+			var groupList string
+
+			dbQuery = "select name, description from " + GROUPS_CD_DB
+			rows,err := db.Query(dbQuery)
+
+			if err!=nil {
+				return(err.Error())
+			}
+
+			defer rows.Close()
+
+			for rows.Next() {
+				err=rows.Scan(&groups,&groupDescription)
+
+				groupList+=groups + " : " + groupDescription
+			}
+			return groupList
 		},
 	})
 
