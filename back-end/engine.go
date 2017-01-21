@@ -551,6 +551,34 @@ func saveUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 	fmt.Fprintf(w,"Success");
 }
 
+func getSystemGroups(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	var groups, groupList string
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+	}
+
+	defer db.Close()
+	dbQuery = "select name from " + GROUPS_CD_DB
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err=rows.Scan(&groups)
+
+		if err != nil {
+			fmt.Fprintf(w,err.Error())
+		}
+
+		groupList+=groups+"|"
+	}
+
+	fmt.Fprintf(w,groupList)
+
+}
+
 func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	var templateName, templatePath string
 	var users,groups,groupDescription string
@@ -612,10 +640,11 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			for rows.Next() {
 				err=rows.Scan(&groups,&groupDescription)
 
-				groupList+="<p><label class='dynContent-sublabel-text' style='margin-left: 30px; padding-bottom: 0px; margin-bottom: 0px; font-size: 20px;'>" + groups + ": " + groupDescription + "</label></p>"
+				groupList+="<p><span style='width: 50px;'><b>" + groups + ":</b></span> " + groupDescription + "</p>"
 			}
 			return groupList
 		},
+
 	})
 
 	tpl,err=tpl.ParseFiles(templatePath)
@@ -758,6 +787,7 @@ func main() {
 	router.POST("/getConfig/:page",getConfig)
 	router.POST("/getUserDetails",getUserDetails)
 	router.POST("/saveUserDetails",saveUserDetails)
+	router.POST("/getSystemGroups",getSystemGroups)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,context.ClearHandler(router))

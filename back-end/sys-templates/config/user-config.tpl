@@ -31,6 +31,8 @@
                 }
             });
 
+            updateAdditionalGroups();
+
             $('#userContent').removeAttr('hidden');
             $('#groupDescriptionList').removeAttr('hidden');
         });
@@ -56,6 +58,18 @@
             });
         });
 
+        $(document).on('click',"[name=add]",function() {
+            var selectedGroup=($(this).data("value"));
+            if($('#updatedGroups').text()=="none|") {
+                $('#updatedGroups').text("");
+                $('#groupList').text("");
+            }
+            $('#updatedGroups').append(selectedGroup+"|");
+            $('#groupList').append("<span style='margin-right: 20px;'><i name='remove' data-value=\"" + selectedGroup + "\" class='fa fa-times-circle-o' style='color: #337ab7;'> </i> " + selectedGroup + "</span>\n");
+
+            updateAdditionalGroups();
+        });
+
         $(document).on('click',"[name=remove]",function() {
             $('#serverMsg').text("");
 
@@ -78,7 +92,34 @@
                 $('#updatedGroups').text("none|");
                 $('#groupList').append("None");
             }
+
+            updateAdditionalGroups();
         });
+
+        function updateAdditionalGroups() {
+            $('#AddGroupsList').text("");
+
+            $.ajax({                                                                    //Send data to the back end
+                url: '/getSystemGroups',
+                type: 'post',
+                dataType: 'text',
+                data: "",
+                success: function (data) {
+                    $('#AddGroupsList').html("");
+                    //$('#SystemGroupsList').html(data);
+                    var systemGroups = data.split("|");
+                    var userGroups = $('#updatedGroups').text();
+
+                    for (var i = 0; i <= systemGroups.length - 1; i++) {
+
+                        if (userGroups.search(systemGroups[i]) == -1) {
+                            //$('#AddGroupsList').append("+ " + systemGroups[i] + ", ");
+                            $('#AddGroupsList').append("<span style='margin-right: 20px;'><i name='add' data-value=\"" + systemGroups[i] + "\" class='fa fa-plus-circle' style='color: #337ab7;'> </i> " + systemGroups[i] + "</span>\n");
+                        }
+                    }
+                }
+            });
+        }
 </script>
 
 <style>
@@ -107,6 +148,17 @@
     .groupDescriptionList {
         margin-top: 20px;
         margin-left: 20px;
+        font-family: Arial, Helvetica, Monospace;
+        font-size: 20px;
+    }
+
+    .groupDescriptionListContents {
+        margin-top: 0px;
+        padding-top: 0px;
+        padding-left: 40px;
+        padding-bottom: 0px;
+        font-family: Arial, Helvetica, Monospace;
+        font-size: 20px;
     }
 
 </style>
@@ -136,21 +188,26 @@
             <label class="dynContent-sublabel-text">Username: </label><label id="selectedUserName" class="dynContent-sublabel-text" style="padding-left: 20px;"></label>
         </p>
         <p>
-            <label class="dynContent-sublabel-text">Groups: </label><label id="groupList" class="dynContent-sublabel-text" style="padding-left: 20px;"></label>
+            <label class="dynContent-sublabel-text">User groups: </label><label id="groupList" class="dynContent-sublabel-text" style="padding-left: 20px;"></label>
         </p>
         <p>
             <label id="updatedGroups" hidden></label>
         </p>
         <p style="margin-top: 30px;">
+            <label class="dynContent-sublabel-text" style="padding-right: 20px;">Additional Groups:</label><label id="AddGroupsList" class="dynContent-sublabel-text" style="margin-bottom: 0px; padding-bottom: 0px;">Test</label>
             <span>
-                <label id="serverMsg" class="dynContent-sublabel-text" style="float: left;"></label>
-                <button id="saveUserData" class="btn btn-primary dynContent-sublabel-text" style="float: right; margin-right: 20px;">Save</button>
+                <button id="saveUserData" class="btn btn-primary dynContent-sublabel-text" style="float: right; margin-right: 20px; margin-left: 20px;">Save</button>
+                <label id="serverMsg" class="dynContent-sublabel-text" style="float: right;"></label>
             </span>
+
 
         </p>
     </div>
     <div id="groupDescriptionList" class="groupDescriptionList" hidden>
-        <label class="dynContent-sublabel-text" style="font-size: 20px;">Group Descriptions: {{GetGroupList}}</label>
+        <label class="dynContent-sublabel-text" style="font-size: 20px;">Group Descriptions: </label>
+        <div class="groupDescriptionListContents">
+            {{GetGroupList}}
+        </div>
     </div>
 
 

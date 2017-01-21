@@ -144,7 +144,7 @@
             padding-right: 20px;
             border: 2px solid;
             padding-top: 30px;
-            padding-bottom: 70px;
+            padding-bottom: 20px;
             border-radius: 10px;
             margin-top: 20px;
         }
