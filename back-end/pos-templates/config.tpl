@@ -38,6 +38,11 @@
            });
 
            $('#chPassword').click(function() {
+               $('#newPassword').val("");
+               $('#newPasswordConfirm').val("");
+               $('#chPasswordCancelBtn').removeAttr('hidden');
+               $('#newPassword').removeAttr('hidden');
+               $('#newPasswordConfirm').removeAttr('hidden');
                $('#commandType').text("chPasswordOK");
                $('#confirmUserText').val("");
                $("#commandTitle").text("Change Password");
@@ -71,7 +76,22 @@
            });
 
            $('#chPasswordOKBtn').click(function() {
-              alert("Changing your password");
+               $('#chPasswordCancelBtn').attr('hidden','hidden');
+               $('#newPassword').attr('hidden','hidden');
+               $('#newPasswordConfirm').attr('hidden','hidden');
+
+               var postData="password=" + $('#newPassword').val();
+               $.ajax({                                                                    //Send data to the back end
+                   url: '/chPwd',
+                   type: 'post',
+                   dataType: 'text',
+                   data: postData,
+                   success: function (data) {                          //AJAX request completed, deal with the results below
+                       if(data=="Success") {
+
+                       }
+                   }
+               });
            });
         });
 
@@ -247,7 +267,7 @@
                     <input type="password" class="dlglabel-text" id="newPasswordConfirm" placeholder="Confirm password" style="margin-left: 20px; padding-left: 10px; width: 90%;">
                     <div id="dlg-btn" class="text-center" hidden="true">
                         <button type="button" id="chPasswordOKBtn" class="text-center btn btn-primary dlgBtn" style="border: 1px solid; margin-right: 20px; margin-top: 20px;" disabled>OK</button>
-                        <button type="button" class="text-center btn btn-primary dlgBtn" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="chPasswordCancelBtn" class="text-center btn btn-primary dlgBtn" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
                         <label id="commandType" hidden></label>
                     </div>
                 </div>
