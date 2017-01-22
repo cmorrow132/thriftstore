@@ -669,7 +669,8 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	tpl=tpl.Funcs(template.FuncMap{
 		"GetUserList": func() string {
 
-			var userList string
+			userList:=""
+
 			//Return list of current discounts for item.tpl
 			dbQuery = "select username from " + CREDENTIALS_DB + " WHERE username!='admin'"
 			rows,err := db.Query(dbQuery)
@@ -685,6 +686,9 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 				userList+="<li class=\"dynContent-dropdown-text\" name=\"user\">" + users + "</li>\n"
 			}
 
+			if userList=="" {
+				userList="<li class=\"dynContent-dropdown-text\">No users exist</li>\n"
+			}
 			return userList
 		},
 

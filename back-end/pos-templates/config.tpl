@@ -36,6 +36,43 @@
                    }
                });
            });
+
+           $('#chPassword').click(function() {
+               $('#commandType').text("chPasswordOK");
+               $('#confirmUserText').val("");
+               $("#commandTitle").text("Change Password");
+               $('#commandMsg').text("Enter your new password.");
+               $("#dlgHeader").removeClass("btn-danger");
+               $("#dlgHeader").addClass("btn-primary");
+               $("#dlg-btn").show();
+               $('#commandWindow').modal({                                                //Finally open the modal
+                   backdrop: 'static',
+                   keyboard: false,                                                    //Disable clicking outside the modal to make it stay on screen till dismissed by return success
+                   show: true
+               });
+           });
+
+           $('#newPassword').keyup(function() {
+               if($(this).val() != "" && $(this).val()==$('#newPasswordConfirm').val()) {
+                   $('#chPasswordOKBtn').removeAttr('disabled');
+               }
+               else {
+                   $('#chPasswordOKBtn').attr('disabled','disabled');
+               }
+           });
+
+           $('#newPasswordConfirm').keyup(function() {
+               if($(this).val() != "" && $(this).val()==$('#newPassword').val()) {
+                   $('#chPasswordOKBtn').removeAttr('disabled');
+               }
+               else {
+                   $('#chPasswordOKBtn').attr('disabled','disabled');
+               }
+           });
+
+           $('#chPasswordOKBtn').click(function() {
+              alert("Changing your password");
+           });
         });
 
     </script>
@@ -149,16 +186,85 @@
             margin-top: 20px;
         }
 
+        .chPasswordLink {
+            color: #337AB7;
+        }
+        .chPasswordLink:hover {
+            color: #d9534f;
+        }
+
+        .dlglabel-msg {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 20px;
+            padding-bottom: 10px;
+            margin-bottom: 0px;
+            padding-left: 20px;
+        }
+
+        .dlglabel-submsg {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 30px;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            font-weight: normal;
+            padding-left: 20px;
+            padding-top: 15px;
+        }
+
+        .dlglabel-text {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 20px;
+            font-weight: normal;
+            padding-left: 20px;
+            margin-bottom: 10px;
+
+        }
+
+        .dlgBtn {
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 20px;
+            font-weight: bold;
+            padding-top: 10px;
+            padding-left: 20px;
+            padding-bottom: 10px;
+            padding-right: 20px;
+
     </style>
 </head>
 <body>
+
+<div class="container">
+    <div id="commandWindow" class="modal fade" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div id="dlgHeader" class="modal-header">
+                    <h4 id="commandTitle" class="modal-title text-center dlglabel-text"></h4>
+                </div>
+                <div class="modal-body">
+                    <label class="dlglabel-text" id="commandMsg"></label>
+                    <input type="password" class="dlglabel-text" id="newPassword" placeholder="Password "autofocus style="margin-left: 20px; padding-left: 10px; width: 90%;">
+                    <input type="password" class="dlglabel-text" id="newPasswordConfirm" placeholder="Confirm password" style="margin-left: 20px; padding-left: 10px; width: 90%;">
+                    <div id="dlg-btn" class="text-center" hidden="true">
+                        <button type="button" id="chPasswordOKBtn" class="text-center btn btn-primary dlgBtn" style="border: 1px solid; margin-right: 20px; margin-top: 20px;" disabled>OK</button>
+                        <button type="button" class="text-center btn btn-primary dlgBtn" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
+                        <label id="commandType" hidden></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <nav class="navbar navbar-default" style="margin-bottom: 0px;">
         <div class="container-fluid">
             <div class="navbar-header" style="margin-bottom: 0px;">
                 <a class="navbar-brand branding-text" href="#">Produce Management System</a>
                 <a class="pull-right navbar-brand branding-subtext">Configuration</a>
-                <p><label class="branding-sublabel-text">User: {{.CurrentUser}}</label></p>
+                <p>
+                    <label class="branding-sublabel-text">User: {{.CurrentUser}}</label>
+                    <label id="chPassword" class="chPasswordLink branding-sublabel-text" style="margin-left: 15px; font-size: 15px; font-weight: bold;">Change password</label>
+                </p>
             </div>
             <button id="home" class="btn fa fa-home pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
         </div>

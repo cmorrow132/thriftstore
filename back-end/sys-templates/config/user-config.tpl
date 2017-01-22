@@ -1,5 +1,7 @@
 <script>
         $("[name=user]").click(function() {
+            $('#addUserLink').attr('hidden','hidden');
+            $('#newUserContent').attr('hidden','hidden');
             $('#removePassword').removeAttr('hidden');
             $('#deleteUser').removeAttr('hidden');
 
@@ -124,12 +126,19 @@
             });
         }
 
+        $('#addUserLink').click(function() {
+            $('#addUserLink').attr('hidden','hidden');
+            $("#userContent").attr('hidden','hidden');
+            $("#newUserContent").removeAttr('hidden');
+        });
+
         $('#removePassword').click(function() {
             $('#commandType').text("removePassword");
             $('#confirmUserText').val("");
             $("#commandTitle").text("Remove Password");
             $('#commandMsg').text("To remove the user's password, type the username to confirm.");
-            $("#dlgHeader").addClass("btn-success");
+            $("#dlgHeader").removeClass("btn-danger");
+            $("#dlgHeader").addClass("btn-warning");
             $("#dlg-btn").show();
             $('#commandWindow').modal({                                                //Finally open the modal
                 backdrop: 'static',
@@ -143,6 +152,7 @@
             $('#confirmUserText').val("");
             $("#commandTitle").text("Delete User");
             $('#commandMsg').text("To remove the user account, type the username to confirm.");
+            $("#dlgHeader").removeClass("btn-warning");
             $("#dlgHeader").addClass("btn-danger");
             $("#dlg-btn").show();
             $('#commandWindow').modal({                                                //Finally open the modal
@@ -172,7 +182,7 @@
                     success: function (data) {
                         if (data == "Success") {
                             $('#serverMsg').css({'color': '#337AB7'});
-                            $('#serverMsg').text("Password removed.");
+                            $('#serverMsg').text("Password set to 'none'.");
                         }
                         else {
                             $('#serverMsg').css({'color': '##d9534f'});
@@ -182,7 +192,7 @@
                     }
                 });
             }
-            else {
+            else if($('#commandType').text()=="deleteUser") {
                 var postData = "user=" + $('#usersDropdown').text();
                 $.ajax({                                                                    //Send data to the back end
                     url: '/removeUser',
@@ -190,18 +200,34 @@
                     dataType: 'text',
                     data: postData,
                     success: function (data) {
+                        $('#commandWindow').modal('hide');
+
                         if (data == "Success") {
                             $('#serverMsg').css({'color': '#337AB7'});
                             $('#serverMsg').text("User removed.");
+
+                            setTimeout(function() {                                         //User deleted, reload the content
+                                $.ajax({
+                                    url: '/getConfig/users',
+                                    type: 'post',
+                                    dataType: 'text',
+                                    data: "",
+                                    success: function (data) {
+                                        $('#main-content').html("");
+                                        $('#main-content').html(data);
+
+                                    }
+                                });
+                            }, 200);
                         }
                         else {
-                            $('#serverMsg').css({'color': '##d9534f'});
+                            $('#serverMsg').css({'color': '#d9534f'});
                             $('#serverMsg').text(data);
                         }
-                        $('#commandWindow').modal('hide');
-                        location.reload();
+                        //location.reload();
                     }
                 });
+
             }
         });
 </script>
@@ -329,7 +355,7 @@
                 {{GetUserList}}
             </ul>
         </div>
-
+        <a><label class="userOptionLinks" id="addUserLink">Add a new user</label></a>
         <a><label class="userOptionLinks" id="removePassword" hidden>Remove password</label></a>
         <a><label class="userOptionLinks" id="deleteUser" hidden>Remove user</label></a>
     </div>
@@ -364,4 +390,7 @@
     </div>
 
 
+    <div class="tplSubContentDetail" id="newUserContent" hidden="hidden">
+        <label class="dynContent-sublabel-text">Add user</label>
+    </div>
 </p>
