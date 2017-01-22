@@ -296,6 +296,69 @@ func setAdminPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 }
 
+func removePassword(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	username:=r.PostFormValue("user")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	dbQuery:="UPDATE " + CREDENTIALS_DB + " SET password=SHA('none') WHERE username='" + username + "'"
+	stmt,err:=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	fmt.Fprintf(w,"Success")
+}
+
+func removeUser(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	username:=r.PostFormValue("user")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	dbQuery:="DELETE FROM " + CREDENTIALS_DB + " WHERE username='" + username + "'"
+	stmt,err:=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	dbQuery="DELETE FROM " + GROUPS_DB + " WHERE username='" + username + "'"
+	stmt,err=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+	}
+
+	fmt.Fprintf(w,"Success")
+}
+
 func chPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	session,err:=sessionStore.Get(r,"auth")
@@ -784,6 +847,8 @@ func main() {
 	router.POST("/printCode", printBarCode)
 	router.POST("/setAdminPwd", setAdminPwd)
 	router.POST("/chPwd",chPwd)
+	router.POST("/removePassword",removePassword)
+	router.POST("/removeUser",removeUser)
 	router.POST("/getConfig/:page",getConfig)
 	router.POST("/getUserDetails",getUserDetails)
 	router.POST("/saveUserDetails",saveUserDetails)
