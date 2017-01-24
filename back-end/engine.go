@@ -359,6 +359,47 @@ func removeUser(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w,"Success")
 }
 
+func addUser(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	username:=r.PostFormValue("user")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	dbQuery:="INSERT INTO " + CREDENTIALS_DB + " VALUES(DEFAULT,'" + username + "',SHA('none'))"
+	stmt,err:=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+		return
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Fprintf(w,"The user already exists")
+		return
+	}
+
+	dbQuery="INSERT INTO " + GROUPS_DB + " VALUES('" + username + "','none|')"
+	stmt,err=db.Prepare(dbQuery)
+	if err!= nil {
+		fmt.Fprintf(w,err.Error())
+		return
+	}
+
+	_,err=stmt.Exec()
+	if err!= nil {
+		fmt.Fprintf(w,"Could not add user to groups")
+		return
+	}
+
+	fmt.Fprintf(w,"Success")
+}
+
 func chPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	session,err:=sessionStore.Get(r,"auth")
@@ -853,6 +894,7 @@ func main() {
 	router.POST("/chPwd",chPwd)
 	router.POST("/removePassword",removePassword)
 	router.POST("/removeUser",removeUser)
+	router.POST("/addUser",addUser)
 	router.POST("/getConfig/:page",getConfig)
 	router.POST("/getUserDetails",getUserDetails)
 	router.POST("/saveUserDetails",saveUserDetails)

@@ -944,7 +944,7 @@
     <p>
         <div class="input-prepend">
                 <input id="bCodeID" class="barcode" type="text" placeholder="Product BarCode" value="{{.BarCodeID}}" disabled>
-        <button id="bCodeBtn" class="btn btn-info barcode-btn {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"><i class="fa fa-barcode "> {{.BarcodeBtnLabel}}</i></button>
+                <button id="bCodeBtn" class="btn btn-info barcode-btn {{.ClsbCodeBtn}}" aria-hidden="true" style="border: 1px solid black;"><i class="fa fa-barcode "> {{.BarcodeBtnLabel}}</i></button>
         </div>
     </p>
 

@@ -45,12 +45,12 @@
                $('#newPasswordConfirm').removeAttr('hidden');
                $('#commandType').text("chPasswordOK");
                $('#confirmUserText').val("");
-               $("#commandTitle").text("Change Password");
+               $("#chPwdWindowTitle").text("Change Password");
                $('#commandMsg').text("Enter your new password.");
-               $("#dlgHeader").removeClass("btn-danger");
-               $("#dlgHeader").addClass("btn-primary");
-               $("#dlg-btn").show();
-               $('#commandWindow').modal({                                                //Finally open the modal
+               $("#chPwd-dlgHeader").removeClass("btn-danger");
+               $("#chPwd-dlgHeader").addClass("btn-primary");
+               $("#chPwd-dlg-btn").show();
+               $('#chPwdWindow').modal({                                                //Finally open the modal
                    backdrop: 'static',
                    keyboard: false,                                                    //Disable clicking outside the modal to make it stay on screen till dismissed by return success
                    show: true
@@ -76,23 +76,44 @@
            });
 
            $('#chPasswordOKBtn').click(function() {
-               $('#chPasswordCancelBtn').attr('hidden','hidden');
-               $('#newPassword').attr('hidden','hidden');
-               $('#newPasswordConfirm').attr('hidden','hidden');
+               if($(this).hasClass('chPwdFinalBtn')) {
+                   $.ajax({                                            //Send GET request to back end
+                       url: '/logout',
+                       type: 'post',
+                       dataType: 'text',
+                       data: "",
+                       success: function (data) {                  //AJAX request completed, deal with the results below
+                           var pageURL=window.location.href.split("/");
 
-               var postData="password=" + $('#newPassword').val();
-               $.ajax({                                                                    //Send data to the back end
-                   url: '/chPwd',
-                   type: 'post',
-                   dataType: 'text',
-                   data: postData,
-                   success: function (data) {                          //AJAX request completed, deal with the results below
-                       if(data=="Success") {
-
+                           if (data == "Logout") {                         //Logout completed on the server side
+                               $(location).attr('href', "/"+pageURL[3]);
+                           }
                        }
-                   }
-               });
+                   });
+               }
+               else {
+                   $('#newPassword').attr('hidden', 'hidden');
+                   $('#newPasswordConfirm').attr('hidden', 'hidden');
+                   $('#chPasswordCancelBtn').hide();
+
+                   var postData = "password=" + $('#newPassword').val();
+                   $.ajax({                                                                    //Send data to the back end
+                       url: '/chPwd',
+                       type: 'post',
+                       dataType: 'text',
+                       data: postData,
+                       success: function (data) {                     //AJAX request completed, deal with the results below
+                           if (data == "Success") {
+                               $("#chPwd-dlgHeader").removeClass("btn-primary");
+                               $("#chPwd-dlgHeader").addClass("btn-success");
+                               $('#commandMsg').text("Your password was reset. You will now be logged out.");
+                               $('#chPasswordOKBtn').addClass('chPwdFinalBtn');
+                           }
+                       }
+                   });
+               }
            });
+
         });
 
     </script>
@@ -213,7 +234,7 @@
             color: #d9534f;
         }
 
-        .dlglabel-msg {
+        .chPwd-dlglabel-msg {
             font-family: Arial, Helvetica, Monospace;
             font-size: 20px;
             padding-bottom: 10px;
@@ -221,7 +242,7 @@
             padding-left: 20px;
         }
 
-        .dlglabel-submsg {
+        .chPwd-dlglabel-submsg {
             font-family: Arial, Helvetica, Monospace;
             font-size: 30px;
             padding-bottom: 20px;
@@ -231,7 +252,7 @@
             padding-top: 15px;
         }
 
-        .dlglabel-text {
+        .chPwd-dlglabel-text {
             font-family: Arial, Helvetica, Monospace;
             font-size: 20px;
             font-weight: normal;
@@ -240,7 +261,7 @@
 
         }
 
-        .dlgBtn {
+        .chPwd-dlgBtn {
             font-family: Arial, Helvetica, Monospace;
             font-size: 20px;
             font-weight: bold;
@@ -248,26 +269,27 @@
             padding-left: 20px;
             padding-bottom: 10px;
             padding-right: 20px;
+        }
 
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="commandWindow" class="modal fade" role="dialog" data-backdrop="true">
+    <div id="chPwdWindow" class="modal fade" role="dialog" data-backdrop="true" style="margin-top: 100px;">
         <div class="modal-dialog modal-md">
             <!-- Modal content-->
             <div class="modal-content">
-                <div id="dlgHeader" class="modal-header">
-                    <h4 id="commandTitle" class="modal-title text-center dlglabel-text"></h4>
+                <div id="chPwd-dlgHeader" class="modal-header">
+                    <h4 id="chPwdWindowTitle" class="modal-title text-center dlglabel-text"></h4>
                 </div>
                 <div class="modal-body">
-                    <label class="dlglabel-text" id="commandMsg"></label>
-                    <input type="password" class="dlglabel-text" id="newPassword" placeholder="Password "autofocus style="margin-left: 20px; padding-left: 10px; width: 90%;">
-                    <input type="password" class="dlglabel-text" id="newPasswordConfirm" placeholder="Confirm password" style="margin-left: 20px; padding-left: 10px; width: 90%;">
-                    <div id="dlg-btn" class="text-center" hidden="true">
-                        <button type="button" id="chPasswordOKBtn" class="text-center btn btn-primary dlgBtn" style="border: 1px solid; margin-right: 20px; margin-top: 20px;" disabled>OK</button>
-                        <button type="button" id="chPasswordCancelBtn" class="text-center btn btn-primary dlgBtn" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
+                    <label class="chPwd-dlglabel-text" id="commandMsg"></label>
+                    <input type="password" class="chPwd-dlglabel-text" id="newPassword" placeholder="Password "autofocus style="margin-left: 20px; padding-left: 10px; width: 90%;">
+                    <input type="password" class="chPwd-dlglabel-text" id="newPasswordConfirm" placeholder="Confirm password" style="margin-left: 20px; padding-left: 10px; width: 90%;">
+                    <div id="chPwd-dlg-btn" class="text-center" hidden="true">
+                        <button type="button" id="chPasswordOKBtn" class="text-center btn btn-primary chPwd-dlgBtn" style="border: 1px solid; margin-right: 20px; margin-top: 20px;" disabled>OK</button>
+                        <button type="button" id="chPasswordCancelBtn" class="text-center btn btn-primary chPwd-dlgBtn" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
                         <label id="commandType" hidden></label>
                     </div>
                 </div>

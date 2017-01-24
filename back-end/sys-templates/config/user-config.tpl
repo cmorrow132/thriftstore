@@ -129,18 +129,71 @@
         $('#addUserLink').click(function() {
             $('#addUserLink').attr('hidden','hidden');
             $("#userContent").attr('hidden','hidden');
+            $('#addUserBtn').attr('disabled','disabled');
+            $('#addUserServerMsg').text("");
             $("#newUserContent").removeAttr('hidden');
         });
 
+        $('#newUsernameText').keyup(function() {
+            $('#addUserServerMsg').text("");
+            if($(this).val()!="" && $(this).val().length >= 4) {
+                $('#addUserBtn').removeAttr('disabled');
+            }
+            else {
+                $('#addUserBtn').attr('disabled','disabled');
+            }
+        });
+
+        $('#addUserBtn').click(function() {
+            var username=$('#newUsernameText').val();
+            var postData="user=" + username;
+            $.ajax({                                                                    //Send data to the back end
+                url: '/addUser',
+                type: 'post',
+                dataType: 'text',
+                data: postData,
+                success: function (data) {
+                    if(data=="Success") {
+                        if(data=="Success") {
+                            $('#updatedGroups').text("");
+                            
+                            setTimeout(function() {
+                                $('#main-content').html("");
+
+                                $.ajax({                                                                    //Send data to the back end
+                                    url: '/getConfig/users',
+                                    type: 'post',
+                                    dataType: 'text',
+                                    data: "",
+                                    success: function (data) {                          //AJAX request completed, deal with the results below
+                                        $('#main-content').html("");
+                                        $('#main-content').html(data);
+
+                                    }
+                                });
+                            },100);
+                        }
+                        else {
+                            $('#serverMsg').css({'color':'#D9534F'});
+                            $('#serverMsg').html(data);
+                        }
+                    }
+                }
+            });
+        });
+
         $('#removePassword').click(function() {
-            $('#commandType').text("removePassword");
-            $('#confirmUserText').val("");
-            $("#commandTitle").text("Remove Password");
-            $('#commandMsg').text("To remove the user's password, type the username to confirm.");
-            $("#dlgHeader").removeClass("btn-danger");
-            $("#dlgHeader").addClass("btn-warning");
-            $("#dlg-btn").show();
-            $('#commandWindow').modal({                                                //Finally open the modal
+            $('#cmd-OKBtn').removeAttr('hidden');
+            $('#cmd-OKBtn').removeAttr('hidden');
+            $('#cmd-OKBtn').attr('disabled','disabled');
+            $('#confirmUsernameText').val("");
+            $('#cmdType').text("userRemovePwd");
+            $("#cmd-WindowTitle").text("Remove password");
+            $('#cmd-Msg').text("Enter the username to confirm.");
+            $("#cmd-dlgHeader").removeClass("btn-danger");
+            $("#cmd-dlgHeader").addClass("btn-primary");
+            $("#cmd-dlg-btn").show();
+            $('#cmdWindow').modal({                                                //Finally open the modal
                 backdrop: 'static',
                 keyboard: false,                                                    //Disable clicking outside the modal to make it stay on screen till dismissed by return success
                 show: true
@@ -148,88 +201,91 @@
         });
 
         $('#deleteUser').click(function() {
-            $('#commandType').text("deleteUser");
-            $('#confirmUserText').val("");
-            $("#commandTitle").text("Delete User");
-            $('#commandMsg').text("To remove the user account, type the username to confirm.");
-            $("#dlgHeader").removeClass("btn-warning");
-            $("#dlgHeader").addClass("btn-danger");
-            $("#dlg-btn").show();
-            $('#commandWindow').modal({                                                //Finally open the modal
+            $('#cmd-OKBtn').removeAttr('hidden');
+            $('#cmd-OKBtn').removeAttr('hidden');
+            $('#cmd-OKBtn').attr('disabled','disabled');
+            $('#confirmUsernameText').val("");
+            $('#cmdType').text("userDelete");
+            $("#cmd-WindowTitle").text("Remove user");
+            $('#cmd-Msg').text("Enter the username to confirm.");
+            $("#cmd-dlgHeader").removeClass("btn-primary");
+            $("#cmd-dlgHeader").addClass("btn-danger");
+            $("#cmd-dlg-btn").show();
+            $('#cmdWindow').modal({                                                //Finally open the modal
                 backdrop: 'static',
                 keyboard: false,                                                    //Disable clicking outside the modal to make it stay on screen till dismissed by return success
                 show: true
             });
         });
 
-        $('#confirmUserText').keyup(function () {
+        $('#cmd-OKBtn').click(function() {
+           if($('#cmdType').text()=="userRemovePwd")
+           {
+               var username=$('#usersDropdown').text();
+               var postData="user="+username;
+               $.ajax({                                                                    //Send data to the back end
+                   url: '/removePassword',
+                   type: 'post',
+                   dataType: 'text',
+                   data: postData,
+                   success: function (data) {
+                       if(data=="Success") {
+                           $('#serverMsg').css({'color':'#337AB7'});
+                           $('#serverMsg').text("The user's password was removed");
+                       }
+                       else {
+                           $('#serverMsg').css({'color':'#D9534F'});
+                           $('#serverMsg').html(data);
+                       }
+                   }
+               });
+               $('#cmdWindow').modal('hide');
+           }
+           else if($('#cmdType').text()=="userDelete")
+           {
+               var username=$('#usersDropdown').text();
+               var postData="user="+username;
+
+               $.ajax({                                                                    //Send data to the back end
+                   url: '/removeUser',
+                   type: 'post',
+                   dataType: 'text',
+                   data: postData,
+                   success: function (data) {
+                       if(data=="Success") {
+                           setTimeout(function() {
+                               $('#main-content').html("");
+
+                               $.ajax({                                                                    //Send data to the back end
+                                   url: '/getConfig/users',
+                                   type: 'post',
+                                   dataType: 'text',
+                                   data: "",
+                                   success: function (data) {                          //AJAX request completed, deal with the results below
+                                       $('#main-content').html("");
+                                       $('#main-content').html(data);
+
+                                   }
+                               });
+                           },100);
+                       }
+                       else {
+                           $('#serverMsg').css({'color':'#D9534F'});
+                           $('#serverMsg').html(data);
+                       }
+                   }
+               });
+
+               $('#cmdWindow').modal('hide');
+           }
+        });
+
+        $('#confirmUsernameText').keyup(function() {
            if($(this).val()==$('#usersDropdown').text()) {
-               $('#removePasswordBtnOK').removeAttr('disabled');
-           }
-           else {
-               $('#removePasswordBtnOK').attr('disabled','disabled');
+               $('#cmd-OKBtn').removeAttr('disabled');
            }
         });
 
-        $('#removePasswordBtnOK').click(function() {
-            if($('#commandType').text()=="removePassword") {
-                var postData = "user=" + $('#usersDropdown').text();
-                $.ajax({                                                                    //Send data to the back end
-                    url: '/removePassword',
-                    type: 'post',
-                    dataType: 'text',
-                    data: postData,
-                    success: function (data) {
-                        if (data == "Success") {
-                            $('#serverMsg').css({'color': '#337AB7'});
-                            $('#serverMsg').text("Password set to 'none'.");
-                        }
-                        else {
-                            $('#serverMsg').css({'color': '##d9534f'});
-                            $('#serverMsg').text(data);
-                        }
-                        $('#commandWindow').modal('hide');
-                    }
-                });
-            }
-            else if($('#commandType').text()=="deleteUser") {
-                var postData = "user=" + $('#usersDropdown').text();
-                $.ajax({                                                                    //Send data to the back end
-                    url: '/removeUser',
-                    type: 'post',
-                    dataType: 'text',
-                    data: postData,
-                    success: function (data) {
-                        $('#commandWindow').modal('hide');
-
-                        if (data == "Success") {
-                            $('#serverMsg').css({'color': '#337AB7'});
-                            $('#serverMsg').text("User removed.");
-
-                            setTimeout(function() {                                         //User deleted, reload the content
-                                $.ajax({
-                                    url: '/getConfig/users',
-                                    type: 'post',
-                                    dataType: 'text',
-                                    data: "",
-                                    success: function (data) {
-                                        $('#main-content').html("");
-                                        $('#main-content').html(data);
-
-                                    }
-                                });
-                            }, 200);
-                        }
-                        else {
-                            $('#serverMsg').css({'color': '#d9534f'});
-                            $('#serverMsg').text(data);
-                        }
-                        //location.reload();
-                    }
-                });
-
-            }
-        });
 </script>
 
 <style>
@@ -277,7 +333,17 @@
         margin-left: 20px;
     }
 
-    .dlglabel-msg {
+    .label-text {
+        font-family: Arial, Helvetica, Monospace;
+        font-size: 20px;
+        font-weight: bold;
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-bottom: 10px;
+        padding-right: 20px;
+    }
+
+    .cmd-dlglabel-msg {
         font-family: Arial, Helvetica, Monospace;
         font-size: 20px;
         padding-bottom: 10px;
@@ -285,7 +351,7 @@
         padding-left: 20px;
     }
 
-    .dlglabel-submsg {
+    .cmd-dlglabel-submsg {
         font-family: Arial, Helvetica, Monospace;
         font-size: 30px;
         padding-bottom: 20px;
@@ -295,7 +361,7 @@
         padding-top: 15px;
     }
 
-    .dlglabel-text {
+    .cmd-dlglabel-text {
         font-family: Arial, Helvetica, Monospace;
         font-size: 20px;
         font-weight: normal;
@@ -304,7 +370,7 @@
 
     }
 
-    .label-text {
+    .cmd-dlgBtn {
         font-family: Arial, Helvetica, Monospace;
         font-size: 20px;
         font-weight: bold;
@@ -317,20 +383,20 @@
 </style>
 
 <div class="container">
-    <div id="commandWindow" class="modal fade" role="dialog" data-backdrop="true">
+    <div id="cmdWindow" class="modal fade" role="dialog" data-backdrop="true" style="margin-top: 100px;">
         <div class="modal-dialog modal-md">
             <!-- Modal content-->
             <div class="modal-content">
-                <div id="dlgHeader" class="modal-header">
-                    <h4 id="commandTitle" class="modal-title text-center dlglabel-text"></h4>
+                <div id="cmd-dlgHeader" class="modal-header">
+                    <h4 id="cmd-WindowTitle" class="modal-title text-center cmd-dlglabel-text"></h4>
                 </div>
                 <div class="modal-body">
-                        <label class="dlglabel-text" id="commandMsg"></label>
-                        <input type="text" class="dlglabel-text" id="confirmUserText" autofocus style="margin-left: 20px; padding-left: 10px; width: 90%;">
-                    <div id="dlg-btn" class="text-center" hidden="true">
-                        <button type="button" id="removePasswordBtnOK" class="text-center btn btn-primary label-text" style="border: 1px solid; margin-right: 20px; margin-top: 20px;" disabled>OK</button>
-                        <button type="button" class="text-center btn btn-primary label-text" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
-                        <label id="commandType" hidden></label>
+                    <label class="cmd-dlglabel-text" id="cmd-Msg"></label>
+                    <input type="text" class="cmd-dlglabel-text" id="confirmUsernameText" placeholder="Username" style="margin-left: 20px; padding-left: 10px; width: 90%;">
+                    <div id="cmd-dlg-btn" class="text-center" hidden="true">
+                        <button type="button" id="cmd-OKBtn" class="text-center btn btn-primary cmd-dlgBtn" style="border: 1px solid; margin-right: 20px; margin-top: 20px;" disabled>OK</button>
+                        <button type="button" id="cmd-CancelBtn" class="text-center btn btn-primary cmd-dlgBtn" style="border: 1px solid;  margin-top: 20px;" data-dismiss="modal">Cancel</button>
+                        <label id="cmdType" hidden></label>
                     </div>
                 </div>
             </div>
@@ -352,7 +418,9 @@
         <div class="dropdown" style="display: inline; padding-bottom: 20px;">
             <a id="usersDropdown" class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
             <ul class="dropdown-menu">
+                <div id="usersList">
                 {{GetUserList}}
+                </div>
             </ul>
         </div>
         <a><label class="userOptionLinks" id="addUserLink">Add a new user</label></a>
@@ -391,6 +459,11 @@
 
 
     <div class="tplSubContentDetail" id="newUserContent" hidden="hidden">
-        <label class="dynContent-sublabel-text">Add user</label>
+        <label class="dynContent-sublabel-text" style="text-decoration: underline; margin-bottom: 20px;">Add a new user</label>
+        <div class="input-prepend">
+            <input type="text" class="cmd-dlglabel-text" id="newUsernameText" placeholder="Username" style="margin-left: 20px; padding-left: 10px; width: 30%;">
+            <button id="addUserBtn" class="btn btn-primary" style="font-size: 20px; margin-left: 10px;">Add</button>
+            <label class="dynContent-sublabel-text" id="addUserServerMsg" style="margin-left: 50px;"></label>
+        </div>
     </div>
 </p>
