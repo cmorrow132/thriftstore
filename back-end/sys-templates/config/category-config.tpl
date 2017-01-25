@@ -1,19 +1,26 @@
 <script>
 
-    $(document).on('click',"[name=removeCategory]",function() {
-        var selectedCategory=$(this).data("value");
-        var newCatItem=selectedCategory.substring(1,2);
-        alert(newCatItem);
+    $(document).on('click',"[name=removeCategory]",function(event) {
+        event.stopImmediatePropagation();
+        var selectedCategory=$(this).data("value").toString();
 
-        /*if(selectedCategory.substring(0,5) != ".cat--") {
+        var catID="";
+        var newCatItem=selectedCategory.substring(0,7);
+
+        if(newCatItem != "newcat-") {
             $('#removeCatList').append(selectedCategory + ",");       //Hidden label to store deleted category names to send to server
+            catID=".cat-" + selectedCategory;
         }
+        else {
+            catID="." + selectedCategory;
+        }
+
         $(this).remove();
         $(catID).remove();
         var itemToRemove=$(this).attr('id')+",";
 
         $('#newCatList').text($('#newCatList').text().replace(itemToRemove,""));
-        $('#CategorySaveBtn').removeAttr('disabled');*/
+        $('#CategorySaveBtn').removeAttr('disabled');
         /*$.ajax({                                                                    //Send data to the back end
             url: '/removeCategory',
             type: 'post',
@@ -41,7 +48,8 @@
 
     $('#newCategoryAddBtn').click(function() {
         $('#newCatList').append($('#newCategoryName').val()+",");         //Hidden label to store new category names to send to server
-        $('#categoryList').append("<p><i name='removeCategory' data-value='newcat-" + Math.random() + "' id='" + $('#newCategoryName').val() + "' class='fa fa-times-circle-o' style='color: #337ab7; margin-right: 10px;'> </i><label class='cat--1'>" + $('#newCategoryName').val() + "</label></p>\n");
+        var catID="newcat-" + Math.ceil(Math.random()*999999999);
+        $('#categoryList').append("<p><i name='removeCategory' data-value='" + catID + "' id='" + $('#newCategoryName').val() + "' class='fa fa-times-circle-o' style='color: #337ab7; margin-right: 10px;'> </i><label class='" + catID + "'>" + $('#newCategoryName').val() + "</label></p>\n");
         $('#newCategoryName').val("");
         $(this).attr('disabled','disabled');
         $('#CategorySaveBtn').removeAttr('disabled');
@@ -69,9 +77,9 @@
     <input id="newCategoryName" class="dynContent-sublabel-text" placeholder="New category name">
     <button id="newCategoryAddBtn" class="btn btn-primary" style="font-size: 20px; margin-left: 10px;" disabled>Add</button>
     <button id="CategorySaveBtn" class="btn btn-primary" style="font-size: 20px; margin-left: 10px;" disabled>Save</button>
-    <label id="serverMsg" class="dynContent-sublabel-text" style="float: right; margin-right: 50px;">Test</label>
-    <p><label id="newCatList"></label></p>
-    <p><label id="removeCatList"></label></p>
+    <label id="serverMsg" class="dynContent-sublabel-text" style="float: right; margin-right: 50px;"></label>
+    <p><label id="newCatList" hidden></label></p>
+    <p><label id="removeCatList" hidden></label></p>
 </div>
 
 <div class="tplSubContentDetail">

@@ -78,7 +78,8 @@
             });
         });
 
-        $(document).on('click',"[name=add]",function() {
+        $(document).on('click',"[name=add]",function(event) {
+            event.stopImmediatePropagation();
             var selectedGroup=($(this).data("value"));
             if($('#updatedGroups').text()=="none|") {
                 $('#updatedGroups').text("");
@@ -90,7 +91,8 @@
             updateAdditionalGroups();
         });
 
-        $(document).on('click',"[name=remove]",function() {
+        $(document).on('click',"[name=remove]",function(event) {
+            event.stopImmediatePropagation();
             $('#serverMsg').text("");
 
             var selectedGroup=($(this).data("value"));

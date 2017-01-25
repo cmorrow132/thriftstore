@@ -43,6 +43,7 @@
                $('#main-content').html("");
                $('#newCatList').text("");       //Label in category-config.tpl
                $('#removeCatList').text("");    //Label in category-config.tpl
+
                $.ajax({                                                                    //Send data to the back end
                    url: '/getConfig/categories',
                    type: 'post',
@@ -133,6 +134,7 @@
                    });
                }
            });
+
 
         });
 
