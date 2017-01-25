@@ -117,7 +117,8 @@ func getCategories() (string) {
 		if err!=nil {
 			return "Error loading categories"
 		}
-		dbResults+="<row><button name=\"categoryName\" value=\"" + strconv.Itoa(category_id) + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + categoryName + "</button></row>"
+		//dbResults+="<row><button name=\"categoryName\" value=\"" + strconv.Itoa(category_id) + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + categoryName + "</button></row>"
+		dbResults+=strconv.Itoa(category_id) + "=" + categoryName + ","
 	}
 
 	return dbResults
@@ -780,6 +781,21 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			}
 			return groupList
 		},
+
+		"CategoryList": func() string {
+			formattedCatList:=""
+			categoryList:=strings.Split(getCategories(),",")
+
+			for i:=0;i<len(categoryList)-1;i++ {
+				itemSplit:=strings.Split(categoryList[i],"=")
+
+				if(itemSplit[1] != "No category") {
+					formattedCatList+="<p><i name='removeCategory' data-value='" + itemSplit[0] + "' class='fa fa-times-circle-o' style='color: #337ab7; margin-right: 10px;'> </i><label class='cat-" + itemSplit[0] + "'>" + itemSplit[1] + "</label></p>\n";
+				}
+			}
+
+			return formattedCatList
+		},
 	})
 
 	tpl,err=tpl.ParseFiles(templatePath)
@@ -889,7 +905,20 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		},
 
 		"FnMbiTrkc": func() string {
-			return getCategories()
+			formattedCatList:=""
+			categoryList:=strings.Split(getCategories(),",")
+			fmt.Println("Array items: " + strconv.Itoa(len(categoryList)))
+
+			for i:=0;i<len(categoryList)-1;i++ {
+				fmt.Println("Item " + strconv.Itoa(i))
+				fmt.Println(categoryList[i])
+				itemSplit:=strings.Split(categoryList[i],"=")
+				if(itemSplit[1] != "No category") {
+					formattedCatList += "<row><button name=\"categoryName\" value=\"" + itemSplit[0] + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + itemSplit[1] + "</button></row>"
+				}
+			}
+
+			return formattedCatList
 		},
 		"GetColors": func() string {
 			return getColors()

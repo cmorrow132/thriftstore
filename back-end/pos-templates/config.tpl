@@ -41,7 +41,8 @@
            $('#pageSelectorCategories').click(function() {
                $('#main-content').addClass("main-content-border");
                $('#main-content').html("");
-
+               $('#newCatList').text("");       //Label in category-config.tpl
+               $('#removeCatList').text("");    //Label in category-config.tpl
                $.ajax({                                                                    //Send data to the back end
                    url: '/getConfig/categories',
                    type: 'post',
@@ -49,6 +50,7 @@
                    data: "",
                    success: function (data) {                          //AJAX request completed, deal with the results below
                        $('#main-content').html("");
+                       $('#serverMsg').text("");
                        $('#main-content').html(data);
 
                    }

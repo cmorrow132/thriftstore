@@ -446,7 +446,7 @@
             <label id="updatedGroups" hidden></label>
         </p>
         <p style="margin-top: 30px;">
-            <label class="dynContent-sublabel-text" style="padding-right: 20px;">Additional Groups:</label><label id="AddGroupsList" class="dynContent-sublabel-text" style="margin-bottom: 0px; padding-bottom: 0px;">Test</label>
+            <label class="dynContent-sublabel-text" style="padding-right: 20px;">Additional Groups:</label><label id="AddGroupsList" class="dynContent-sublabel-text" style="margin-bottom: 0px; padding-bottom: 0px;"></label>
             <span>
                 <button id="saveUserData" class="btn btn-primary dynContent-sublabel-text" style="float: right; margin-right: 20px; margin-left: 20px;">Save</button>
                 <label id="serverMsg" class="dynContent-sublabel-text" style="float: right;"></label>
