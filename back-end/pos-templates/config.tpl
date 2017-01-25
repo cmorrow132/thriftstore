@@ -22,10 +22,28 @@
            });
 
            $('#pageSelectorUsers').click(function() {
+               $('#main-content').addClass("main-content-border");
                $('#main-content').html("");
 
                $.ajax({                                                                    //Send data to the back end
                    url: '/getConfig/users',
+                   type: 'post',
+                   dataType: 'text',
+                   data: "",
+                   success: function (data) {                          //AJAX request completed, deal with the results below
+                       $('#main-content').html("");
+                       $('#main-content').html(data);
+
+                   }
+               });
+           });
+
+           $('#pageSelectorCategories').click(function() {
+               $('#main-content').addClass("main-content-border");
+               $('#main-content').html("");
+
+               $.ajax({                                                                    //Send data to the back end
+                   url: '/getConfig/categories',
                    type: 'post',
                    dataType: 'text',
                    data: "",
@@ -166,6 +184,15 @@
             padding-left: 100px;
             padding-right: 100px;
             margin-top: 50px;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        .main-content-border {
+            border-radius: 10px;
+            border: 1px solid;
         }
 
         .branding-sublabel-text {
@@ -312,17 +339,18 @@
         </div>
     </nav>
 
-    <div class="btn-primary">
-        <div class="dropdown pull-right">
-            <a class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu <span class="caret" style="font-size: 50px;"></span></a>
-            <ul class="dropdown-menu">
-                <li class="dynContent-dropdown-text"><a id="pageSelectorUsers">Users</a></li>
-            </ul>
-        </div>
+    <div class="form-horizontal" style="margin-top: 10px;">
+        <label style="font-family: Arial, Helvetica, Monospace; font-size: 15px; margin-left: 20px; margin-right: 20px;">Select a module from the dropdown.</label>
+            <div class="dropdown" style="display: inline;">
+                <a class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu <span class="caret" style="font-size: 50px;"></span></a>
+                <ul class="dropdown-menu">
+                    <li class="dynContent-dropdown-text"><a id="pageSelectorUsers">Users</a></li>
+                    <li class="dynContent-dropdown-text"><a id="pageSelectorCategories">Categories</a></li>
+                </ul>
+            </div>
     </div>
-
     <div id="main-content" class="main-content">
-        <label class="label-text">Select a module from the dropdown.</label>
+
     </div>
 
     <div class="copyright text-center" style="height: 20px;">

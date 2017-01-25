@@ -630,6 +630,32 @@ func getUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params)
 
 }
 
+func isUserPasswordSet(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	username:=r.PostFormValue("user")
+	match:=0
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Println("Error: Could not open the database")
+	}
+
+	defer db.Close()
+	dbQuery = "select * from " + CREDENTIALS_DB + " WHERE username='" + username + "' AND password=SHA('none')"
+
+	rows,err := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		match=1
+	}
+
+	if match==1 {
+		fmt.Fprintf(w,"No password set");
+	} else {
+		fmt.Fprintf(w,"Password is set")
+	}
+}
+
 func saveUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	user:=r.PostFormValue("user")
 	groups:=r.PostFormValue("groups");
@@ -701,6 +727,8 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	switch pageRequest {
 		case "users":
 			templateName="user-config.tpl"
+		case "categories":
+			templateName="category-config.tpl"
 	}
 
 	templatePath="sys-templates/config/" + templateName
@@ -752,7 +780,6 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 			}
 			return groupList
 		},
-
 	})
 
 	tpl,err=tpl.ParseFiles(templatePath)
@@ -898,6 +925,7 @@ func main() {
 	router.POST("/getConfig/:page",getConfig)
 	router.POST("/getUserDetails",getUserDetails)
 	router.POST("/saveUserDetails",saveUserDetails)
+	router.POST("/isUserPasswordSet",isUserPasswordSet)
 	router.POST("/getSystemGroups",getSystemGroups)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)

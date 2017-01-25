@@ -963,32 +963,7 @@
     <row>
         <div class="col-md-12">
             <input id="price" class="inputs" type=text placeholder="$" value="{{.ItemPrice}}">
-            <!-- <button id="price" value="" class="dropdown-toggle btn btn-default page-controls category-control text-left" type="button" data-toggle="dropdown">Price</button>
-            <div class="dropdown-menu" style="margin-top: 0px; margin-left: 20px; padding: 15px; padding-bottom: 0px;">
 
-                    <p>
-                        <button name="priceNumBtn" value="7" class="btn number-buttons">7</button>
-                        <button name="priceNumBtn" value="8" class="btn number-buttons">8</button>
-                        <button name="priceNumBtn" value="9" class="btn number-buttons">9</button>
-                        <button id="btnPriceSubmit" class="number-buttons fa fa-arrow-right btn-success" style="background-color: #5cb85c; padding-top: 25px; padding-bottom: 30px; border: 2px solid;"></button>
-                    </p>
-                    <p>
-                        <button name="priceNumBtn" value="4" class="btn number-buttons">4</button>
-                        <button name="priceNumBtn" value="5" class="btn number-buttons">5</button>
-                        <button name="priceNumBtn" value="6" class="btn number-buttons">6</button>
-                    </p>
-                    <p>
-                        <button name="priceNumBtn" value="1" class="btn number-buttons">1</button>
-                        <button name="priceNumBtn" value="2" class="btn number-buttons">2</button>
-                        <button name="priceNumBtn" value="3" class="btn number-buttons">3</button>
-                    </p>
-                    <p>
-                        <button name="priceNumBtn" value="0" class="btn number-buttons">0</button>
-                        <button name="priceNumBtn" value="." class="btn number-buttons">.</button>
-                        <button id="btnPriceBkspc" class="btn number-buttons fa fa-arrow-left" style="background-color: #f0ad4e; color: white;"></button>
-                    </p>
-
-            </div> -->
         </div>
     </row>
 

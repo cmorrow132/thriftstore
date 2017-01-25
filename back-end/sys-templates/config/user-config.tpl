@@ -36,6 +36,21 @@
                 }
             });
 
+            $.ajax({                                                                    //Send data to the back end
+                url: '/isUserPasswordSet',
+                type: 'post',
+                dataType: 'text',
+                data: "user=" + $(this).text(),
+                success: function (data) {
+                    if(data=="No password set") {
+                        $('#isPasswordSet').text("No password is set");
+                    }
+                    else {
+                        $('#isPasswordSet').text("");
+                    }
+                }
+            });
+
             updateAdditionalGroups();
 
             $('#userContent').removeAttr('hidden');
@@ -155,23 +170,11 @@
                 success: function (data) {
                     if(data=="Success") {
                         if(data=="Success") {
-                            $('#updatedGroups').text("");
-                            
                             setTimeout(function() {
-                                $('#main-content').html("");
-
-                                $.ajax({                                                                    //Send data to the back end
-                                    url: '/getConfig/users',
-                                    type: 'post',
-                                    dataType: 'text',
-                                    data: "",
-                                    success: function (data) {                          //AJAX request completed, deal with the results below
-                                        $('#main-content').html("");
-                                        $('#main-content').html(data);
-
-                                    }
-                                });
+                               location.reload();
                             },100);
+
+                            updateAdditionalGroups();
                         }
                         else {
                             $('#serverMsg').css({'color':'#D9534F'});
@@ -230,8 +233,7 @@
                    data: postData,
                    success: function (data) {
                        if(data=="Success") {
-                           $('#serverMsg').css({'color':'#337AB7'});
-                           $('#serverMsg').text("The user's password was removed");
+                           $('#isPasswordSet').text("No password is set");
                        }
                        else {
                            $('#serverMsg').css({'color':'#D9534F'});
@@ -436,6 +438,9 @@
         </p>
         <p>
             <label class="dynContent-sublabel-text">User groups: </label><label id="groupList" class="dynContent-sublabel-text" style="padding-left: 20px;"></label>
+        </p>
+        <p>
+            <label id="isPasswordSet" class="dynContent-sublabel-text" style="font-size: 20px; margin-left: 10px; margin-bottom: 0px; color: #d9534f;"></label>
         </p>
         <p>
             <label id="updatedGroups" hidden></label>
