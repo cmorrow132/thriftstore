@@ -344,7 +344,7 @@
     </nav>
 
     <div class="form-horizontal" style="margin-top: 10px;">
-        <label style="font-family: Arial, Helvetica, Monospace; font-size: 15px; margin-left: 20px; margin-right: 20px;">Select a module from the dropdown.</label>
+        <label style="font-family: Arial, Helvetica, Monospace; font-size: 18px; margin-left: 20px; margin-right: 20px;">Select a module from the dropdown.</label>
             <div class="dropdown" style="display: inline;">
                 <a class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu <span class="caret" style="font-size: 50px;"></span></a>
                 <ul class="dropdown-menu">

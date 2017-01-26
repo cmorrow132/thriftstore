@@ -136,7 +136,6 @@ func getDefaultColor(requestId int, colorName string) (string) {
 	defer db.Close()
 
 	dbQuery = "select id, colorcode from "+DISCOUNT_DB + " WHERE name='" + colorName + "'"
-	//fmt.Println(dbQuery)
 
 	if err!=nil {
 		return "Error reading color codes"
@@ -232,7 +231,6 @@ func getColors() (string) {
 	defer db.Close()
 
 	dbQuery = "select id, name, colorcode from "+DISCOUNT_DB + " WHERE type='color'"
-	//fmt.Println(dbQuery)
 
 	if err!=nil {
 		return "Error loading colors"
@@ -273,24 +271,24 @@ func setAdminPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	dbQuery:="INSERT INTO " + CREDENTIALS_DB + " VALUES(DEFAULT,'admin',SHA('" + adminPassword +"'))"
 	stmt,err:=db.Prepare(dbQuery)
 	if err!= nil {
-		fmt.Println(err)
+		fmt.Fprintf(w,err.Error())
 	}
 
 	_,err=stmt.Exec()
 	if err!= nil {
-		fmt.Println(err)
+		fmt.Fprintf(w,err.Error())
 	}
 
 
 	dbQuery="DELETE FROM " + CREDENTIALS_DB + " WHERE username='setup'"
 	stmt,err=db.Prepare(dbQuery)
 	if err!= nil {
-		fmt.Println(err)
+		fmt.Fprintf(w,err.Error())
 	}
 
 	_,err=stmt.Exec()
 	if err!= nil {
-		fmt.Println(err)
+		fmt.Fprintf(w,err.Error())
 	}
 
 	fmt.Fprintf(w,"Success")
@@ -383,6 +381,7 @@ func addUser(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	if err!= nil {
 		fmt.Fprintf(w,"The user already exists")
 		return
+
 	}
 
 	dbQuery="INSERT INTO " + GROUPS_DB + " VALUES('" + username + "','none|')"
@@ -390,15 +389,19 @@ func addUser(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	if err!= nil {
 		fmt.Fprintf(w,err.Error())
 		return
+
 	}
 
 	_,err=stmt.Exec()
 	if err!= nil {
 		fmt.Fprintf(w,"Could not add user to groups")
 		return
+
 	}
 
-	fmt.Fprintf(w,"Success")
+	if err==nil {
+		fmt.Fprintf(w,"Success")
+	}
 }
 
 func chPwd(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
@@ -477,7 +480,7 @@ func doLogin(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 func doLogout(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	session,err:=sessionStore.Get(r,"auth")
 	if err!= nil {
-		fmt.Println(err);
+		fmt.Fprintf(w,err.Error())
 	}
 
 	session.Options.MaxAge=-1		//Delete the session
@@ -614,7 +617,7 @@ func getUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params)
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	if err!=nil {
-		fmt.Println("Error: Could not open the database")
+		fmt.Fprintf(w,"Error: Could not open the database")
 	}
 
 	defer db.Close()
@@ -637,7 +640,7 @@ func isUserPasswordSet(w http.ResponseWriter,r *http.Request, ps httprouter.Para
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	if err!=nil {
-		fmt.Println("Error: Could not open the database")
+		fmt.Fprintf(w,"Error: Could not open the database")
 	}
 
 	defer db.Close()
@@ -663,7 +666,7 @@ func saveUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	if err!=nil {
-		fmt.Println("Error: Could not open the database")
+		fmt.Fprintf(w,"Error: Could not open the database")
 	}
 
 	defer db.Close()
@@ -671,12 +674,12 @@ func saveUserDetails(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 
 	stmt,err:=db.Prepare(dbQuery)
 	if err!= nil {
-		fmt.Println(err)
+		fmt.Fprintf(w,err.Error())
 	}
 
 	_,err=stmt.Exec()
 	if err!= nil {
-		fmt.Println(err)
+		fmt.Fprintf(w,err.Error())
 	}
 
 	fmt.Fprintf(w,"Success");
@@ -710,6 +713,56 @@ func getSystemGroups(w http.ResponseWriter,r *http.Request, ps httprouter.Params
 
 }
 
+func saveCategories(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
+	removeCategories:=r.PostFormValue("removeCategories")
+	addCategories:=r.PostFormValue("addCategories")
+
+	rCatlist:=strings.Split(removeCategories,",")
+	aCatList:=strings.Split(addCategories,",")
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err!=nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+
+	defer db.Close()
+
+	for i:=0; i<len(rCatlist)-1;i++ {
+		dbQuery = "DELETE FROM " + CATEGORY_DB + " WHERE id=" + rCatlist[i]
+
+		stmt,err:=db.Prepare(dbQuery)
+		if err!= nil {
+			fmt.Fprintf(w,err.Error())
+			return
+		}
+
+		_,err=stmt.Exec()
+		if err!= nil {
+			fmt.Fprintf(w,err.Error())
+			return
+		}
+	}
+
+	for j:=0; j<len(aCatList)-1;j++ {
+		dbQuery = "INSERT INTO " + CATEGORY_DB + " VALUES(DEFAULT,'" + aCatList[j] + "')"
+
+		stmt,err:=db.Prepare(dbQuery)
+		if err!= nil {
+			fmt.Fprintf(w,err.Error())
+			return
+		}
+
+		_,err=stmt.Exec()
+		if err!= nil {
+			fmt.Fprintf(w,err.Error())
+			return
+		}
+	}
+
+	fmt.Fprintf(w,"Success")
+}
+
 func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 	var templateName, templatePath string
 	var users,groups,groupDescription string
@@ -719,7 +772,7 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	if err!=nil {
-		fmt.Println("Error: Could not open the database")
+		fmt.Fprintf(w,"Error: Could not open the database")
 	}
 
 	defer db.Close()
@@ -784,18 +837,24 @@ func getConfig(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 
 		"CategoryList": func() string {
 			formattedCatList:=""
+
 			categoryList:=strings.Split(getCategories(),",")
 
 			for i:=0;i<len(categoryList)-1;i++ {
 				itemSplit:=strings.Split(categoryList[i],"=")
 
 				if(itemSplit[1] != "No category") {
+
 					formattedCatList+="<p><i name='removeCategory' data-value='" + itemSplit[0] + "' class='fa fa-times-circle-o' style='color: #337ab7; margin-right: 10px;'> </i><label class='cat-" + itemSplit[0] + "'>" + itemSplit[1] + "</label></p>\n";
 				}
 			}
 
+			if formattedCatList=="" {
+				formattedCatList="No categories defined"
+			}
 			return formattedCatList
 		},
+
 	})
 
 	tpl,err=tpl.ParseFiles(templatePath)
@@ -907,17 +966,20 @@ func pageHandler(w http.ResponseWriter,r *http.Request, ps httprouter.Params) {
 		"FnMbiTrkc": func() string {
 			formattedCatList:=""
 			categoryList:=strings.Split(getCategories(),",")
-			fmt.Println("Array items: " + strconv.Itoa(len(categoryList)))
+			//fmt.Println("Array items: " + strconv.Itoa(len(categoryList)))
 
 			for i:=0;i<len(categoryList)-1;i++ {
-				fmt.Println("Item " + strconv.Itoa(i))
-				fmt.Println(categoryList[i])
+				//fmt.Println("Item " + strconv.Itoa(i))
+				//fmt.Println(categoryList[i])
 				itemSplit:=strings.Split(categoryList[i],"=")
 				if(itemSplit[1] != "No category") {
 					formattedCatList += "<row><button name=\"categoryName\" value=\"" + itemSplit[0] + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + itemSplit[1] + "</button></row>"
 				}
 			}
 
+			if formattedCatList=="" {
+				formattedCatList="<row><label class='category-buttons'>No categories defined</label>"
+			}
 			return formattedCatList
 		},
 		"GetColors": func() string {
@@ -956,6 +1018,7 @@ func main() {
 	router.POST("/saveUserDetails",saveUserDetails)
 	router.POST("/isUserPasswordSet",isUserPasswordSet)
 	router.POST("/getSystemGroups",getSystemGroups)
+	router.POST("/saveCategories",saveCategories)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
 	fmt.Println("Product Management System listening and ready on port: " +port)
 	http.ListenAndServe(":"+port,context.ClearHandler(router))

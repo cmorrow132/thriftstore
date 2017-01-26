@@ -1,9 +1,73 @@
 <script>
-        $("[name=user]").click(function() {
+        function populateUserData(username) {
             $('#addUserLink').attr('hidden','hidden');
             $('#newUserContent').attr('hidden','hidden');
             $('#removePassword').removeAttr('hidden');
             $('#deleteUser').removeAttr('hidden');
+
+            $('#addgroupslist').text("");
+
+            var userGroups = "";
+
+            $('#serverMsg').text("");
+
+            $('#usersDropdown').text(username);   //Change dropdown to selected username
+            $('#selectedUserName').text(username);
+
+            $.ajax({                                                                    //Send data to the back end
+                url: '/getUserDetails',
+                type: 'post',
+                dataType: 'text',
+                data: "user=" + username,
+                success: function (data) {                          //Populate user details
+                    $('#groupList').text("");
+                    $('#updatedGroups').text("");
+
+                    var groupList = data.split("|");
+                    for (var i = 0; i < groupList.length - 1; i++) {
+                        if (groupList[i] == "none") {
+                            //userGroups="None"
+                            $('#updatedGroups').append("none|");
+                            $('#groupList').append("None");
+                        }
+                        else {
+                            //userGroups=userGroups+groupList[i]+",";
+                            $('#updatedGroups').append(groupList[i] + "|");
+                            $('#groupList').append("<span style='margin-right: 20px;'><i name='remove' data-value=\"" + groupList[i] + "\" class='fa fa-times-circle-o' style='color: #337ab7;'> </i> " + groupList[i] + "</span>\n");
+                        }
+                    }
+                }
+            });
+
+            $.ajax({                                                                    //Send data to the back end
+                url: '/isUserPasswordSet',
+                type: 'post',
+                dataType: 'text',
+                data: "user=" + username,
+                success: function (data) {
+                    if(data=="No password set") {
+                        $('#isPasswordSet').text("No password is set");
+                    }
+                    else {
+                        $('#isPasswordSet').text("");
+                    }
+                }
+            });
+
+            updateAdditionalGroups();
+
+            $('#userContent').removeAttr('hidden');
+            $('#groupDescriptionList').removeAttr('hidden');
+        }
+
+        $("[name=user]").click(function() {
+            populateUserData($(this).text());
+            /*$('#addUserLink').attr('hidden','hidden');
+            $('#newUserContent').attr('hidden','hidden');
+            $('#removePassword').removeAttr('hidden');
+            $('#deleteUser').removeAttr('hidden');
+
+            $('#addgroupslist').text("");
 
             var userGroups = "";
 
@@ -54,7 +118,7 @@
             updateAdditionalGroups();
 
             $('#userContent').removeAttr('hidden');
-            $('#groupDescriptionList').removeAttr('hidden');
+            $('#groupDescriptionList').removeAttr('hidden');*/
         });
 
         $('#saveUserData').click(function() {
@@ -171,17 +235,19 @@
                 data: postData,
                 success: function (data) {
                     if(data=="Success") {
-                        if(data=="Success") {
-                            setTimeout(function() {
-                               location.reload();
-                            },100);
+                        //var newItem = "<li class='dynContent-dropdown-text' name='user'>" + username + "</li>\n"
 
-                            updateAdditionalGroups();
-                        }
-                        else {
-                            $('#serverMsg').css({'color':'#D9534F'});
-                            $('#serverMsg').html(data);
-                        }
+                        $("ul#userList li:contains('No users')").remove();
+                        var newUserEntry="<li class='dynContent-dropdown-text' name='user'>" + username + "</li>";
+
+                        $('#userList').append(newUserEntry);
+                        $("#newUserContent").attr('hidden','hidden');
+                        populateUserData(username);
+                    }
+                    else {
+                        //alert(data);
+                        $('#addUserServerMsg').css({'color':'#D9534F'});
+                        $('#addUserServerMsg').html(data);
                     }
                 }
             });
@@ -417,19 +483,18 @@
 <p>
     <div class="form-horizontal">
 
-        <label class="dynContent-sublabel-text" style="width: 200px;">Select a user</label>
+        <label class="dynContent-sublabel-text" style="width: 200px; padding-right: 10px;">Select a user</label>
 
         <div class="dropdown" style="display: inline; padding-bottom: 20px;">
-            <a id="usersDropdown" class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <div id="usersList">
+            <a id="usersDropdown" class="dropdown-toggle btn btn-default menu-dropdown text-left" style="margin-right: 10px; margin-top: 5px; padding-top: 0px; padding-bottom: 0px; width: 250px;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+            <ul class="dropdown-menu" id="userList">
                 {{GetUserList}}
-                </div>
             </ul>
         </div>
         <a><label class="userOptionLinks" id="addUserLink">Add a new user</label></a>
         <a><label class="userOptionLinks" id="removePassword" hidden>Remove password</label></a>
         <a><label class="userOptionLinks" id="deleteUser" hidden>Remove user</label></a>
+
     </div>
 </p>
 
@@ -470,7 +535,7 @@
         <div class="input-prepend">
             <input type="text" class="cmd-dlglabel-text" id="newUsernameText" placeholder="Username" style="margin-left: 20px; padding-left: 10px; width: 30%;">
             <button id="addUserBtn" class="btn btn-primary" style="font-size: 20px; margin-left: 10px;">Add</button>
-            <label class="dynContent-sublabel-text" id="addUserServerMsg" style="margin-left: 50px;"></label>
+            <label class="dynContent-sublabel-text" id="addUserServerMsg" style="margin-left: 50px;">Test</label>
         </div>
     </div>
 </p>

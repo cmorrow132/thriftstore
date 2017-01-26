@@ -21,20 +21,7 @@
 
         $('#newCatList').text($('#newCatList').text().replace(itemToRemove,""));
         $('#CategorySaveBtn').removeAttr('disabled');
-        /*$.ajax({                                                                    //Send data to the back end
-            url: '/removeCategory',
-            type: 'post',
-            dataType: 'text',
-            data: "category=" + selectedCategory,
-            success: function (data) {                          //Populate user details
-                if(data=="Success") {
 
-                }
-                else {
-                    $('#serverMsg').html("<font color='#d9534f'>" + data + "</font>");
-                }
-            }
-        });*/
     });
 
     $('#newCategoryName').keyup(function() {
@@ -47,12 +34,46 @@
     });
 
     $('#newCategoryAddBtn').click(function() {
+        $('#categoryList li').each(function(idx,li) {
+
+            alert($(li));
+        });
+
         $('#newCatList').append($('#newCategoryName').val()+",");         //Hidden label to store new category names to send to server
         var catID="newcat-" + Math.ceil(Math.random()*999999999);
         $('#categoryList').append("<p><i name='removeCategory' data-value='" + catID + "' id='" + $('#newCategoryName').val() + "' class='fa fa-times-circle-o' style='color: #337ab7; margin-right: 10px;'> </i><label class='" + catID + "'>" + $('#newCategoryName').val() + "</label></p>\n");
         $('#newCategoryName').val("");
         $(this).attr('disabled','disabled');
         $('#CategorySaveBtn').removeAttr('disabled');
+    });
+
+    $('#CategorySaveBtn').click(function() {
+        var postData="removeCategories="+$('#removeCatList').text() + "&addCategories=" + $('#newCatList').text();
+        $.ajax({                                                                    //Send data to the back end
+            url: '/saveCategories',
+            type: 'post',
+            dataType: 'text',
+            data: postData,
+            success: function (data) {                          //Populate user details
+                if (data == "Success") {
+                    $.ajax({                                                                    //Send data to the back end
+                        url: '/getConfig/categories',
+                        type: 'post',
+                        dataType: 'text',
+                        data: "",
+                        success: function (data) {                          //AJAX request completed, deal with the results below
+                            $('#main-content').html("");
+                            $('#serverMsg').text("");
+                            $('#main-content').html(data);
+
+                        }
+                    });
+                }
+                else {
+                    $('#serverMsg').html("<font color='#d9534f'>" + data + "</font>");
+                }
+            }
+        });
     });
 
 </script>
