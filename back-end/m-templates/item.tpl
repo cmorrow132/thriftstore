@@ -711,10 +711,10 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header btn-primary">
-            <h4 class="modal-title text-center" style="font-size: 50px;">Choose a category for this item</h4>
+          <h4 class="modal-title text-center" style="font-size: 50px;">Choose a category for this item<p>(Swipe up and down for more)</p></h4>
       </div>
       <div class="modal-body">
-            <div class="categorybox-noborder">
+            <div class="categorybox-noborder" style="height: 800px; overflow: scroll;">
                 <ul>
                     {{FnMbiTrkc}}
                 </ul>
@@ -845,7 +845,7 @@
             <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
             <p>
                 <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCode}}" style="border: solid; font-size: 400%; background-color: {{.SelectedColorCodeHtml}}; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
+                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="none-selected" style="background-color: rgb(255,255,255); border: solid; font-size: 400%; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
             </p>
 	    </center>
 

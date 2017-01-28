@@ -146,6 +146,17 @@
             font-size: 30px;
         }
 
+        .copyright {
+            position:fixed;
+            bottom:0;
+            width:100%;
+            display:block;
+            font-family: Arial, Helvetica, Monospace;
+            font-size: 15px;
+            background-color: #000345;
+            color: white;
+        }
+
     </style>
 
 </head>
@@ -181,6 +192,10 @@
             <button id="loginBtn" class="btn btn-success" disabled="disabled">Login</button>
         </p>
     </div>
+</div>
+
+<div class="copyright text-center" style="height: 20px;">
+    <p>{{.CopyRight}} </p>
 </div>
 </body>
 </html>

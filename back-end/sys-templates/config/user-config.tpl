@@ -235,14 +235,21 @@
                 data: postData,
                 success: function (data) {
                     if(data=="Success") {
-                        //var newItem = "<li class='dynContent-dropdown-text' name='user'>" + username + "</li>\n"
+                        setTimeout(function() {
+                            $('#main-content').html("");
 
-                        $("ul#userList li:contains('No users')").remove();
-                        var newUserEntry="<li class='dynContent-dropdown-text' name='user'>" + username + "</li>";
+                            $.ajax({                                                                    //Send data to the back end
+                                url: '/getConfig/users',
+                                type: 'post',
+                                dataType: 'text',
+                                data: "",
+                                success: function (data) {                          //AJAX request completed, deal with the results below
+                                    $('#main-content').html("");
+                                    $('#main-content').html(data);
 
-                        $('#userList').append(newUserEntry);
-                        $("#newUserContent").attr('hidden','hidden');
-                        populateUserData(username);
+                                }
+                            });
+                        },200);
                     }
                     else {
                         //alert(data);
@@ -337,7 +344,7 @@
 
                                    }
                                });
-                           },100);
+                           },200);
                        }
                        else {
                            $('#serverMsg').css({'color':'#D9534F'});

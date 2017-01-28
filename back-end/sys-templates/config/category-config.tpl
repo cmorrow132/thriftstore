@@ -103,7 +103,7 @@
     <p><label id="removeCatList" hidden></label></p>
 </div>
 
-<div class="tplSubContentDetail">
+<div class="tplSubContentDetail" style="height: 300px; overflow: scroll;">
     <ul id="categoryList" class="dynContent-sublabel-text">
     {{CategoryList}}
     </ul>

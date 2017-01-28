@@ -58,6 +58,46 @@
                });
            });
 
+           $('#pageSelectorDiscounts').click(function() {
+               $('#main-content').addClass("main-content-border");
+               $('#main-content').html("");
+               $('#newCatList').text("");       //Label in category-config.tpl
+               $('#removeCatList').text("");    //Label in category-config.tpl
+
+               $.ajax({                                                                    //Send data to the back end
+                   url: '/getConfig/discounts',
+                   type: 'post',
+                   dataType: 'text',
+                   data: "",
+                   success: function (data) {                          //AJAX request completed, deal with the results below
+                       $('#main-content').html("");
+                       $('#serverMsg').text("");
+                       $('#main-content').html(data);
+
+                   }
+               });
+           });
+
+            $('#pageSelectorColors').click(function() {
+                $('#main-content').addClass("main-content-border");
+                $('#main-content').html("");
+                $('#newCatList').text("");       //Label in category-config.tpl
+                $('#removeCatList').text("");    //Label in category-config.tpl
+
+                $.ajax({                                                                    //Send data to the back end
+                    url: '/getConfig/colors',
+                    type: 'post',
+                    dataType: 'text',
+                    data: "",
+                    success: function (data) {                          //AJAX request completed, deal with the results below
+                        $('#main-content').html("");
+                        $('#serverMsg').text("");
+                        $('#main-content').html(data);
+
+                    }
+                });
+            });
+
            $('#chPassword').click(function() {
                $('#newPassword').val("");
                $('#newPasswordConfirm').val("");
@@ -135,6 +175,23 @@
                }
            });
 
+            $('#logout').click(function() {
+                $.ajax({                                            //Send GET request to back end
+                    url: '/logout',
+                    type: 'post',
+                    dataType: 'text',
+                    data: "",
+                    success: function (data) {                  //AJAX request completed, deal with the results below
+                        var pageURL=window.location.href.split("/");
+
+                        if (data == "Logout") {                         //Logout completed on server side
+
+
+                            $(location).attr('href', "/"+pageURL[3]);
+                        }
+                    }
+                });
+            });
 
         });
 
@@ -340,6 +397,7 @@
                 </p>
             </div>
             <button id="home" class="btn fa fa-home pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
+            <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
         </div>
     </nav>
 
@@ -350,6 +408,7 @@
                 <ul class="dropdown-menu">
                     <li class="dynContent-dropdown-text"><a id="pageSelectorUsers">Users</a></li>
                     <li class="dynContent-dropdown-text"><a id="pageSelectorCategories">Categories</a></li>
+                    <li class="dynContent-dropdown-text"><a id="pageSelectorDiscounts">Discounts</a></li>
                 </ul>
             </div>
     </div>

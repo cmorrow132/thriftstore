@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96bf5a10-1fce-405e-9089-6e41b5ae84dc" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/back-end/license_server.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/engine.go" afterPath="$PROJECT_DIR$/back-end/engine.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/m-templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/m-templates/item.tpl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/pos-templates/config.tpl" afterPath="$PROJECT_DIR$/back-end/pos-templates/config.tpl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/pos-templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/pos-templates/item.tpl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/pos-templates/login.tpl" afterPath="$PROJECT_DIR$/back-end/pos-templates/login.tpl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl" afterPath="$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/sys-templates/config/user-config.tpl" afterPath="$PROJECT_DIR$/back-end/sys-templates/config/user-config.tpl" />
     </list>
@@ -27,10 +31,32 @@
       <file leaf-file-name="engine.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/engine.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="469">
-              <caret line="980" column="116" lean-forward="false" selection-start-line="980" selection-start-column="116" selection-end-line="980" selection-end-column="116" />
+            <state relative-caret-position="583">
+              <caret line="1034" column="52" lean-forward="true" selection-start-line="1034" selection-start-column="52" selection-end-line="1034" selection-end-column="52" />
               <folding>
-                <element signature="e#14#344#0" expanded="true" />
+                <element signature="e#14#349#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="access_denied.tpl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/back-end/m-templates/access_denied.tpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="96" column="0" lean-forward="true" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="license_server.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/back-end/license_server.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="16" lean-forward="false" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+              <folding>
+                <element signature="e#14#39#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -39,91 +65,41 @@
       <file leaf-file-name="login.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/pos-templates/login.tpl">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.tpl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="71" column="23" lean-forward="false" selection-start-line="51" selection-start-column="20" selection-end-line="71" selection-end-column="23" />
+              <caret line="62" column="9" lean-forward="true" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="user-config.tpl" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/user-config.tpl">
+      <file leaf-file-name="license.tpl" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/back-end/sys-templates/license.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="29" column="64" lean-forward="false" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#1;n#p#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#1;n#p#4;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#p#5;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#7;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#p#7;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#1;n#p#7;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#span#0;n#p#7;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#span#0;n#p#7;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#2;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#div#0;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#0;n#div#3;n#!!top" expanded="true" />
-                <marker date="1485409466851" expanded="true" signature="1600:1619" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="1710:1725" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="4255:4274" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="4365:4380" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="6607:6626" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="6718:6733" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="7506:7525" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="7621:7636" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="8867:8886" ph="..." />
-                <marker date="1485409466851" expanded="true" signature="8974:8989" ph="..." />
-              </folding>
+            <state relative-caret-position="426">
+              <caret line="103" column="12" lean-forward="true" selection-start-line="103" selection-start-column="12" selection-end-line="103" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="category-config.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl">
+      <file leaf-file-name="license-error.tpl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/back-end/m-templates/license-error.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1035">
-              <caret line="69" column="23" lean-forward="false" selection-start-line="69" selection-start-column="23" selection-end-line="69" selection-end-column="23" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#p#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#p#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#p#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#0;n#p#1;n#!!top" expanded="true" />
-                <marker date="1485405970039" expanded="true" signature="1587:1622" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/back-end/pos-templates/config.tpl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="119" column="22" lean-forward="false" selection-start-line="119" selection-start-column="19" selection-end-line="119" selection-end-column="22" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#1;n#p#0;n#div#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#a#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#3;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="60">
+              <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="102" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -133,20 +109,13 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Go File" />
         <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>href</find>
-      <find>Cookies</find>
-      <find>locatio.</find>
-      <find>location</find>
-      <find>branding-text</find>
-      <find>number</find>
-      <find>number-butt</find>
-      <find>menu-dropdown</find>
       <find>dropdown</find>
       <find>name=</find>
       <find>container</find>
@@ -169,6 +138,14 @@
       <find>addUserServerMsg</find>
       <find>fmt.Println</find>
       <find>var</find>
+      <find>GetColors</find>
+      <find>colorname</find>
+      <find>name</find>
+      <find>getDefaultColor</find>
+      <find>selectedColorCode</find>
+      <find>SelectedColorCode</find>
+      <find>session.Op</find>
+      <find>MaxAge</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -188,13 +165,11 @@
         <option value="$PROJECT_DIR$/back-end/pos-templates/temp" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/config.tpl.html" />
-        <option value="$PROJECT_DIR$/back-end/m-templates/item.tpl" />
         <option value="$PROJECT_DIR$/back-end/pos-templates/access_denied.tpl.html" />
         <option value="$PROJECT_DIR$/back-end/m-templates/access_denied.tpl" />
         <option value="$PROJECT_DIR$/back-end/m-templates/main.tpl" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/config.tpl" />
         <option value="$PROJECT_DIR$/back-end/m-templates/login.tpl" />
-        <option value="$PROJECT_DIR$/back-end/pos-templates/login.tpl" />
         <option value="$PROJECT_DIR$/back-end/m-templates/first_login.tpl" />
         <option value="$PROJECT_DIR$/back-end/pos-templates/first_login.tpl" />
         <option value="$PROJECT_DIR$/back-end/pos-templates/config.tpl.html" />
@@ -203,12 +178,21 @@
         <option value="$PROJECT_DIR$/back-end/sys-templates/config/test.tpl" />
         <option value="$PROJECT_DIR$/back-end/temp-deleteme.html" />
         <option value="$PROJECT_DIR$/back-end/temp.go" />
-        <option value="$PROJECT_DIR$/back-end/pos-templates/item.tpl" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl.html" />
-        <option value="$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl" />
-        <option value="$PROJECT_DIR$/back-end/engine.go" />
-        <option value="$PROJECT_DIR$/back-end/pos-templates/config.tpl" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/config/user-config.tpl" />
+        <option value="$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl" />
+        <option value="$PROJECT_DIR$/back-end/sys-templates/config/discount-config.tpl.html" />
+        <option value="$PROJECT_DIR$/back-end/sys-templates/config/color-config.tpl" />
+        <option value="$PROJECT_DIR$/back-end/pos-templates/login.tpl" />
+        <option value="$PROJECT_DIR$/back-end/pos-templates/config.tpl" />
+        <option value="$PROJECT_DIR$/back-end/pos-templates/item.tpl" />
+        <option value="$PROJECT_DIR$/back-end/m-templates/item.tpl" />
+        <option value="$PROJECT_DIR$/back-end/sys-templates/config/discount-config.tpl" />
+        <option value="$PROJECT_DIR$/back-end/sys-templates/license.tpl.html" />
+        <option value="$PROJECT_DIR$/back-end/license_server.go" />
+        <option value="$PROJECT_DIR$/back-end/engine.go" />
+        <option value="$PROJECT_DIR$/back-end/m-templates/license-error.tpl" />
+        <option value="$PROJECT_DIR$/back-end/sys-templates/license.tpl" />
       </list>
     </option>
   </component>
@@ -219,8 +203,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1440" />
-    <option name="height" value="874" />
+    <option name="x" value="-1" />
+    <option name="y" value="24" />
+    <option name="width" value="1442" />
+    <option name="height" value="854" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -349,15 +335,16 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../go/projects/github-goprojects/go-templates/address_book.go" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="DefaultGoTemplateProperty" value="Go File" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/back-end/pos-templates" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/back-end/m-templates" />
       <recent name="$PROJECT_DIR$/back-end/sys-templates/config" />
       <recent name="$PROJECT_DIR$/back-end/pos-templates" />
-      <recent name="$PROJECT_DIR$/back-end/m-templates" />
     </key>
   </component>
   <component name="RunManager">
@@ -411,10 +398,10 @@
     <option name="remove_strategy" value="false" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="874" extended-state="6" />
+    <frame x="-1" y="24" width="1442" height="854" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3662375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39208633" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3264463" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -444,24 +431,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/back-end/m-templates/main.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="49" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="10" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/mobile.go" />
-    <entry file="file://$PROJECT_DIR$/back-end/mobile.go" />
-    <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl" />
-    <entry file="file://$PROJECT_DIR$/back-end/templates/temp" />
-    <entry file="file://$PROJECT_DIR$/../go/projects/github-goprojects/go-templates/address_book.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="990">
-          <caret line="66" column="27" lean-forward="false" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/mobile.go" />
     <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl" />
     <entry file="file://$PROJECT_DIR$/back-end/templates/temp" />
@@ -539,13 +508,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/m-templates/item.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="458" column="9" lean-forward="true" selection-start-line="450" selection-start-column="8" selection-end-line="458" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="840">
@@ -574,13 +536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/m-templates/access_denied.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="98" column="6" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="120" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/pos-templates/access_denied.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="338">
@@ -589,74 +544,75 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/temp.go" />
-    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="7" column="4" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="92" />
-          <folding>
-            <element signature="n#style#0;n#button#0;n#center#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#1;n#center#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#2;n#center#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/pos-templates/first_login.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="17" column="46" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="46" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/item.tpl">
+    <entry file="file://$PROJECT_DIR$/back-end/m-templates/item_tpl.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="835" column="31" lean-forward="false" selection-start-line="835" selection-start-column="22" selection-end-line="835" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/login.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="71" column="23" lean-forward="false" selection-start-line="51" selection-start-column="20" selection-end-line="71" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="980" column="116" lean-forward="false" selection-start-line="980" selection-start-column="116" selection-end-line="980" selection-end-column="116" />
-          <folding>
-            <element signature="e#14#344#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1035">
-          <caret line="69" column="23" lean-forward="false" selection-start-line="69" selection-start-column="23" selection-end-line="69" selection-end-column="23" />
+        <state relative-caret-position="-909">
+          <caret line="13" column="14" lean-forward="true" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/item.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14760">
+          <caret line="984" column="164" lean-forward="false" selection-start-line="984" selection-start-column="164" selection-end-line="984" selection-end-column="164" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/m-templates/item.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12600">
+          <caret line="840" column="0" lean-forward="false" selection-start-line="840" selection-start-column="0" selection-end-line="840" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#p#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#div#0;n#p#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#1;n#div#0;n#p#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#0;n#div#0;n#p#1;n#!!top" expanded="true" />
-            <marker date="1485405970039" expanded="true" signature="1587:1622" ph="..." />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#label#0;n#center#0;n#div#0;n#row#5;n#div#4;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#button#0;n#p#0;n#center#0;n#div#0;n#row#5;n#div#4;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#5;n#body#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/color-config.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="10" lean-forward="false" selection-start-line="0" selection-start-column="10" selection-end-line="0" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/discount-config.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#p#1;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#label#0;n#p#2;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#p#2;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#label#0;n#p#3;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#p#3;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/pos-templates/config.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1785">
-          <caret line="119" column="22" lean-forward="false" selection-start-line="119" selection-start-column="19" selection-end-line="119" selection-end-column="22" />
+        <state relative-caret-position="337">
+          <caret line="410" column="0" lean-forward="false" selection-start-line="410" selection-start-column="0" selection-end-line="410" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -678,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/user-config.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="29" column="64" lean-forward="false" selection-start-line="29" selection-start-column="64" selection-end-line="29" selection-end-column="64" />
+        <state relative-caret-position="126">
+          <caret line="440" column="0" lean-forward="false" selection-start-line="440" selection-start-column="0" selection-end-line="447" selection-end-column="5" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -701,17 +657,79 @@
             <element signature="n#style#0;n#input#0;n#div#0;n#div#3;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#0;n#div#0;n#div#3;n#!!top" expanded="true" />
             <element signature="n#style#0;n#label#0;n#div#0;n#div#3;n#!!top" expanded="true" />
-            <marker date="1485409466851" expanded="true" signature="1600:1619" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="1710:1725" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="4255:4274" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="4365:4380" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="6607:6626" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="6718:6733" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="7506:7525" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="7621:7636" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="8867:8886" ph="..." />
-            <marker date="1485409466851" expanded="true" signature="8974:8989" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="1600:1619" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="1710:1725" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="4255:4274" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="4365:4380" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="6607:6626" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="6718:6733" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="7506:7525" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="7621:7636" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="8867:8886" ph="..." />
+            <marker date="1485540502147" expanded="true" signature="8974:8989" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/m-templates/access_denied.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="96" column="0" lean-forward="true" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="583">
+          <caret line="1034" column="52" lean-forward="true" selection-start-line="1034" selection-start-column="52" selection-end-line="1034" selection-end-column="52" />
+          <folding>
+            <element signature="e#14#349#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/license_server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="16" lean-forward="false" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+          <folding>
+            <element signature="e#14#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/m-templates/license-error.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="102" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/login.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="62" column="9" lean-forward="true" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/license.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="103" column="12" lean-forward="true" selection-start-line="103" selection-start-column="12" selection-end-line="103" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>

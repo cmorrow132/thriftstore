@@ -302,7 +302,7 @@
                             });
                         }
 
-                        else if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)      //Some fields incomplete
+                        else if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0 || $('#selectedColorCode').val()=="none-selected")      //Some fields incomplete
                         {
                             $("#warningTitle").text("Error");                                       //Set modal title to Error
                             $('#warningMsg').text("Some fields are incomplete.");                   //Set modal msg to error
@@ -805,7 +805,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header btn-primary">
-                    <h4 class="modal-title text-center" style="font-size: 20px;">Choose a category for this item</h4>
+                    <h4 class="modal-title text-center" style="font-size: 20px;">Choose a color for this item</h4>
                 </div>
                 <div class="modal-body">
                     <div class="categorybox-noborder" style="padding-left: 20px;">
@@ -982,7 +982,7 @@
                 <label class="text-center label-text" style="padding-top: 0px; margin-top: 0px; margin-bottom: 0px; padding-bottom: 0px;">Selected Color Code: </label>
             </p><p>
             <center>
-                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="{{.SelectedColorCode}}" style="border: 1px solid; font-size: 40%; background-color: {{.SelectedColorCodeHtml}}; margin-top: 0px; width: 100px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
+                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="none-selected" style="background-color: rgb(15,15,15); border: 1px solid; font-size: 40%; margin-top: 0px; width: 100px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
             </center>
             </p>
 
