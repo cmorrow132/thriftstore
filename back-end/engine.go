@@ -577,7 +577,7 @@ func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 func checkLicense() (string) {
 	licenseKey := ""
-	licenseSet := ""
+	licenseSet := "false"
 
 	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
 	if err != nil {
@@ -602,20 +602,22 @@ func checkLicense() (string) {
 			licenseSet="1054"
 		} else {
 
-			licenseQuery := "get " + licenseKey
+			licenseQuery := "LICENSE=" + licenseKey
 
 			fmt.Fprintf(conn, licenseQuery+"\n")
 			licenseServerResponse, _ := bufio.NewReader(conn).ReadString('\n')
 
-			if licenseServerResponse == "true\n" {
+			if licenseServerResponse == "valid\n" {
 				licenseSet = "true"
+			} else if licenseServerResponse == "expired\n" {
+				licenseSet = "expired"
+			} else {
+				licenseSet=licenseServerResponse
 			}
 		}
 	}
 
-	//return licenseSet
 	return licenseSet
-	//return true
 }
 
 func checkSetupComplete() (bool) {
@@ -998,6 +1000,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	licenseStatus:=checkLicense()
 	if(licenseStatus!="true") {
+		fmt.Println("License: " + licenseStatus)
+
 		if(mobile) {
 			templateName = "license-error.tpl"
 			templatePath = "m-templates/license-error.tpl"

@@ -15,12 +15,15 @@
 
     <script>
         $(document).ready(function() {
-            var licenseStatus = {{.LicenseStatus}};
+            var licenseStatus = '{{.LicenseStatus}}';
             if (licenseStatus == "1054") {
-                $('#licenseStatus').text("Could not access the license server.");
+                $('#licenseStatus').text("Could not communicate with the license server.");
             }
-            else {
-                $('#licenseStatus').text("There was an error validating the license.");
+            else if(licenseStatus=="expired") {
+                $('#licenseStatus').text("Your license is expired.");
+            }
+            else if(licenseStatus=="invalid") {
+                $('#licenseStatus').text("Invalid license.");
             }
         });
     </script>
