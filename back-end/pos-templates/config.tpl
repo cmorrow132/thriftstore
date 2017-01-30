@@ -17,6 +17,11 @@
 
     <script>
         $(document).ready(function() {
+            var licenseDaysLeft={{.LicenseDaysLeft}}
+            if(licenseDaysLeft <=30) {
+                $('#licenseDaysLeft').css({'color':'red'});
+            }
+
            $('#home').click(function() {
               $(location).attr('href','/front');
            });
@@ -86,6 +91,26 @@
 
                 $.ajax({                                                                    //Send data to the back end
                     url: '/getConfig/colors',
+                    type: 'post',
+                    dataType: 'text',
+                    data: "",
+                    success: function (data) {                          //AJAX request completed, deal with the results below
+                        $('#main-content').html("");
+                        $('#serverMsg').text("");
+                        $('#main-content').html(data);
+
+                    }
+                });
+            });
+
+            $('#pageSelectorLicense').click(function() {
+                $('#main-content').addClass("main-content-border");
+                $('#main-content').html("");
+                $('#newCatList').text("");       //Label in category-config.tpl
+                $('#removeCatList').text("");    //Label in category-config.tpl
+
+                $.ajax({                                                                    //Send data to the back end
+                    url: '/getConfig/license',
                     type: 'post',
                     dataType: 'text',
                     data: "",
@@ -409,11 +434,20 @@
                     <li class="dynContent-dropdown-text"><a id="pageSelectorUsers">Users</a></li>
                     <li class="dynContent-dropdown-text"><a id="pageSelectorCategories">Categories</a></li>
                     <li class="dynContent-dropdown-text"><a id="pageSelectorDiscounts">Discounts</a></li>
+                    <li class="dynContent-dropdown-text"><a id="pageSelectorLicense">License</a></li>
                 </ul>
             </div>
     </div>
     <div id="main-content" class="main-content">
-
+        <div style="border: 1px solid; border-radius: 10px; width: 50%; padding-top: 10px; padding-bottom: 10px; padding-left: 30px;">
+            <p>
+                <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; margin-left: 0px; padding-bottom: 0px;">License: </label>
+                <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; margin-left: 0px; padding-bottom: 0px; padding-right: 0px;">{{.ProdLicense}}</label>
+            </p><p>
+                <label class="dynContent-label-text" style="font-size: 25px; margin-top: 0px; margin-left: 0px; padding-top: 0px;">Expiration: {{.ProdLicenseExpiry}}</label>
+                <label id="licenseDaysLeft" class="dynContent-label-text" style="font-size: 25px; margin-top: 0px; margin-left: 0px; padding-top: 0px;">{{.LicenseDaysLeft}} day(s) remaining</label>
+            </p>
+        </div>
     </div>
 
     <div class="copyright text-center" style="height: 20px;">

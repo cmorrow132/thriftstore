@@ -14,6 +14,11 @@
 
     <script>
         $(document).ready(function() {
+            var licenseDaysLeft={{.LicenseDaysLeft}};
+            if(licenseDaysLeft < 30) {
+                $('#licenseWarning').text("License expires in " + licenseDaysLeft + " days");
+            }
+
             $('#password').val("");
 
             $('#username').keyup(function () {
@@ -157,6 +162,16 @@
             color: white;
         }
 
+        .branding-sublabel-text {
+            font-family: Arial, Helvetica, Monospace;
+            color: #575757;
+            font-size: 20px;
+            font-weight: normal;
+            margin-left: 20px;
+            padding-top: 0px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
     </style>
 
 </head>
@@ -166,6 +181,9 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand branding-text" href="#">Product Management System</a>
+            <p>
+                <label id="licenseWarning" class="branding-sublabel-text" style="color: red"></label>
+            </p>
         </div>
     </div>
 </nav>

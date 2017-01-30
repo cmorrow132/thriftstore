@@ -17,7 +17,6 @@ var (
 
 func verifyLicense(license string) (string) {
 	expiry:="not found"
-	licenseStatus:="valid"
 
 	systemTime:=time.Now().Local();
 	currentDate:=strings.Split(systemTime.String()," ")
@@ -26,7 +25,7 @@ func verifyLicense(license string) (string) {
 
 	if err != nil {
 		fmt.Println(err.Error())
-		return "1054"
+		return "1054,"
 	}
 	defer db.Close()
 
@@ -40,12 +39,12 @@ func verifyLicense(license string) (string) {
 
 		if err!=nil {
 			fmt.Println(err.Error())
-			return "1054"
+			return "1054,"
 		}
 	}
 
 	if(expiry=="not found") {
-		licenseStatus="invalid"
+		return "invalid,"
 	} else {
 		expDateSplit:=strings.Split(expiry,"-")
 		currentDateSplit:=strings.Split(currentDate[0],"-")
@@ -58,19 +57,19 @@ func verifyLicense(license string) (string) {
 		curMonth,_:=strconv.Atoi(currentDateSplit[1])
 		curDay,_:=strconv.Atoi(currentDateSplit[2])
 
-		if curYear>expYear {
-			fmt.Println("Current year = " + strconv.Itoa(curYear) + " , expYear = " + strconv.Itoa(expYear))
-			licenseStatus="expired"
-		} else if curMonth>expMonth {
-			fmt.Println("Current month = " + strconv.Itoa(curMonth) + " , expMonth = " + strconv.Itoa(expMonth))
-			licenseStatus="expired"
-		} else if curDay>expDay {
-			fmt.Println("Current day = " + strconv.Itoa(curDay) + " , expDay = " + strconv.Itoa(expDay))
-			licenseStatus="expired"
+		//fmt.Println("Current date: " + strconv.Itoa(curYear) + "-" + strconv.Itoa(curMonth) + "-" + strconv.Itoa(curDay))
+		//fmt.Println("Expiry date: " + strconv.Itoa(expYear) + "-" + strconv.Itoa(expMonth) + "-" + strconv.Itoa(expDay))
+
+		if curYear<expYear {
+			return "valid," + expiry
+		} else if curMonth<expMonth {
+			return "valid," + expiry
+		} else if curDay<expDay {
+			return "valid," + expiry
+		} else {
+			return "expired," + expiry
 		}
 	}
-
-	return licenseStatus
 }
 
 func main() {
@@ -92,6 +91,6 @@ func main() {
 			returnResponse=verifyLicense(command[1])
 		}
 
-		conn.Write([]byte(returnResponse + "\n"))
+		conn.Write([]byte(returnResponse + ",expiryString\n"))
 	}
 }

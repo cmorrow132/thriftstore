@@ -15,6 +15,11 @@
 	<script>
 		$(document).ready(function() {
 
+            var licenseDaysLeft={{.LicenseDaysLeft}};
+            if(licenseDaysLeft < 30) {
+                $('#licenseWarning').text("License expires in " + licenseDaysLeft + "days");
+            }
+
 		            var pageType="{{.PageType}}";
 		            switch(pageType) {
 		                case "newItem":

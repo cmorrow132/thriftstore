@@ -21,6 +21,7 @@ import (
 	"time"
 	//"sync"
 	"github.com/nu7hatch/gouuid"
+	"github.com/robfig/cron"
 )
 
 var session_id, _ = uuid.NewV4()
@@ -45,6 +46,9 @@ type PageTags struct {
 	PageType              string
 	ItemPrice             string
 	LicenseStatus	      string
+	ProdLicense	      string
+	ProdLicenseExpiry     string
+	LicenseDaysLeft	      float64
 }
 
 var (
@@ -76,12 +80,17 @@ var (
 	GROUPS_CD_DB   string
 	LICENSE_DB     string
 
-	licenseServer string
+	licenseServer 	string
+	licenseStatus 	string
+	licenseKey	string
+	licenseExpiry	string
+	licenseDaysLeft float64
+	appPort		string
 
 	maxIdleTime int
 )
 
-func setVars() (int) {
+func setVars() {
 	dbUsername = "goservices"
 	dbPassword = "C7163mwx!"
 	dbLoginString = dbUsername + ":" + dbPassword
@@ -96,10 +105,11 @@ func setVars() (int) {
 	GROUPS_CD_DB = "GROUPS_CD"
 	LICENSE_DB = "LICENSE"
 
+	licenseStatus=""
 	licenseServer = "192.168.1.190:8891"
 	maxIdleTime = 15
 
-	return 8890
+	appPort="8890"
 }
 
 func getCategories() (string) {
@@ -575,51 +585,6 @@ func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 }
 
-func checkLicense() (string) {
-	licenseKey := ""
-	licenseSet := "false"
-
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
-	if err != nil {
-		fmt.Println("Error: Could not open the database")
-	}
-	defer db.Close()
-
-	dbQuery = "select license from " + LICENSE_DB
-
-	rows, err := db.Query(dbQuery)
-	defer rows.Close()
-
-	for rows.Next() {
-		err = rows.Scan(&licenseKey)
-	}
-
-	if (licenseKey != "") {
-		conn, err := net.Dial("tcp", licenseServer)
-
-		if err != nil {
-			fmt.Println("Could not connect to the license server");
-			licenseSet="1054"
-		} else {
-
-			licenseQuery := "LICENSE=" + licenseKey
-
-			fmt.Fprintf(conn, licenseQuery+"\n")
-			licenseServerResponse, _ := bufio.NewReader(conn).ReadString('\n')
-
-			if licenseServerResponse == "valid\n" {
-				licenseSet = "true"
-			} else if licenseServerResponse == "expired\n" {
-				licenseSet = "expired"
-			} else {
-				licenseSet=licenseServerResponse
-			}
-		}
-	}
-
-	return licenseSet
-}
-
 func checkSetupComplete() (bool) {
 	setupComplete := true
 
@@ -840,6 +805,8 @@ func getConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		templateName = "discount-config.tpl"
 	case "colors":
 		templateName = "color-config.tpl"
+	case "license":
+		templateName = "license-config.tpl"
 	}
 
 	templatePath = "sys-templates/config/" + templateName
@@ -918,10 +885,11 @@ func getConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	err = tpl.Execute(w, "")
+	err = tpl.Execute(w, PageTags{ProdLicense:licenseKey,})
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 }
 
 func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -998,16 +966,13 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		templateName = "login.tpl"
 	}
 
-	licenseStatus:=checkLicense()
-	if(licenseStatus!="true") {
-		fmt.Println("License: " + licenseStatus)
-
+	if(licenseStatus != "valid") {
 		if(mobile) {
 			templateName = "license-error.tpl"
 			templatePath = "m-templates/license-error.tpl"
 		} else {
-			templateName = "license.tpl"
-			templatePath = "sys-templates/license.tpl"
+			templateName = "license-error.tpl"
+			templatePath = "sys-templates/license-error.tpl"
 		}
 
 	} else if (checkSetupComplete() == false) {
@@ -1062,15 +1027,142 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		log.Fatalln(err.Error())
 	}
 	//err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,CurrentUser:loggedInUser,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
-	err = tpl.Execute(w, PageTags{LicenseStatus:licenseStatus,PageType:pageType, ActionTitle:pageTitle, CurrentUser:loggedInUser, MobOrPcHomeBtn:mobOrPcHomeBtn, ApplyBtnName:applyBtnName, CopyRight:copyrightMsg, BarcodeBtnLabel:barCodeBtnLabel, BarcodeButtonFunc:barCodeButtonFunc, BarCodeID:barCodeID, ClsbCodeBtn:clsbCodeBtn, ItemPrice:itemPrice, })
+	err = tpl.Execute(w, PageTags{LicenseDaysLeft:licenseDaysLeft,ProdLicense:licenseKey,ProdLicenseExpiry:licenseExpiry,LicenseStatus:licenseStatus,PageType:pageType, ActionTitle:pageTitle, CurrentUser:loggedInUser, MobOrPcHomeBtn:mobOrPcHomeBtn, ApplyBtnName:applyBtnName, CopyRight:copyrightMsg, BarcodeBtnLabel:barCodeBtnLabel, BarcodeButtonFunc:barCodeButtonFunc, BarCodeID:barCodeID, ClsbCodeBtn:clsbCodeBtn, ItemPrice:itemPrice, })
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func main() {
-	port := strconv.Itoa(setVars())
+func updateLicense(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	newLicense := r.PostFormValue("license")
 
+	newLicenseStatus:=""
+	newLicenseExpiry:=""
+
+	conn, err := net.Dial("tcp", licenseServer)
+
+	if err != nil {
+		newLicenseStatus="1054"
+	} else {
+
+		licenseQuery := "LICENSE=" + newLicense
+
+		fmt.Fprintf(conn, licenseQuery+"\n")
+		licenseServerResponse, _ := bufio.NewReader(conn).ReadString('\n')
+
+		rawLicenseServerResponse:=strings.Split(licenseServerResponse,",")
+
+		newLicenseStatus=rawLicenseServerResponse[0]
+		newLicenseExpiry=rawLicenseServerResponse[1]
+	}
+
+	if(newLicenseStatus=="valid") {
+
+		db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+		if err != nil {
+			fmt.Println("Error: Could not open the database")
+		}
+		defer db.Close()
+
+		dbQuery = "update " + LICENSE_DB + " set license='" + newLicense + "'"
+		stmt, err := db.Prepare(dbQuery)
+		if err != nil {
+			fmt.Fprintf(w, err.Error())
+			return
+		}
+
+		_, err = stmt.Exec()
+		if err != nil {
+			fmt.Fprintf(w, err.Error())
+			return
+		}
+
+		fmt.Println("License updated")
+		doLicenseCheck()
+	}
+
+	fmt.Fprintf(w,newLicenseStatus+","+newLicenseExpiry)
+}
+
+func doLicenseCheck() {
+	fmt.Println("License check at ", time.Now())
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	if err != nil {
+		fmt.Println("Error: Could not open the database")
+	}
+	defer db.Close()
+
+	dbQuery = "select license from " + LICENSE_DB
+
+	rows, err := db.Query(dbQuery)
+
+	if err!=nil {
+		fmt.Println(err.Error)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&licenseKey)
+	}
+
+	if (licenseKey != "") {
+		conn, err := net.Dial("tcp", licenseServer)
+
+		if err != nil {
+			fmt.Println("Could not connect to the license server");
+			licenseStatus="1054"
+		} else {
+
+			licenseQuery := "LICENSE=" + licenseKey
+
+			fmt.Fprintf(conn, licenseQuery+"\n")
+			licenseServerResponse, _ := bufio.NewReader(conn).ReadString('\n')
+
+			rawLicenseServerResponse:=strings.Split(licenseServerResponse,",")
+
+			licenseStatus=rawLicenseServerResponse[0]
+			licenseExpiry=rawLicenseServerResponse[1]
+
+			//Check license days remaining
+			currentDate:=time.Now().Format("2006-01-02")
+
+			d1,_:=time.Parse("2006-01-02",currentDate)
+			d2, _ := time.Parse("2006-01-02", licenseExpiry)
+			durationInDay := d2.Sub(d1).Hours()/24
+
+			licenseDaysLeft=durationInDay
+			fmt.Println(licenseDaysLeft)
+		}
+	}
+}
+
+func licenseServerRetry(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	//Used when the license server is down to retry
+	doLicenseCheck()
+
+	if licenseStatus != "1054" {
+		fmt.Fprintf(w,"1050")
+	} else {
+		fmt.Fprintf(w,"error")
+	}
+
+}
+
+func init() {
+	setVars()
+
+	licenseCheckThread:=cron.New()
+	licenseCheckThread.AddFunc("@every 12h",func() {
+		doLicenseCheck()
+	})
+
+	licenseCheckThread.Start()
+
+	doLicenseCheck()
+}
+
+func main() {
 	router := httprouter.New()
 	router.GET("/m", pageHandler)       //Main page handler with no pages named
 	router.GET("/m/:page", pageHandler) //Allows for specific pages using json format
@@ -1092,7 +1184,9 @@ func main() {
 	router.POST("/isUserPasswordSet", isUserPasswordSet)
 	router.POST("/getSystemGroups", getSystemGroups)
 	router.POST("/saveCategories", saveCategories)
+	router.POST("/updateLicense",updateLicense)
+	router.POST("/licenseServerRetry",licenseServerRetry)
 	http.Handle("/css/", http.StripPrefix("css/", http.FileServer(http.Dir("./css"))))
-	fmt.Println("Product Management System listening and ready on port: " + port)
-	http.ListenAndServe(":"+port, context.ClearHandler(router))
+	fmt.Println("Product Management System listening and ready on port: " + appPort +"\n")
+	http.ListenAndServe(":"+appPort, context.ClearHandler(router))
 }

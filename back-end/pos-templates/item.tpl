@@ -15,6 +15,11 @@
 	<script>
 		$(document).ready(function() {
 
+            var licenseDaysLeft={{.LicenseDaysLeft}};
+            if(licenseDaysLeft < 30) {
+                $('#licenseWarning').text("License expires in " + licenseDaysLeft + " days");
+            }
+
 		            var pageType="{{.PageType}}";
 		            switch(pageType) {
 		                case "newItem":
@@ -911,8 +916,11 @@
 <nav class="navbar navbar-default" style="margin-bottom: 0px;">
     <div class="container-fluid">
         <div class="navbar-header" style="margin-bottom: 0px;">
-            <a class="navbar-brand branding-text" href="#">Produce Management System - {{.ActionTitle}}</a>
-            <p><label class="branding-sublabel-text">User: {{.CurrentUser}}</label></p>
+            <a class="navbar-brand branding-text" href="#">Product Management System - {{.ActionTitle}}</a>
+            <p>
+                <label class="branding-sublabel-text">User: {{.CurrentUser}}</label>
+                <label id="licenseWarning" class="branding-sublabel-text" style="color: red"></label>
+            </p>
         </div>
         <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
     </div>

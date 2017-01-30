@@ -15,9 +15,9 @@
 
     <script>
         $(document).ready(function() {
-            var licenseStatus={{.LicenseStatus}};
+            var licenseStatus="{{.LicenseStatus}}";
             if(licenseStatus=="1054") {
-                $('#licenseStatus').text("Could not access the license server.");
+                $('#licenseStatus').html("Could not communicate with the license server. <p class='text-center'><button id='retryServer' class='btn btn-primary label-text' style='margin-left: 20px; width: 300px;'> Retry </button></p>");
             }
             else {
                 $('#licenseStatus').text("There was an error validating the license.");
@@ -33,6 +33,20 @@
 
                         if (data == "Logout") {                         //Logout completed on the server side
                             $(location).attr('href', "/"+pageURL[3]);
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click',"#retryServer", function() {
+                $.ajax({                                                                    //Send data to the back end
+                    url: '/licenseServerRetry',
+                    type: 'post',
+                    dataType: 'text',
+                    data: "",
+                    success: function (data) {
+                        if(data==1050) {
+                            $(location).attr("href","/m");
                         }
                     }
                 });

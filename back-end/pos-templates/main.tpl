@@ -15,6 +15,12 @@
 
     <script>
         $(document).ready(function() {
+
+            var licenseDaysLeft={{.LicenseDaysLeft}};
+            if(licenseDaysLeft < 30) {
+                $('#licenseWarning').text("License expires in " + licenseDaysLeft + " days");
+            }
+
             $('#logout').click(function() {
                 $.ajax({                                            //Send GET request to back end
                     url: '/logout',
@@ -114,7 +120,10 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand branding-text" href="#">Product Management System</a>
-                <p><label class="branding-sublabel-text">User: {{.CurrentUser}}</label></p>
+                <p>
+                    <label class="branding-sublabel-text">User: {{.CurrentUser}}</label>
+                    <label id="licenseWarning" class="branding-sublabel-text" style="color: red"></label>
+                </p>
             </div>
              <button id="config" class="btn glyphicon glyphicon-cog pull-right navbar-buttons"></button>
             <button id="logout" class="btn fa fa-sign-out pull-right navbar-buttons" aria-hidden="true" pull-right navbar-buttons"></button>
