@@ -469,6 +469,7 @@
             font-weight: normal;
             padding-left: 20px;
             width: 100px;
+            border-radius: 50%;
          }
 
         .dlglabel-msg {

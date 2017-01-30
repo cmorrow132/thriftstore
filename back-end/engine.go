@@ -181,6 +181,34 @@ func getDefaultColor(requestId int, colorName string) (string) {
 	}
 }
 
+func getConfigDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	id:=r.PostFormValue("id")
+
+	var discountAmount string
+
+	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+
+	if err != nil {
+		fmt.Fprintf(w,err.Error())
+	}
+	defer db.Close()
+
+	dbQuery = "SELECT amount FROM DISCOUNT_CD WHERE id=" + id
+
+	rows, _ := db.Query(dbQuery)
+	defer rows.Close()
+
+	for rows.Next() {
+		err=rows.Scan(&discountAmount)
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+
+	fmt.Fprintf(w,discountAmount)
+}
+
 func getDiscounts() (string) {
 	var colorcode string
 	var discountAmount string;
@@ -227,7 +255,7 @@ func getDiscounts() (string) {
 		}
 
 		if (priceString != "") {
-			dbResults += "<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px; border-radius: 50px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + priceString
+			dbResults += "<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + priceString
 		}
 	}
 
@@ -879,6 +907,14 @@ func getConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 			return formattedCatList
 		},
 
+		"GetColors": func() string {
+			return getColors()
+		},
+
+		"GetDiscounts": func() string {
+			return getDiscounts()
+		},
+
 	})
 
 	tpl, err = tpl.ParseFiles(templatePath)
@@ -1183,6 +1219,7 @@ func main() {
 	router.POST("/saveUserDetails", saveUserDetails)
 	router.POST("/isUserPasswordSet", isUserPasswordSet)
 	router.POST("/getSystemGroups", getSystemGroups)
+	router.POST("/getConfigDiscounts",getConfigDiscounts)
 	router.POST("/saveCategories", saveCategories)
 	router.POST("/updateLicense",updateLicense)
 	router.POST("/licenseServerRetry",licenseServerRetry)

@@ -135,7 +135,6 @@
             <center>
                 <button onclick="location.href = '/front/pos';" class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Point Of Sale</button></a>
                 <button onclick="location.href = '/front/new-item';"class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Management</button>
-                <button class="btn btn-primary btn-block label-text content-buttons" style="border-radius: 50px;">Inventory Configuration</button>
             </center>
         </div>
     </div>
