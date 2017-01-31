@@ -1,6 +1,9 @@
 <script>
     var lastButton;
 
+    $('#seniorDiscount').val( $('#seniorDiscountLbl').text() );
+    $('#militaryDiscount').val( $('#militaryDiscountLbl').text() );
+
     $(document).on('click',"[name=color]",function(event) {
         $('#colorDiscountData').removeAttr('hidden');
         event.stopImmediatePropagation();
@@ -23,25 +26,28 @@
             dataType: 'text',
             data: postData,
             success: function (data) {                          //AJAX request completed, deal with the results below
-                $('#colorDiscount').val(data);
+                $('#colorDiscount').val(data+"%");
+            }
+        });
 
-                var prependSign="";
+        $(document).on('click','#colorDiscount', function() {
+            $(this).val("");
+        });
 
-                var discountNumeric=parseFloat(data);
-                if(discountNumeric != 0) {
+        $(document).on('keyup','#colorDiscount', function(event) {
 
-                    var discountSplit=data.split(".");
-                    var dollarAmount=parseInt(discountSplit[0]);
-                    var centAmount=parseInt(discountSplit[1]);
-
-                    if(dollarAmount!=0) {
-                        $('#colorDiscount').val("$" + data);
-                    }
-                    else {
-                        $('#colorDiscount').val(centAmount + "%");
-                    }
+            if(event.keyCode==13) {
+                var radioValue = $("input[name='discountType']:checked").val();
+            }
+            else {
+                var chars = /[0-9]/i;
+                var value=$(this).val();
+                var char=value[value.length-1];
+                if(!chars.test(char)) {
+                    $(this).val(value.substring(0,value.length-1));
                 }
             }
+
         });
     });
 </script>
@@ -80,21 +86,20 @@
     </span>
 </p>
 
-<p>
+<p>DiscountLbl
     <div class="tplSubContentDetail" id="discountContent" style="padding-top: 15px;">
         <button id="btnSaveDiscountData" class="btn btn-primary text-center pull-right" style="margin-left: 20px; font-size: 25px;" disabled>Save</button>
         <p>
             <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 10px;">Senior Discount: </label>
-            <input type="text" class="cmd-dlglabel-text" id="seniorDiscount" placeholder="$ / %" style="margin-left: 27px; padding-left: 10px; width: 100px; margin-bottom: 10px;">
+            <input type="text" class="cmd-dlglabel-text" id="seniorDiscount" placeholder="%" style="margin-left: 27px; padding-left: 10px; width: 100px; margin-bottom: 10px;">
         </p>
         <p>
             <label class="dynContent-label-text" style="font-size: 25px; padding-top: 0px;">Military Discount: </label>
-            <input type="text" class="cmd-dlglabel-text" id="militaryDiscount" placeholder="$ / %" style="margin-left: 20px; padding-left: 10px; width: 100px; margin-bottom: 10px;">
+            <input type="text" class="cmd-dlglabel-text" id="militaryDiscount" placeholder="%" style="margin-left: 20px; padding-left: 10px; width: 100px; margin-bottom: 10px;">
         </p>
         <p><label class="dynContent-label-text" style="font-size: 25px;">Defined discount tags: </label>
             {{GetDiscounts}}
         </p>
-        <p>
         <p>
             <label class="dynContent-label-text" style="font-size: 25px;">Click a color to set its discount value</label>
         </p>
@@ -103,8 +108,9 @@
 
         <div id="colorDiscountData" style="margin-left: 20px; margin-top: 30px;" hidden>
             <label class="dynContent-label-text" style="font-size: 25px;">Discount: </label>
-            <input id="colorDiscount" class="dynContent-label-text" style="font-size: 25px; margin-left: 10px; padding-left: 10px; padding-top: 0px;">
-            <button class="discountlabel-text" id="selectedColorButton">&nbsp;</button>
+            <input id="colorDiscount" class="dynContent-label-text" style="width: 90px; font-size: 25px; margin-left: 10px; padding-left: 10px; padding-top: 0px; margin-right: 0px; padding-right: 0px;">
+
+            <button class="discountlabel-text" id="selectedColorButton" style="margin-left: 20px;">&nbsp;</button>
         </div>
         </p>
     </div>

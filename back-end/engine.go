@@ -209,12 +209,10 @@ func getConfigDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	fmt.Fprintf(w,discountAmount)
 }
 
-func getDiscounts() (string) {
-	var colorcode string
-	var discountAmount string;
-	var discountDollars int
-	var discountCents int
-	var priceString string
+func getDiscounts(discountType string) (string) {
+	//var discountDollars int
+	//var discountCents int
+	//var priceString string
 
 	//var tmpDiscountDollars string
 	//var tmpDiscountCents string
@@ -226,41 +224,64 @@ func getDiscounts() (string) {
 	}
 	defer db.Close()
 
-	dbQuery = "SELECT colorcode, amount FROM DISCOUNT_CD WHERE type='color'";
-	rows, err := db.Query(dbQuery)
-	defer rows.Close()
+	if discountType=="color" {
+		var colorcode string
+		var discountAmount string;
 
-	for rows.Next() {
-		err = rows.Scan(&colorcode, &discountAmount)
+		dbQuery = "SELECT colorcode, amount FROM DISCOUNT_CD WHERE type='color'";
+		rows, err := db.Query(dbQuery)
+		defer rows.Close()
 
-		if err != nil {
-			return "Error loading color"
-		}
+		for rows.Next() {
+			err = rows.Scan(&colorcode, &discountAmount)
 
-		discountSplit := strings.Split(discountAmount, ".")
-		discountDollars, _ = strconv.Atoi(discountSplit[0]) //Convert dollar string to int
-		discountCents, _ = strconv.Atoi(discountSplit[1])
+			if err != nil {
+				return "Error loading color"
+			}
 
-		priceString = ""
+			/*discountSplit := strings.Split(discountAmount, ".")
+			discountDollars, _ = strconv.Atoi(discountSplit[0]) //Convert dollar string to int
+			discountCents, _ = strconv.Atoi(discountSplit[1])
 
-		if (discountDollars == 0 && discountCents > 0) { //Dollars is 0, so discount is a percentage
-			priceString = strconv.Itoa(discountCents) + "%"
-		} else if (discountDollars > 0) {
-			priceString = "$"
-			priceString += strconv.Itoa(discountDollars)
+			priceString = ""
 
-			if (discountCents > 0) {
-				priceString += "." + strconv.Itoa(discountCents)
+			if (discountDollars == 0 && discountCents > 0) { //Dollars is 0, so discount is a percentage
+				priceString = strconv.Itoa(discountCents) + "%"
+			} else if (discountDollars > 0) {
+				priceString = "$"
+				priceString += strconv.Itoa(discountDollars)
+
+				if (discountCents > 0) {
+					priceString += "." + strconv.Itoa(discountCents)
+				}
+			}*/
+
+			if (discountAmount != "0") {
+				dbResults += "<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + discountAmount + " %"
 			}
 		}
 
-		if (priceString != "") {
-			dbResults += "<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + priceString
+		if (dbResults == "") {
+			dbResults = "No discounts defined"
 		}
-	}
 
-	if (dbResults == "") {
-		dbResults = "No discounts defined"
+	} else if discountType=="senior" {
+		var discountName string
+		var discountAmount string
+
+		dbQuery = "SELECT type, amount FROM DISCOUNT_CD WHERE type!='color'";
+		rows, err := db.Query(dbQuery)
+		defer rows.Close()
+
+		for rows.Next() {
+			err = rows.Scan(&discountName, &discountAmount)
+
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			dbResults+="<label id='" + discountName + "DiscountLbl' hidden>" + discountAmount + "</label>"
+		}
 	}
 
 	return dbResults
@@ -912,7 +933,10 @@ func getConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		},
 
 		"GetDiscounts": func() string {
-			return getDiscounts()
+			discountData:=getDiscounts("color")
+			discountData+=getDiscounts("senior")
+
+			return discountData
 		},
 
 	})
@@ -1031,7 +1055,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	tpl = tpl.Funcs(template.FuncMap{
 		"FncGlobalDiscount1": func() string {
 			//Return list of current discounts for item.tpl
-			return getDiscounts();
+			return getDiscounts("color");
 		},
 
 		"FnMbiTrkc": func() string {
@@ -1219,7 +1243,7 @@ func main() {
 	router.POST("/saveUserDetails", saveUserDetails)
 	router.POST("/isUserPasswordSet", isUserPasswordSet)
 	router.POST("/getSystemGroups", getSystemGroups)
-	router.POST("/getConfigDiscounts",getConfigDiscounts)
+	router.POST("/getConfigDiscounts",getConfigDiscounts)		//used by discount-config.tpl ajax call
 	router.POST("/saveCategories", saveCategories)
 	router.POST("/updateLicense",updateLicense)
 	router.POST("/licenseServerRetry",licenseServerRetry)
