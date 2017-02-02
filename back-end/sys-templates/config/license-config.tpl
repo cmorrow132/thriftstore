@@ -41,9 +41,13 @@
 
 <div style="padding-top: 20px;">
     <p>
-        <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; padding-bottom: 0px;">License: </label>
+        <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; margin-left: 0px; padding-bottom: 0px; padding-right: 0px;">Current License: </label>
+        <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; margin-left: 0px; padding-bottom: 0px; padding-right: 0px; margin-right: 0px; padding-right: 0px;">{{.ProdLicense}}, </label>
+        <label id="licenseConfigExpiryLbl" class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; padding-bottom: 0px; padding-right: 0px;"></label>
+    </p><p>
+        <label class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; padding-bottom: 0px;">New License: </label>
         <label id="licenseLabel" class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; padding-bottom: 0px; padding-right: 0px; margin-left: 10px;" hidden></label>
-        <input type="text" id="licenseInput" class="cmd-dlglabel-text" style="font-size: 25px; margin-bottom: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 10px; margin-left: 10px;" placeholder="{{.ProdLicense}}">
+        <input type="text" id="licenseInput" class="cmd-dlglabel-text" style="font-size: 25px; margin-bottom: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 10px; margin-left: 10px;">
         <button id="saveLicenseBtn" class="btn btn-primary" style="font-size: 20px; margin-left: 10px;" disabled>Save</button>
     </p><p>
         <label id="licenseResponseStatus" class="dynContent-label-text" style="color: #337ab7; font-size: 25px; margin-top: 0px; padding-top: 0px;"></label>

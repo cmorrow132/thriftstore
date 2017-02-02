@@ -119,6 +119,7 @@
                         $('#serverMsg').text("");
                         $('#main-content').html(data);
 
+                        $('#licenseConfigExpiryLbl').text(licenseDaysLeft + " days remaining.");
                     }
                 });
             });
