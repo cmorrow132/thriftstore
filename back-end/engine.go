@@ -16,7 +16,7 @@ import (
 	"strings"
 	"strconv"
 	"math/rand"
-	//"os"
+	"os"
 	"bufio"
 	"time"
 	//"sync"
@@ -72,6 +72,7 @@ var (
 	itemPrice             string
 
 	//DB Names
+	OPERATING_DB	string
 	CATEGORY_DB    string
 	DISCOUNT_DB    string
 	BARCODE_DB     string
@@ -91,12 +92,9 @@ var (
 )
 
 func setVars() {
-	dbUsername = "goservices"
-	dbPassword = "C7163mwx!"
-	dbLoginString = dbUsername + ":" + dbPassword
-
 	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
 
+	OPERATING_DB = "thriftstore"
 	CATEGORY_DB = "CATEGORY_CD"
 	DISCOUNT_DB = "DISCOUNT_CD"
 	BARCODE_DB = "BARCODE_CD"
@@ -112,12 +110,32 @@ func setVars() {
 	appPort="8890"
 }
 
+func getDBAccess() {
+	file, err := os.Open("db.crd")
+	if err!= nil {
+		panic(err.Error())
+	}
+
+	defer file.Close()
+	var lines string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines += scanner.Text()
+	}
+
+	fileArray:=strings.Split(lines,",")
+	dbUsername=fileArray[0]
+	dbPassword=fileArray[1]
+
+	dbLoginString = dbUsername + ":" + dbPassword
+}
+
 func getCategories() (string) {
 	var category_id int
 	var categoryName, dbQuery string
 	dbResults := ""
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		return "Error loading categories"
@@ -150,7 +168,7 @@ func getDefaultColor(requestId int, colorName string) (string) {
 	colorID := 0
 	colorCode := ""
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		return "Error reading color codes"
@@ -186,7 +204,7 @@ func getConfigDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 
 	var discountAmount string
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w,err.Error())
@@ -209,15 +227,67 @@ func getConfigDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 	fmt.Fprintf(w,discountAmount)
 }
 
+func saveDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	discountType:=r.PostFormValue("type")
+	dbRequest:=""
+	dbRequest2:=""
+
+	switch discountType {
+	case "1":
+		seniorDiscountAmount:=r.PostFormValue("senior")
+		militaryDiscountAmount:=r.PostFormValue("military")
+
+		dbRequest="update DISCOUNT_CD set amount=" + seniorDiscountAmount + " WHERE type='senior'"
+		dbRequest2="update DISCOUNT_CD set amount=" + militaryDiscountAmount + " WHERE type='military'"
+		break
+
+	case "2":
+		discountID:=r.PostFormValue("id")
+		discountAmount:=r.PostFormValue("amount")
+		dbRequest="update DISCOUNT_CD set amount=" + discountAmount + " WHERE id=" + discountID
+		break
+	}
+
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
+	if err != nil {
+		fmt.Fprintf(w,err.Error())
+		return
+	}
+	defer db.Close()
+
+	stmt, err := db.Prepare(dbRequest)
+	if err != nil {
+		fmt.Fprintf(w, err.Error()+"\n"+dbRequest)
+		return
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		fmt.Fprintf(w, err.Error()+"\n"+dbRequest)
+		return
+	}
+
+	if dbRequest2 !="" {
+		stmt, err := db.Prepare(dbRequest2)
+		if err != nil {
+			fmt.Fprintf(w, err.Error()+"\n"+dbRequest2)
+			return
+		}
+
+		_, err = stmt.Exec()
+		if err != nil {
+			fmt.Fprintf(w, err.Error()+"\n"+dbRequest2)
+			return
+		}
+
+	}
+
+	fmt.Fprintf(w,"Success")
+}
+
 func getDiscounts(discountType string) (string) {
-	//var discountDollars int
-	//var discountCents int
-	//var priceString string
 
-	//var tmpDiscountDollars string
-	//var tmpDiscountCents string
-
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	dbResults := ""
 	if err != nil {
 		return "Error loading discounts"
@@ -238,23 +308,6 @@ func getDiscounts(discountType string) (string) {
 			if err != nil {
 				return "Error loading color"
 			}
-
-			/*discountSplit := strings.Split(discountAmount, ".")
-			discountDollars, _ = strconv.Atoi(discountSplit[0]) //Convert dollar string to int
-			discountCents, _ = strconv.Atoi(discountSplit[1])
-
-			priceString = ""
-
-			if (discountDollars == 0 && discountCents > 0) { //Dollars is 0, so discount is a percentage
-				priceString = strconv.Itoa(discountCents) + "%"
-			} else if (discountDollars > 0) {
-				priceString = "$"
-				priceString += strconv.Itoa(discountDollars)
-
-				if (discountCents > 0) {
-					priceString += "." + strconv.Itoa(discountCents)
-				}
-			}*/
 
 			if (discountAmount != "0") {
 				dbResults += "<button class=\"discountlabel-text\" style=\"border: solid; background-color: " + colorcode + "; padding-top: 0px; margin-left: 20px;\" disabled=\"disabled\">&nbsp&nbsp;</button> " + discountAmount + " %"
@@ -288,18 +341,17 @@ func getDiscounts(discountType string) (string) {
 }
 
 func getColors() (string) {
-	//var colorname string
+
 	var colorcode string
 	var colorID int //singleColor returns request to populate the default color selection on the item template at the back end
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	dbResults := ""
 	if err != nil {
 		return "Error loading colors"
 	}
 	defer db.Close()
 
-	//dbQuery = "select id, name, colorcode from "+DISCOUNT_DB + " WHERE type='color'"
 	dbQuery = "select id, colorcode from " + DISCOUNT_DB + " WHERE type='color'"
 
 	if err != nil {
@@ -310,7 +362,6 @@ func getColors() (string) {
 	defer rows.Close()
 
 	for rows.Next() {
-		//err = rows.Scan(&colorID, &colorname,&colorcode)
 		err = rows.Scan(&colorID, &colorcode)
 
 		if err != nil {
@@ -330,7 +381,7 @@ func getColors() (string) {
 func setAdminPwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	adminPassword := r.PostFormValue("password")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -368,7 +419,7 @@ func setAdminPwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 func removePassword(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	username := r.PostFormValue("user")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -394,7 +445,7 @@ func removePassword(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 func removeUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	username := r.PostFormValue("user")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -431,7 +482,7 @@ func removeUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 func addUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	username := r.PostFormValue("user")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -480,7 +531,7 @@ func chPwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	username := session.Values["username"].(string)
 	password := r.PostFormValue("password")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -511,7 +562,7 @@ func doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	session, err := sessionStore.Get(r, "auth")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -563,7 +614,7 @@ func generateBarCode(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	var bcode_val string
 	existing_barcode := ""
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -605,8 +656,6 @@ func generateBarCode(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	}
 	//Check the BARCODE_CD database to be sure this barcode is unique, and if not regenerate
 
-	//fmt.Println("New bar code generated: " + bcode_val)
-	//fmt.Println("Category ID: " + category_id)
 	fmt.Fprintf(w, bcode_val)
 }
 
@@ -616,7 +665,6 @@ func printBarCode(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
-	//formData:=[]string{r.PostFormValue("bcode"),r.PostFormValue("category"),r.PostFormValue("price"),r.PostFormValue("description"),r.PostFormValue("colorcode")}
 	frmBarcode := r.PostFormValue("bcode")
 	frmCategory := r.PostFormValue("category")
 	frmPrice := r.PostFormValue("price")
@@ -637,7 +685,7 @@ func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 func checkSetupComplete() (bool) {
 	setupComplete := true
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Println("Error: Could not open the database")
 	}
@@ -657,7 +705,7 @@ func checkSetupComplete() (bool) {
 func checkPerms(username string, groupName string) bool {
 	var groups = ""
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Println("Error: Could not open the database")
 	}
@@ -684,7 +732,7 @@ func getUserDetails(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	username := r.PostFormValue("user")
 	var groups string
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
 	}
@@ -707,7 +755,7 @@ func isUserPasswordSet(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	username := r.PostFormValue("user")
 	match := 0
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
 	}
@@ -732,7 +780,7 @@ func isUserPasswordSet(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 func saveUserDetails(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	user := r.PostFormValue("user")
 	groups := r.PostFormValue("groups");
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
 	}
@@ -756,7 +804,7 @@ func saveUserDetails(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 func getSystemGroups(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var groups, groupList string
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
 	}
@@ -788,7 +836,7 @@ func saveCategories(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	rCatlist := strings.Split(removeCategories, ",")
 	aCatList := strings.Split(addCategories, ",")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
 		return
@@ -834,11 +882,10 @@ func saveCategories(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 func getConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var templateName, templatePath string
 	var users, groups, groupDescription string
-	//var userName string
 
 	pageRequest := ps.ByName("page")
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
 	}
@@ -1061,11 +1108,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		"FnMbiTrkc": func() string {
 			formattedCatList := ""
 			categoryList := strings.Split(getCategories(), ",")
-			//fmt.Println("Array items: " + strconv.Itoa(len(categoryList)))
 
 			for i := 0; i < len(categoryList)-1; i++ {
-				//fmt.Println("Item " + strconv.Itoa(i))
-				//fmt.Println(categoryList[i])
 				itemSplit := strings.Split(categoryList[i], "=")
 				if (itemSplit[1] != "No category") {
 					formattedCatList += "<row><button name=\"categoryName\" value=\"" + itemSplit[0] + "\" class=\"category-buttons btn btn-block\" data-dismiss=\"modal\">" + itemSplit[1] + "</button></row>"
@@ -1086,7 +1130,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	//err = tpl.Execute(w,PageTags{PageType:pageType,ActionTitle:pageTitle,CurrentUser:loggedInUser,MobOrPcHomeBtn:mobOrPcHomeBtn,ApplyBtnName:applyBtnName,CopyRight:copyrightMsg,BarcodeBtnLabel:barCodeBtnLabel,BarcodeButtonFunc:barCodeButtonFunc,BarCodeID:barCodeID,ClsbCodeBtn:clsbCodeBtn,ItemPrice:itemPrice,SelectedColorCode:getDefaultColor(1,"White"),SelectedColorCodeHtml:getDefaultColor(2,"White"),})
+
 	err = tpl.Execute(w, PageTags{LicenseDaysLeft:licenseDaysLeft,ProdLicense:licenseKey,ProdLicenseExpiry:licenseExpiry,LicenseStatus:licenseStatus,PageType:pageType, ActionTitle:pageTitle, CurrentUser:loggedInUser, MobOrPcHomeBtn:mobOrPcHomeBtn, ApplyBtnName:applyBtnName, CopyRight:copyrightMsg, BarcodeBtnLabel:barCodeBtnLabel, BarcodeButtonFunc:barCodeButtonFunc, BarCodeID:barCodeID, ClsbCodeBtn:clsbCodeBtn, ItemPrice:itemPrice, })
 	if err != nil {
 		log.Fatalln(err)
@@ -1118,7 +1162,7 @@ func updateLicense(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 
 	if(newLicenseStatus=="valid") {
 
-		db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+		db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 		if err != nil {
 			fmt.Println("Error: Could not open the database")
 		}
@@ -1147,7 +1191,7 @@ func updateLicense(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 func doLicenseCheck() {
 	fmt.Println("License check at ", time.Now())
 
-	db, err := sql.Open("mysql", "admin:C7163mwx!@/thriftstore")
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
 		fmt.Println("Error: Could not open the database")
 	}
@@ -1192,7 +1236,6 @@ func doLicenseCheck() {
 			durationInDay := d2.Sub(d1).Hours()/24
 
 			licenseDaysLeft=durationInDay
-			fmt.Println(licenseDaysLeft)
 		}
 	}
 }
@@ -1210,6 +1253,7 @@ func licenseServerRetry(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 }
 
 func init() {
+	getDBAccess()
 	setVars()
 
 	licenseCheckThread:=cron.New()
@@ -1244,6 +1288,7 @@ func main() {
 	router.POST("/isUserPasswordSet", isUserPasswordSet)
 	router.POST("/getSystemGroups", getSystemGroups)
 	router.POST("/getConfigDiscounts",getConfigDiscounts)		//used by discount-config.tpl ajax call
+	router.POST("/saveDiscounts",saveDiscounts)
 	router.POST("/saveCategories", saveCategories)
 	router.POST("/updateLicense",updateLicense)
 	router.POST("/licenseServerRetry",licenseServerRetry)

@@ -415,7 +415,7 @@
     <nav class="navbar navbar-default" style="margin-bottom: 0px;">
         <div class="container-fluid">
             <div class="navbar-header" style="margin-bottom: 0px;">
-                <a class="navbar-brand branding-text" href="#">Produce Management System</a>
+                <a class="navbar-brand branding-text" href="#">Product Management System</a>
                 <a class="pull-right navbar-brand branding-subtext">Configuration</a>
                 <p>
                     <label class="branding-sublabel-text">User: {{.CurrentUser}}</label>

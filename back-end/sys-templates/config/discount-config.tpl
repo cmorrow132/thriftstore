@@ -6,9 +6,12 @@
 
     var seniorDiscount=$('#seniorDiscountLbl').text();
     var militaryDiscount=$('#militaryDiscountLbl').text();
-    var colorDiscount;
+    var colorDiscount;                                          //used to track and update the input boxes
+    var selectedColorID;                                        //used to track the selected color ID for sql purposes
 
     $(document).on('click',"[name=color]",function(event) {
+        $('#serverMsg2').text("");
+        $('#serverMsg1').text("");
         $('#btnSaveDiscountData1').hide();
         $('#btnSaveDiscountData2').attr('disabled','disabled');
 
@@ -25,6 +28,7 @@
         //alert($(this).css('backgroundColor'));
 
         $('#selectedColorButton').css('background-color', $(this).css('background-color'));
+        selectedColorID=$(this).val();
         postData = "id=" + $(this).val();
         $.ajax({
             //Send data to the back end
@@ -42,6 +46,8 @@
 
     $(document).on('click','#seniorDiscount', function(event) {
         event.stopImmediatePropagation();
+        $('#serverMsg2').text("");
+        $('#serverMsg1').text("");
         $(this).val("");
         $('#btnSaveDiscountData1').show();
         $('#colorDiscountData').attr('hidden','hidden');
@@ -75,6 +81,8 @@
 
     $(document).on('click', '#militaryDiscount', function(event) {
         event.stopImmediatePropagation();
+        $('#serverMsg2').text("");
+        $('#serverMsg1').text("");
         $(this).val("");
         $('#btnSaveDiscountData1').show();
         $('#colorDiscountData').attr('hidden','hidden');
@@ -108,6 +116,8 @@
 
     $(document).on('click','#colorDiscount', function(event) {
         event.stopImmediatePropagation();
+        $('#serverMsg2').text("");
+        $('#serverMsg1').text("");
         $(this).val("");
     });
 
@@ -138,11 +148,58 @@
     });
 
     $('#btnSaveDiscountData1').click(function() {
-       alert("Senior: " + seniorDiscount + "\nmilitary: " + militaryDiscount);
+        postData = "type=1&senior=" + seniorDiscount + "&military=" + militaryDiscount
+        $.ajax({
+            //Send data to the back end
+            url: '/saveDiscounts',
+            type: 'post',
+            dataType: 'text',
+            data: postData,
+            success: function (data) {                          //Save senior and military discounts
+                if(data=="Success") {
+                    $('#serverMsg1').text("Senior and military discounts saved");
+                    $('#btnSaveDiscountData1').attr('disabled','disabled');
+                }
+                else {
+                    $('#serverMsg1').text(data);
+                }
+            }
+        });
     });
 
     $('#btnSaveDiscountData2').click(function() {
-        alert("Color discount: " + colorDiscount);
+        postData="type=2&id="+selectedColorID+"&amount="+colorDiscount;
+        $.ajax({
+            //Send data to the back end
+            url: '/saveDiscounts',
+            type: 'post',
+            dataType: 'text',
+            data: postData,
+            success: function (data) {                          //Send color discount data to back-end
+                if(data=="Success") {
+                    $('#main-content').addClass("main-content-border");
+                    $('#main-content').html("");
+                    $('#newCatList').text("");       //Label in category-config.tpl
+                    $('#removeCatList').text("");    //Label in category-config.tpl
+
+                    $.ajax({
+                        url: '/getConfig/discounts',
+                        type: 'post',
+                        dataType: 'text',
+                        data: "",
+                        success: function (data) {                          //Color discount saved, reload discount data
+                            $('#main-content').html("");
+                            $('#serverMsg').text("");
+                            $('#main-content').html(data);
+
+                        }
+                    });
+                }
+                else {
+                    $('#serverMsg2').text(data);
+                }
+            }
+        });
     });
 
 </script>
@@ -191,7 +248,7 @@
             <label class="dynContent-label-text" style="font-size: 25px; padding-top: 0px;">Military Discount: </label>
             <input type="text" class="cmd-dlglabel-text" id="militaryDiscount" placeholder="%" style="margin-left: 20px; padding-left: 10px; width: 100px; margin-bottom: 10px;">
         </p>
-        <p><label class="dynContent-label-text" style="font-size: 25px;">Defined discount tags: </label>
+        <p><label id="defined_discounts" class="dynContent-label-text" style="font-size: 25px;">Defined discount tags: </label>
             {{GetDiscounts}}
         </p>
         <p>
@@ -200,13 +257,15 @@
         <p style="padding-left: 20px;">
             {{GetColors}}
 
-            <button id="btnSaveDiscountData1" class="btn btn-primary text-center pull-right" style="margin-left: 20px; font-size: 25px;" disabled>Save</button>
+            <button id="btnSaveDiscountData1" class="btn btn-primary text-center pull-right" style="margin-left: 30px; font-size: 25px;" disabled>Save</button>
+            <label id="serverMsg1" class="dynContent-label-text pull-right" style="font-size: 25px; margin-bottom: 0px; color: #337AB7;"></label>
         <div id="colorDiscountData" style="margin-left: 20px; margin-top: 30px;" hidden>
             <label class="dynContent-label-text" style="font-size: 25px;">Discount: </label>
             <input id="colorDiscount" class="dynContent-label-text" style="width: 90px; font-size: 25px; margin-left: 10px; padding-left: 10px; padding-top: 0px; margin-right: 0px; padding-right: 0px;">
 
             <button class="discountlabel-text" id="selectedColorButton" style="margin-left: 20px;">&nbsp;</button>
             <button id="btnSaveDiscountData2" class="btn btn-primary text-center" style="margin-left: 50px; font-size: 25px;" disabled>Save</button>
+            <label id="serverMsg2" class="dynContent-label-text" style="font-size: 25px; margin-bottom: 0px; margin-left: 20px; color: #337AB7;"></label>
         </div>
         </p>
     </div>
