@@ -26,6 +26,15 @@
 		                    $('#bCodeBtn').addClass('clsDisableBtn');
 		                    $('#bCodeBtn').attr('disabled','disabled');
 		                    //$('#bCodeBtn').blur();
+                            break;
+                        case "exItem":
+                            $('#selected_category').attr('disabled','disabled');
+                            $('#price').attr('disabled','disabled');
+                            $('#itemDescription').attr('disabled','disabled');
+                            $('#selectedColorCode').attr('disabled','disabled');
+                            $('#ExItemApply').attr('disabled','disabled');
+                            $('#ExItemApply').addClass('clsDisableBtn');
+                            break;
 		            }
 ``
                     $("#bCodeBtn").click(function () {
@@ -101,7 +110,7 @@
                                         $('#selected_category').attr('disabled','disabled');
                                         $('#itemDescription').attr('disabled','disabled');
                                         $('#price').attr('disabled','disabled');
-                                        $('#selectedColorCode').attr('disabled','disabled');
+                                        //$('#selectedColorCode').attr('disabled','disabled');
 
 
                                     }
@@ -290,7 +299,7 @@
                             });
                         }
 
-                        else if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0)      //Some fields incomplete
+                        else if($('#bCodeID').val()=="" || $('#selected_category').val()==""  || priceTotal==0 || $('#selectedColorCode').val()=="none-selected")      //Some fields incomplete
                         {
                             $("#warningTitle").text("Error");                                       //Set modal title to Error
                             $('#warningMsg').text("Some fields are incomplete.");                   //Set modal msg to error
@@ -851,7 +860,7 @@
             <label id="colorLabel" class="text-center label-text" style="margin-bottom: 0px;">Color Codes</label>
             <p>
                 <label class="text-center label-text" style="font-size: 300%; margin-top: 0px; padding-top: 0px;">Selected Color Code: </label>
-                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="none-selected" style="background-color: rgb(255,255,255); border: solid; font-size: 400%; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
+                <button class="label-text" id="selectedColorCode" data-toggle="modal" data-target="#colorChooser" value="none-selected" style="background-color: rgb(15,15,15); border: solid; font-size: 400%; padding-top: 0px; padding-top: 15px; width: 200px; margin-left: 20px; border-radius: 50px;">&nbsp&nbsp&nbsp;</button>
             </p>
 	    </center>
 

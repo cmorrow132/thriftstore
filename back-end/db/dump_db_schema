@@ -1,0 +1,1 @@
+mysqldump -d -h 192.168.1.190 -u admin -pC7163mwx! thriftstore > thriftstore.sql

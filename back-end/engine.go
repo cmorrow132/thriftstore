@@ -665,18 +665,55 @@ func printBarCode(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
+	dbQuery:=""
+
 	frmBarcode := r.PostFormValue("bcode")
 	frmCategory := r.PostFormValue("category")
 	frmPrice := r.PostFormValue("price")
 	frmDescription := r.PostFormValue("description")
 	frmColorCode := r.PostFormValue("colorcode")
 
-	fmt.Println("Barcode: " + frmBarcode)
+	/*fmt.Println("Barcode: " + frmBarcode)
 	fmt.Println("Category: " + frmCategory)
 	fmt.Println("Price: " + frmPrice)
 	fmt.Println("Description: " + frmDescription)
-	fmt.Println("Color code: " + frmColorCode)
-	fmt.Println("")
+	fmt.Println("Color code: " + frmColorCode)*/
+
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
+	if err != nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+	defer db.Close()
+
+	dbQuery="insert into INVENTORY_CD values(DEFAULT," + frmCategory + "," +frmColorCode + ",'" + frmDescription + "'," + frmPrice + ",'" + frmBarcode + "')"
+
+	stmt, err := db.Prepare(dbQuery)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+
+	dbQuery="insert into BARCODE_CD values(DEFAULT,'" + frmBarcode + "')"
+
+	stmt, err = db.Prepare(dbQuery)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+
 	time.Sleep(2 * time.Second)
 	fmt.Fprintf(w, "Success")
 

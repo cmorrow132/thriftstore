@@ -68,6 +68,12 @@
                     }
                 });
             });
+
+            $(document).keyup(function (e) {
+                if($(".input:focus") && (e.keyCode==13)) {
+                    $('#loginBtn').click();
+                }
+            });
         });
     </script>
 

@@ -78,7 +78,6 @@
                         }
                         else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
 
-
                             $("#warningTitle").text("Printing");                   //Open the error msg modal
                             $('#warningMsg').text("Printing bar code");
                             $("#dlgHeader").removeClass("btn-danger");
@@ -112,7 +111,7 @@
                                         $('#selected_category').attr('disabled','disabled');
                                         $('#itemDescription').attr('disabled','disabled');
                                         $('#price').attr('disabled','disabled');
-                                        $('#selectedColorCode').attr('disabled','disabled');
+                                        //$('#selectedColorCode').attr('disabled','disabled');
 
 
                                     }
