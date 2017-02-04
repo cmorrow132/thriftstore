@@ -25,7 +25,6 @@
 		                case "newItem":
 		                    $('#bCodeBtn').addClass('clsDisableBtn');
 		                    $('#bCodeBtn').attr('disabled','disabled');
-		                    //$('#bCodeBtn').blur();
                             break;
                         case "exItem":
                             $('#selected_category').attr('disabled','disabled');
@@ -34,6 +33,8 @@
                             $('#selectedColorCode').attr('disabled','disabled');
                             $('#ExItemApply').attr('disabled','disabled');
                             $('#ExItemApply').addClass('clsDisableBtn');
+
+                            $('#bCodeID').removeAttr('disabled');
                             break;
 		            }
 ``
@@ -73,8 +74,70 @@
                             });
                         }
                         else if($(this).hasClass('clsScanCode')) {              //Existing item template, set button for scan codes
-                            alert("Scanning bar code");                         //..fill in code here to handle scanning codes and once scanned and returned,
-                                                                                //change to print button, see above for CSS class changes
+                            if($('#bCodeID').val() != "" ) {
+                                postData = "bcode=" + $('#bCodeID').val();
+                                $.ajax({                                                                    //Send data to the back end
+                                    url: '/lookupItem',
+                                    type: 'post',
+                                    dataType: 'text',
+                                    data: postData,
+                                    success: function (data) {
+                                        var returnData=data.substring(0,5);
+
+                                        if(returnData!="Error") {                                           //Populate fields with item data
+                                            returnData=data.split("|");
+
+                                            var catID=returnData[0];
+                                            var discount=returnData[1];
+                                            var description=returnData[2];
+                                            var price=returnData[3];
+                                            var colorcode=returnData[4];
+                                            var catName=returnData[5];
+
+
+                                            $("#selected_category").val(catID);               //Set value on label for selected category
+                                            $("#selected_category").text(catName);
+                                            $("#priceInputLabel").text(price);                  //Set the input price and simulate
+                                            $('#btnPriceSubmit').click();                       //click on price input dialog
+
+                                            $('#itemDescription').val(description);
+
+                                            $("#selectedColorCode").val(discount);             //Set value on #SelectedColorCode
+                                            $("#selectedColorCode").css('background-color',colorcode);  //Set the color code for this discount ID
+
+                                            //Reenable the input fields
+                                            $('#selected_category').removeAttr('disabled');
+                                            $('#price').removeAttr('disabled');
+                                            $('#itemDescription').removeAttr('disabled');
+                                            $('#selectedColorCode').removeAttr('disabled');
+
+                                            $('#bCodeBtn').removeClass('clsScanCode');
+                                            $('#bCodeBtn').addClass('clsDisableBtn');
+                                            $('#bCodeBtn').attr('disabled','disabled');
+
+                                            $('#bCodeID').attr('disabled','disabled');
+
+                                        }
+                                        else {
+                                            $('#bCodeID').val("");
+                                            $("#warningTitle").text("Error");                   //Open the error msg modal
+                                            $('#warningMsg').text(data);
+                                            $("#dlgHeader").removeClass("btn-success");
+                                            $("#dlgHeader").addClass("btn-danger");
+                                            $("#dlgProgressSpinner").hide();
+                                            $("#dlg-btn").show();
+                                            $('#warningBox').modal({
+                                                backdrop: 'static',
+                                                keyboard: false,
+                                                show: true
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                alert("open scan module");
+                            }
                         }
                         else if($(this).hasClass('clsPrintCode')) {             //Print barcode button
                             $("#warningTitle").text("Printing");                   //Open the error msg modal
@@ -144,9 +207,11 @@
                         $("#selected_category").val(itemClicked);               //Set value on label for selected category
                         $("#selected_category").text($(this).text());              //Set text on label for selected category
 
-                        if(getPriceValue()>0) {                                 //if a category was selected and price is greater than 0
-                            $('#bCodeBtn').removeClass('clsDisableBtn');        //enable the barcode button
-                            $('#bCodeBtn').removeAttr('disabled');
+                        if(getPriceValue()>0) {
+                            if(pageType=="newItem") {       //if a category was selected and price is greater than 0
+                                $('#bCodeBtn').removeClass('clsDisableBtn');        //enable the barcode button
+                                $('#bCodeBtn').removeAttr('disabled');
+                            }
                             $('#ExItemApply').removeClass('clsDisableBtn');                        //enable the apply button for existing item pages
                             $('#ExItemApply').removeAttr('disabled');
                         }
@@ -191,8 +256,10 @@
                         $('#numberBox').modal('hide');                                  //and hide the modal
 
                         if(getPriceValue()>0 && $('#selected_category').val() != "") {
-                            $('#bCodeBtn').removeClass('clsDisableBtn');                        //enable the barcode button for new item pages
-                            $('#bCodeBtn').removeAttr('disabled');
+                            if(pageType=="newItem") {
+                                $('#bCodeBtn').removeClass('clsDisableBtn');                        //enable the barcode button for new item pages
+                                $('#bCodeBtn').removeAttr('disabled');
+                            }
                             $('#ExItemApply').removeClass('clsDisableBtn');                        //enable the apply button for existing item pages
                             $('#ExItemApply').removeAttr('disabled');
                         }
@@ -230,49 +297,52 @@
                             $("#priceInputLabel").text(priceValue.substr(0,priceValue.length-1));
                         }
                     });
-                    /############ HOME PAGE BUTTON CLICKED #######################//
+                    //############ HOME PAGE BUTTON CLICKED #######################//
                     $('#homeButton').click(function () {
 
                         bCodeBtnColor=$('#bCodeBtn').css('background-color');
                         submitBtnColor=$('#NewItemApply').css('background-color');
 
-                        //Bar code printed, but item not submitted yet
-                        if($('#bCodeBtn').hasClass("clsPrintCode") && bCodeBtnColor=="rgb(192, 192, 192)" && submitBtnColor=="rgb(5, 180, 0)") {
-                             $("#warningTitle").text("Error");                                       //Set modal title to Error
-                             $('#warningMsg').text("A bar code has been printed, this item must be added to the system.");                   //Set modal msg to error
-                             $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
-                             $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
-                             $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
-                             $("#dlg-btn").show();                                                   //Finally open the modal
-                             $('#warningBox').modal({
-                                 backdrop: 'static',
-                                 keyboard: false,
-                                 show: true
-                             });
+                        if(pageType=="exItem") {
+                            $(location).attr('href', '{{.MobOrPcHomeBtn}}');
                         }
+                        else {
+                            //Bar code printed, but item not submitted yet
+                            if ($('#bCodeBtn').hasClass("clsPrintCode") && bCodeBtnColor == "rgb(192, 192, 192)" && submitBtnColor == "rgb(5, 180, 0)") {
+                                $("#warningTitle").text("Error");                                       //Set modal title to Error
+                                $('#warningMsg').text("A bar code has been printed, this item must be added to the system.");                   //Set modal msg to error
+                                $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                                $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                                $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                                $("#dlg-btn").show();                                                   //Finally open the modal
+                                $('#warningBox').modal({
+                                    backdrop: 'static',
+                                    keyboard: false,
+                                    show: true
+                                });
+                            }
 
-                        //Values changed, bar code not printed, but item has not been added
-                        else if(submitBtnColor=="rgb(5, 180, 0)") {
-                             if(getPriceValue()>0 || $('#selected_category').val() != "")
-                             {
-                                 $("#warningTitle").text("Error");                                       //Set modal title to Error
-                                 $('#warningMsg').text("You will lose any unsaved data.");                   //Set modal msg to error
-                                 $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
-                                 $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
-                                 $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
-                                 $("#dlg-btn").show();                                                   //Finally open the modal
-                                 $('#warningBox').modal({
-                                     backdrop: 'static',
-                                     keyboard: false,
-                                     show: true
-                                 });
-                             }
+                            //Values changed, bar code not printed, but item has not been added
+                            else if (submitBtnColor == "rgb(5, 180, 0)") {
+                                if (getPriceValue() > 0 || $('#selected_category').val() != "") {
+                                    $("#warningTitle").text("Error");                                       //Set modal title to Error
+                                    $('#warningMsg').text("You will lose any unsaved data.");                   //Set modal msg to error
+                                    $("#dlgHeader").removeClass("btn-success");                             //Remove green title bar
+                                    $("#dlgHeader").addClass("btn-danger");                                 //Set red title bar
+                                    $("#dlgProgressSpinner").hide();                                        //Hide the spinner since we don't want it on errors
+                                    $("#dlg-btn").show();                                                   //Finally open the modal
+                                    $('#warningBox').modal({
+                                        backdrop: 'static',
+                                        keyboard: false,
+                                        show: true
+                                    });
+                                }
 
-                             else {
-                                $(location).attr('href', '{{.MobOrPcHomeBtn}}');
-                             }
+                                else {
+                                    $(location).attr('href', '{{.MobOrPcHomeBtn}}');
+                                }
+                            }
                         }
-
                     });
                     //
 
@@ -328,10 +398,10 @@
 
                             var price=getPriceValue();
                                                                                                       //create POST request data
-                            var postData="bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#selectedColorCode').val();
+                            var postData="config=new&bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#selectedColorCode').val();
 
                             $.ajax({                                                                    //Send data to the back end
-                                url: '/addProduct',
+                                url: '/configProduct',
                                 type: 'post',
                                 dataType: 'text',
                                 data : postData,
@@ -371,22 +441,71 @@
 
 
                     $('#ExItemApply').click(function () {                       //Existing item, apply any changes
-                        alert("Updating existing item");
+                        $("#warningTitle").text("Updating Product");                              //Data was entered appropriately
+                        $('#warningMsg').text("Updating product data.");        //Set msg adding products
+                        $("#dlgHeader").removeClass("btn-danger");                              //Remove red title bar
+                        $("#dlgHeader").addClass("btn-success");                                //Add green title bar
+                        $("#dlgProgressSpinner").show();                                        //Show the spinner for status
+                        $("#dlg-btn").hide();                                                   //Hide the OK button, we want this to remain on scree till back end returns a success
+                        $('#warningBox').modal({                                                //Finally open the modal
+                            backdrop: 'static',
+                            keyboard: false,                                                    //Disable clicking outside the modal to make it stay on screen till dismissed by return success
+                            show: true
+                        });
+                        var price=getPriceValue();
+                        //create POST request data
+                        var postData="config=ex&bcode\="+ $('#bCodeID').val()+"&category\="+$("#selected_category").val()+"&price\="+price+"&description\="+$('#itemDescription').val()+"&colorcode\="+$('#selectedColorCode').val();
+                        $.ajax({                                                                    //Send data to the back end
+                            url: '/configProduct',
+                            type: 'post',
+                            dataType: 'text',
+                            data : postData,
+                            success : function(data) {                          //AJAX request completed, deal with the results below
+                                if(data=="Success") {
+                                    $('#warningBox').modal('hide');                                 //Hide the modal if back end returned success on adding
+                                    $('#NewItemApply').removeClass('');
+                                    $('#NewItemApply').addClass('clsDisableBtn');                     //Disable the add item button to prevent re-adding
+                                    $('#NewItemApply').attr('disabled','disabled');
+                                    $('#btnReload').addClass('clsDisableBtn');               //Item has been submitted
+                                    $('#btnReload').attr('disabled','disabled');            //Do not allow reloading to clear data at this point
+
+                                    $('#selected_category').attr('disabled','disabled');
+                                    $('#selected_category').addClass('clsDisableBtn');
+                                    $('#price').attr('disabled','disabled');
+                                    $('#price').addClass('clsDisableBtn');
+                                    $('#itemDescription').attr('disabled','disabled');
+                                    $('#itemDescription').addClass('clsDisableBtn');
+                                    $('#selectedColorCode').attr('disabled','disabled');
+                                    //$('#selectedColorCode').addClass('clsDisableBtn');
+
+                                    $(location).attr('href', '{{.MobOrPcHomeBtn}}/get-item')                           //Item added, reload blank new item page
+                                }
+                                else {                                                              //Change status to error if back end returned error on adding item
+                                    $("#warningTitle").text("Error");
+                                    $('#warningMsg').text(data);
+                                    $("#dlgHeader").addClass("btn-danger");
+                                    $("#dlgHeader").removeClass("btn-success");
+                                    $("#dlgProgressSpinner").hide();
+                                    $("#dlg-btn").show();
+                                }
+                            }
+                        });
+
                     });
 
                     $.fn.setCursorPosition = function(pos) {                    //This function is supposed to handle what happens
-                      this.each(function(index, elem) {                         //when the price box is clicked, for setting the
-                        if (elem.setSelectionRange) {                           //cursor, but needs work
-                          elem.setSelectionRange(pos, pos);
-                        } else if (elem.createTextRange) {
-                          var range = elem.createTextRange();
-                          range.collapse(true);
-                          range.moveEnd('character', pos);
-                          range.moveStart('character', pos);
-                          range.select();
-                        }
-                      });
-                      return this;
+                        this.each(function(index, elem) {                         //when the price box is clicked, for setting the
+                            if (elem.setSelectionRange) {                           //cursor, but needs work
+                                elem.setSelectionRange(pos, pos);
+                            } else if (elem.createTextRange) {
+                                var range = elem.createTextRange();
+                                range.collapse(true);
+                                range.moveEnd('character', pos);
+                                range.moveStart('character', pos);
+                                range.select();
+                            }
+                        });
+                        return this;
                     };
 
 		});

@@ -528,16 +528,14 @@
                         var pageURL=window.location.href.split("/");
 
                         if (data == "Logout") {                         //Logout completed on server side
-
-
                             $(location).attr('href', "/"+pageURL[3]);
                         }
                     }
                 });
             });
-
 		});
 	</script>
+
 
 
 	<style>
