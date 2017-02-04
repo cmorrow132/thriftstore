@@ -73,6 +73,7 @@ var (
 
 	//DB Names
 	OPERATING_DB	string
+	INVENTORY_DB	string
 	CATEGORY_DB    string
 	DISCOUNT_DB    string
 	BARCODE_DB     string
@@ -95,6 +96,7 @@ func setVars() {
 	copyrightMsg = "Copyright &copy 2017 Christopher Morrow"
 
 	OPERATING_DB = "thriftstore"
+	INVENTORY_DB = "INVENTORY_CD"
 	CATEGORY_DB = "CATEGORY_CD"
 	DISCOUNT_DB = "DISCOUNT_CD"
 	BARCODE_DB = "BARCODE_CD"
@@ -663,7 +665,10 @@ func printBarCode(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	time.Sleep(2 * time.Second)
 	fmt.Fprintf(w, "Success")
 }
-func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+
+func configProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+
+	productType:=r.PostFormValue("config")
 
 	dbQuery:=""
 
@@ -686,7 +691,11 @@ func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	}
 	defer db.Close()
 
-	dbQuery="insert into INVENTORY_CD values(DEFAULT," + frmCategory + "," +frmColorCode + ",'" + frmDescription + "'," + frmPrice + ",'" + frmBarcode + "')"
+	if productType=="new" {
+		dbQuery = "insert into " + INVENTORY_DB + " values(DEFAULT," + frmCategory + "," + frmColorCode + ",'" + frmDescription + "'," + frmPrice + ",'" + frmBarcode + "')"
+	} else {
+		dbQuery = "update " + INVENTORY_DB + " SET category=" + frmCategory + ",discount=" + frmColorCode + ",description='" + frmDescription + "',price=" + frmPrice +" WHERE barcode='" + frmBarcode +"'"
+	}
 
 	stmt, err := db.Prepare(dbQuery)
 	if err != nil {
@@ -700,22 +709,96 @@ func addProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		return
 	}
 
-	dbQuery="insert into BARCODE_CD values(DEFAULT,'" + frmBarcode + "')"
+	if productType=="new" {
+		dbQuery = "insert into BARCODE_CD values(DEFAULT,'" + frmBarcode + "')"
 
-	stmt, err = db.Prepare(dbQuery)
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
-		return
-	}
+		stmt, err = db.Prepare(dbQuery)
+		if err != nil {
+			fmt.Fprintf(w, err.Error())
+			return
+		}
 
-	_, err = stmt.Exec()
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
-		return
+		_, err = stmt.Exec()
+		if err != nil {
+			fmt.Fprintf(w, err.Error())
+			return
+		}
 	}
 
 	time.Sleep(2 * time.Second)
 	fmt.Fprintf(w, "Success")
+
+}
+
+func lookupItem(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	bCodeID:=r.PostFormValue("bcode")
+	var category,catName,discount,description,price,colorcode string
+	returnResponse:="Error: Item not found"
+
+	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
+	if err != nil {
+		fmt.Fprintf(w,"Error: Could not open the database")
+		return
+	}
+	defer db.Close()
+
+	dbQuery:="select category,discount,description,price from " + INVENTORY_DB + " WHERE barcode='" + bCodeID + "'"
+
+	rows, err := db.Query(dbQuery)
+	defer rows.Close()
+
+	if err!=nil {
+		fmt.Fprintf(w,"Error: " + err.Error())
+		return
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&category, &discount, &description, &price)
+		if err != nil {
+			fmt.Fprintf(w, "Error: "+err.Error())
+			return
+		}
+		returnResponse=category + "|" + discount + "|" + description + "|" + price
+	}
+
+	if returnResponse!="Error: Item not found" {
+		dbQuery="select colorcode from " + DISCOUNT_DB + " WHERE id=" + discount
+		rows, err = db.Query(dbQuery)
+		defer rows.Close()
+
+		if err!=nil {
+			fmt.Fprintf(w, "Error: "+err.Error())
+			return
+		}
+		for rows.Next() {
+			err = rows.Scan(&colorcode)
+			if err != nil {
+				fmt.Fprintf(w, "Error: "+err.Error())
+				return
+			}
+			returnResponse += "|" + colorcode
+		}
+
+		dbQuery="select name from " + CATEGORY_DB + " WHERE id=" + category
+		rows, err = db.Query(dbQuery)
+		defer rows.Close()
+
+		if err!=nil {
+			fmt.Fprintf(w, "Error: "+err.Error())
+			return
+		}
+		for rows.Next() {
+			err = rows.Scan(&catName)
+			if err != nil {
+				fmt.Fprintf(w, "Error: "+err.Error())
+				return
+			}
+			returnResponse += "|" + catName
+		}
+
+	}
+
+	fmt.Fprintf(w,returnResponse)
 
 }
 
@@ -1309,7 +1392,8 @@ func main() {
 	router.GET("/m/:page", pageHandler) //Allows for specific pages using json format
 	router.GET("/front", pageHandler)
 	router.GET("/front/:page", pageHandler)
-	router.POST("/addProduct", addProduct)     //Ajax call to add new item
+	router.POST("/configProduct", configProduct)     //Ajax call to add new item
+	router.POST("/lookupItem", lookupItem)	   //Used by the barcode scan function on item.tpl
 	router.POST("/mkBarCode", generateBarCode) //Ajax call to generate new bar codes
 	router.POST("/login", doLogin)
 	router.POST("/logout", doLogout)
