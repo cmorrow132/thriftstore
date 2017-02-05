@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96bf5a10-1fce-405e-9089-6e41b5ae84dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/m-templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/m-templates/item.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/pos-templates/item.tpl" afterPath="$PROJECT_DIR$/back-end/pos-templates/item.tpl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/engine.go" afterPath="$PROJECT_DIR$/back-end/engine.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="engine.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="engine.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/back-end/engine.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="39">
-              <caret line="670" column="46" lean-forward="false" selection-start-line="670" selection-start-column="46" selection-end-line="670" selection-end-column="46" />
+            <state relative-caret-position="-62">
+              <caret line="614" column="10" lean-forward="false" selection-start-line="614" selection-start-column="10" selection-end-line="614" selection-end-column="10" />
               <folding>
                 <element signature="e#14#373#0" expanded="true" />
               </folding>
@@ -37,7 +35,7 @@
       <file leaf-file-name="discount-config.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/discount-config.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
+            <state relative-caret-position="502">
               <caret line="271" column="0" lean-forward="true" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#label#0;n#p#2;n#!!top" expanded="true" />
@@ -55,7 +53,7 @@
       <file leaf-file-name="main.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2040">
+            <state relative-caret-position="367">
               <caret line="136" column="187" lean-forward="false" selection-start-line="136" selection-start-column="187" selection-end-line="136" selection-end-column="187" />
               <folding />
             </state>
@@ -65,7 +63,7 @@
       <file leaf-file-name="login.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/m-templates/login.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1125">
+            <state relative-caret-position="-19">
               <caret line="75" column="15" lean-forward="false" selection-start-line="75" selection-start-column="15" selection-end-line="75" selection-end-column="15" />
               <folding />
             </state>
@@ -75,8 +73,8 @@
       <file leaf-file-name="category-config.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="3" column="12" lean-forward="false" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="41" />
+            <state relative-caret-position="45">
+              <caret line="42" column="63" lean-forward="false" selection-start-line="42" selection-start-column="54" selection-end-line="42" selection-end-column="63" />
               <folding>
                 <marker date="1485485287294" expanded="true" signature="1587:1622" ph="..." />
               </folding>
@@ -97,10 +95,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="item.tpl" pinned="false" current-in-tab="true">
+      <file leaf-file-name="item.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/m-templates/item.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-435">
+            <state relative-caret-position="-469">
               <caret line="403" column="52" lean-forward="false" selection-start-line="403" selection-start-column="52" selection-end-line="403" selection-end-column="52" />
               <folding>
                 <element signature="n#style#0;n#button#0;n#p#0;n#center#0;n#div#0;n#row#5;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -121,13 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>colorname</find>
-      <find>name</find>
-      <find>getDefaultColor</find>
-      <find>SelectedColorCode</find>
-      <find>session.Op</find>
-      <find>MaxAge</find>
-      <find>time</find>
       <find>licenseServerResponse</find>
       <find>location</find>
       <find>discountlabel</find>
@@ -151,6 +142,13 @@
       <find>getConfigDiscounts</find>
       <find>addPr</find>
       <find>ExItemApply</find>
+      <find>mkBarCode</find>
+      <find>generateBarCode</find>
+      <find>event.stopImmediatePropagation();</find>
+      <find>999999999</find>
+      <find>SAVE</find>
+      <find>No category</find>
+      <find>gener</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -197,9 +195,9 @@
         <option value="$PROJECT_DIR$/back-end/pos-templates/config.tpl" />
         <option value="$PROJECT_DIR$/back-end/m-templates/login.tpl" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/config/discount-config.tpl" />
-        <option value="$PROJECT_DIR$/back-end/engine.go" />
         <option value="$PROJECT_DIR$/back-end/pos-templates/item.tpl" />
         <option value="$PROJECT_DIR$/back-end/m-templates/item.tpl" />
+        <option value="$PROJECT_DIR$/back-end/engine.go" />
       </list>
     </option>
   </component>
@@ -633,14 +631,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/m-templates/login.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1125">
-          <caret line="75" column="15" lean-forward="false" selection-start-line="75" selection-start-column="15" selection-end-line="75" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/pos-templates/login.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -651,27 +641,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2040">
-          <caret line="136" column="187" lean-forward="false" selection-start-line="136" selection-start-column="187" selection-end-line="136" selection-end-column="187" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="3" column="12" lean-forward="false" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="41" />
-          <folding>
-            <marker date="1485485287294" expanded="true" signature="1587:1622" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/discount-config.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
+        <state relative-caret-position="502">
           <caret line="271" column="0" lean-forward="true" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#label#0;n#p#2;n#!!top" expanded="true" />
@@ -685,12 +657,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
+    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/main.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
-          <caret line="670" column="46" lean-forward="false" selection-start-line="670" selection-start-column="46" selection-end-line="670" selection-end-column="46" />
+        <state relative-caret-position="367">
+          <caret line="136" column="187" lean-forward="false" selection-start-line="136" selection-start-column="187" selection-end-line="136" selection-end-column="187" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/m-templates/login.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-19">
+          <caret line="75" column="15" lean-forward="false" selection-start-line="75" selection-start-column="15" selection-end-line="75" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/category-config.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="42" column="63" lean-forward="false" selection-start-line="42" selection-start-column="54" selection-end-line="42" selection-end-column="63" />
           <folding>
-            <element signature="e#14#373#0" expanded="true" />
+            <marker date="1485485287294" expanded="true" signature="1587:1622" ph="..." />
           </folding>
         </state>
       </provider>
@@ -708,10 +696,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/back-end/m-templates/item.tpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-435">
+        <state relative-caret-position="-469">
           <caret line="403" column="52" lean-forward="false" selection-start-line="403" selection-start-column="52" selection-end-line="403" selection-end-column="52" />
           <folding>
             <element signature="n#style#0;n#button#0;n#p#0;n#center#0;n#div#0;n#row#5;n#div#4;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-62">
+          <caret line="614" column="10" lean-forward="false" selection-start-line="614" selection-start-column="10" selection-end-line="614" selection-end-column="10" />
+          <folding>
+            <element signature="e#14#373#0" expanded="true" />
           </folding>
         </state>
       </provider>

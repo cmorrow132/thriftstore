@@ -612,7 +612,7 @@ func doLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func generateBarCode(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	category_id := r.PostFormValue("category_id")
+	//category_id := r.PostFormValue("category_id")
 	var bcode_val string
 	existing_barcode := ""
 
@@ -628,7 +628,7 @@ func generateBarCode(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	//Generate a new random bar code until there are no matches in the BARCODE_CD database
 	for {
 		//bcode_val="1002-8081-7887-1847-4059"
-		bcode_val = category_id + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000))
+		bcode_val = strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000)) + "-" + strconv.Itoa(rand.Intn(10000))
 
 		dbQuery = "select barcode from " + BARCODE_DB + " where barcode='" + bcode_val + "'"
 
