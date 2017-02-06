@@ -49,6 +49,8 @@ type PageTags struct {
 	ProdLicense	      string
 	ProdLicenseExpiry     string
 	LicenseDaysLeft	      float64
+
+	SessionID	string
 }
 
 var (
@@ -107,7 +109,7 @@ func setVars() {
 
 	licenseStatus=""
 	licenseServer = "192.168.1.190:8891"
-	maxIdleTime = 15
+	maxIdleTime = 60*1
 
 	appPort="8890"
 }
@@ -202,6 +204,8 @@ func getDefaultColor(requestId int, colorName string) (string) {
 }
 
 func getConfigDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	id:=r.PostFormValue("id")
 
 	var discountAmount string
@@ -230,6 +234,8 @@ func getConfigDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 }
 
 func saveDiscounts(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	discountType:=r.PostFormValue("type")
 	dbRequest:=""
 	dbRequest2:=""
@@ -419,6 +425,8 @@ func setAdminPwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func removePassword(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	username := r.PostFormValue("user")
 
 	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
@@ -445,6 +453,8 @@ func removePassword(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func removeUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	username := r.PostFormValue("user")
 
 	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
@@ -482,6 +492,8 @@ func removeUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func addUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	username := r.PostFormValue("user")
 
 	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
@@ -588,7 +600,7 @@ func doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		session.Values["password"] = password
 
 		session.Options = &sessions.Options{
-			MaxAge:   0,
+			MaxAge:   maxIdleTime,
 			HttpOnly: true,
 		}
 
@@ -611,7 +623,21 @@ func doLogout(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "Logout")
 }
 
+func heartbeat(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	session, err := sessionStore.Get(r, "auth")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+
+	session.Options.MaxAge = maxIdleTime
+	session.Save(r, w);
+
+	return
+}
+
 func generateBarCode(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	//category_id := r.PostFormValue("category_id")
 	var bcode_val string
 	existing_barcode := ""
@@ -662,11 +688,14 @@ func generateBarCode(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 }
 
 func printBarCode(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	heartbeat(w,r,p)	//Extend session life
+
 	time.Sleep(2 * time.Second)
 	fmt.Fprintf(w, "Success")
 }
 
 func configProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	heartbeat(w,r,p)	//Extend session life
 
 	productType:=r.PostFormValue("config")
 
@@ -731,6 +760,8 @@ func configProduct(w http.ResponseWriter, r *http.Request, p httprouter.Params) 
 }
 
 func lookupItem(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	heartbeat(w,r,p)	//Extend session life
+
 	bCodeID:=r.PostFormValue("bcode")
 	var category,catName,discount,description,price,colorcode string
 	returnResponse:="Error: Item not found"
@@ -849,6 +880,8 @@ func checkPerms(username string, groupName string) bool {
 }
 
 func getUserDetails(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	username := r.PostFormValue("user")
 	var groups string
 
@@ -898,6 +931,8 @@ func isUserPasswordSet(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 }
 
 func saveUserDetails(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	user := r.PostFormValue("user")
 	groups := r.PostFormValue("groups");
 	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
@@ -922,6 +957,8 @@ func saveUserDetails(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 }
 
 func getSystemGroups(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	var groups, groupList string
 
 	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
@@ -950,6 +987,8 @@ func getSystemGroups(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 }
 
 func saveCategories(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	heartbeat(w,r,ps)	//Extend session life
+
 	removeCategories := r.PostFormValue("removeCategories")
 	addCategories := r.PostFormValue("addCategories")
 
@@ -1004,6 +1043,8 @@ func getConfig(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var users, groups, groupDescription string
 
 	pageRequest := ps.ByName("page")
+
+	heartbeat(w,r,ps)	//Extend session life
 
 	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 	if err != nil {
@@ -1191,6 +1232,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	if (session.Values["username"] == nil) {
 		//Not logged in, redirect to the login page
 		templateName = "login.tpl"
+	} else {
+		heartbeat(w,r,ps)
 	}
 
 	if(licenseStatus != "valid") {
