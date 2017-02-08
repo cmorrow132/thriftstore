@@ -54,7 +54,7 @@
 
                    var postData = "password\=" + password;
                    $.ajax({                                                                    //Send data to the back end
-                       url: '/setAdminPwd',
+                       url: '/systemSetup',
                        type: 'post',
                        dataType: 'text',
                        data: postData,

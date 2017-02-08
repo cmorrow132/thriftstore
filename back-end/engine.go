@@ -109,7 +109,7 @@ func setVars() {
 
 	licenseStatus=""
 	licenseServer = "192.168.1.190:8891"
-	maxIdleTime = 60*1
+	maxIdleTime = 60*5
 
 	appPort="8890"
 }
@@ -135,6 +135,7 @@ func getDBAccess() {
 }
 
 func getCategories() (string) {
+
 	var category_id int
 	var categoryName, dbQuery string
 	dbResults := ""
@@ -386,10 +387,18 @@ func getColors() (string) {
 	return dbResults
 }
 
-func setAdminPwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	adminPassword := r.PostFormValue("password")
+func systemSetup(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	setup_session,_:= sessionStore.Get(r, "setup")
 
-	db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
+	if setup_session.Values["setup_step"]=="step1" {
+		adminPassword := r.PostFormValue("password")
+		setup_session.Values["admin_password"]=adminPassword
+		setup_session.Options.MaxAge=maxIdleTime
+	}
+
+	setup_session.Save(r, w)
+
+	/*db, err := sql.Open("mysql", dbLoginString+"@/"+OPERATING_DB)
 
 	if err != nil {
 		fmt.Fprintf(w, "Error: Could not open the database")
@@ -418,8 +427,7 @@ func setAdminPwd(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	_, err = stmt.Exec()
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
-	}
-
+	}*/
 	fmt.Fprintf(w, "Success")
 
 }
@@ -1247,8 +1255,27 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	} else if (checkSetupComplete() == false) {
 		//Setup has not been completed, load that page
-		templateName = "first_setup.tpl"
-		templatePath = "sys-templates/first_setup.tpl"
+		setup_session,_:= sessionStore.Get(r, "setup")
+		if setup_session.Values["setup_step"]==nil {
+			templateName = "first_setup_pg1.tpl"
+			templatePath = "sys-templates/first_setup_pg1.tpl"
+			setup_session.Values["setup_step"]="step1"
+		} else if setup_session.Values["setup_step"]=="step1" {
+			templateName = "first_setup_pg2.tpl"
+			templatePath = "sys-templates/first_setup_pg2.tpl"
+			setup_session.Values["setup_step"]="step2"
+		} else if setup_session.Values["setup_step"]=="step2" {
+			templateName = "first_setup_pg3.tpl"
+			templatePath = "sys-templates/first_setup_pg3.tpl"
+			setup_session.Values["setup_step"]="step3"
+		}
+
+		setup_session.Options = &sessions.Options{
+			MaxAge:   maxIdleTime,
+			HttpOnly: true,
+		}
+
+		setup_session.Save(r, w)
 
 	} else {
 		if (mobile) {
@@ -1441,7 +1468,7 @@ func main() {
 	router.POST("/login", doLogin)
 	router.POST("/logout", doLogout)
 	router.POST("/printCode", printBarCode)
-	router.POST("/setAdminPwd", setAdminPwd)
+	router.POST("/systemSetup", systemSetup)
 	router.POST("/chPwd", chPwd)
 	router.POST("/removePassword", removePassword)
 	router.POST("/removeUser", removeUser)
