@@ -1264,6 +1264,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 			templateName = "first_setup_pg2.tpl"
 			templatePath = "sys-templates/first_setup_pg2.tpl"
 			setup_session.Values["setup_step"]="step2"
+
+
 		} else if setup_session.Values["setup_step"]=="step2" {
 			templateName = "first_setup_pg3.tpl"
 			templatePath = "sys-templates/first_setup_pg3.tpl"
