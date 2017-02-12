@@ -2,9 +2,53 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96bf5a10-1fce-405e-9089-6e41b5ae84dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/thriftstore.iml" afterPath="$PROJECT_DIR$/.idea/thriftstore.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/license_server/login.tpl" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/license_server" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/back-end/license_server.go" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/built-jar.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/images/fa-cog.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/thriftstore/license/server/management/LoginFXML.fxml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/thriftstore/license/server/management/LoginFXMLController.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/thriftstore/license/server/management/MainApp.fxml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/thriftstore/license/server/management/MainAppController.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/thriftstore/license/server/management/SQLAccess.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/build/classes/thriftstore/license/server/management/ThriftstoreLicenseServerManagement.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/Thriftstore License Server Management.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/Thriftstore License Server Management.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/Thriftstore License Server Management.jnlp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/lib/mysql-connector-java-5.1.40-bin.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/dtjava.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/error.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/get_java.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/get_javafx.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/javafx-chrome.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/javafx-loading-100x100.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/javafx-loading-25x25.gif" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/upgrade_java.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/dist/web-files/upgrade_javafx.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/manifest.mf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/build-impl.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/configs/Run_as_WebStart.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/configs/Run_in_Browser.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/genfiles.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/jfx-impl.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/private/configs/Run_as_WebStart.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/private/configs/Run_in_Browser.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/private/private.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/private/private.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/private/retriever/catalog.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/private/retriever/www.oracle.com/technetwork/java/javase/overview/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/project.properties" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/nbproject/project.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/images/fa-cog.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/thriftstore/license/server/management/LoginFXML.fxml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/thriftstore/license/server/management/LoginFXMLController.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/thriftstore/license/server/management/MainApp.fxml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/thriftstore/license/server/management/MainAppController.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/thriftstore/license/server/management/SQLAccess.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client-apps/license-server-app_java/src/thriftstore/license/server/management/ThriftstoreLicenseServerManagement.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/back-end/engine.go" afterPath="$PROJECT_DIR$/back-end/engine.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -57,8 +101,8 @@
       <file leaf-file-name="engine.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/engine.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="1267" column="0" lean-forward="false" selection-start-line="1267" selection-start-column="0" selection-end-line="1267" selection-end-column="0" />
+            <state relative-caret-position="212">
+              <caret line="398" column="24" lean-forward="false" selection-start-line="398" selection-start-column="14" selection-end-line="398" selection-end-column="24" />
               <folding>
                 <element signature="e#14#373#0" expanded="true" />
               </folding>
@@ -66,36 +110,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="thriftstore.CREDENTIALS" pinned="false" current-in-tab="true">
-        <entry file="dbDummy://dbtable:/245d63f4/386342a7-12e7-40ef-a525-e858d618782a/thriftstore.CREDENTIALS">
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-            <state>
-              <filtering enabled="true" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="first_setup_pg3.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg3.tpl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="141" column="0" lean-forward="false" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="license_server.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/back-end/license_server.go">
+        <entry file="file://$PROJECT_DIR$/license_server/license_server.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1120">
+              <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+              <folding>
+                <element signature="e#14#338#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.tpl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/license_server/main.tpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="9" lean-forward="false" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.tpl" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/license_server/login.tpl">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <caret line="4" column="42" lean-forward="false" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="variables.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/back-end/variables.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -104,7 +155,7 @@
       <file leaf-file-name="first_setup_pg1.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg1.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-840">
+            <state relative-caret-position="840">
               <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
               <folding />
             </state>
@@ -114,7 +165,7 @@
       <file leaf-file-name="first_setup_pg2.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg2.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="41">
+            <state relative-caret-position="465">
               <caret line="31" column="40" lean-forward="false" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="40" />
               <folding />
             </state>
@@ -124,8 +175,8 @@
       <file leaf-file-name="license-config.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/license-config.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="59" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="39" selection-end-column="9" />
+            <state relative-caret-position="525">
+              <caret line="35" column="17" lean-forward="false" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -143,8 +194,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>thriftstore</find>
-      <find>selectedColorCode</find>
       <find>else if($('#bCodeID').val()==&quot;&quot; || $('#selected_category').val()==&quot;&quot;</find>
       <find>homeButton</find>
       <find>addProduct</find>
@@ -173,6 +222,8 @@
       <find>MaxAge</find>
       <find>systemSetup</find>
       <find>checkSetupComplete</find>
+      <find>rand</find>
+      <find>session.sa</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -220,12 +271,16 @@
         <option value="$PROJECT_DIR$/back-end/pos-templates/item.tpl" />
         <option value="$PROJECT_DIR$/back-end/m-templates/item.tpl" />
         <option value="$PROJECT_DIR$/back-end/pos-templates/main.tpl" />
-        <option value="$PROJECT_DIR$/back-end/license_server.go" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/first_setup_pg1.tpl" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/first_setup_pg2.tpl" />
         <option value="$PROJECT_DIR$/back-end/sys-templates/first_setup_pg3.tpl" />
         <option value="dbtable:/245d63f4/386342a7-12e7-40ef-a525-e858d618782a/thriftstore.BARCODE_CD" />
         <option value="$PROJECT_DIR$/back-end/engine.go" />
+        <option value="$PROJECT_DIR$/back-end/license_server.go" />
+        <option value="$PROJECT_DIR$/license_server/login.tpl.html" />
+        <option value="$PROJECT_DIR$/license_server/main.tpl.html" />
+        <option value="$PROJECT_DIR$/license_server/license_server.go" />
+        <option value="$PROJECT_DIR$/license_server/login.tpl" />
       </list>
     </option>
   </component>
@@ -234,6 +289,9 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/client-apps/license-server-app_electron/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-1" />
@@ -256,6 +314,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -266,6 +325,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="thriftstore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thriftstore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thriftstore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="license_server" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -303,7 +376,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -382,18 +454,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="24" width="1442" height="854" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22222222" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3264463" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890856" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991803" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -434,16 +506,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/back-end/mobile.go" />
-    <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl" />
-    <entry file="file://$PROJECT_DIR$/back-end/templates/temp" />
-    <entry file="file://$PROJECT_DIR$/../go/projects/github-goprojects/go-templates/address_book.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="990">
-          <caret line="66" column="27" lean-forward="false" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/mobile.go" />
     <entry file="file://$PROJECT_DIR$/back-end/templates/item.tpl" />
     <entry file="file://$PROJECT_DIR$/back-end/templates/temp" />
@@ -548,13 +610,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/login.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="82" column="23" lean-forward="true" selection-start-line="80" selection-start-column="12" selection-end-line="84" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/pos-templates/first_login.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-525">
@@ -611,26 +666,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/license_server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/back-end/pos-templates/config.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-5340">
           <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/license-config.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="59" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="39" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -681,33 +720,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="141" column="0" lean-forward="false" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg1.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-840">
-          <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg2.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="31" column="40" lean-forward="false" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="1267" column="0" lean-forward="false" selection-start-line="1267" selection-start-column="0" selection-end-line="1267" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#373#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -715,12 +727,88 @@
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/license_server.go" />
+    <entry file="file://$PROJECT_DIR$/back-end/variables.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg1.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/first_setup_pg2.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="40" lean-forward="false" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/sys-templates/config/license-config.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="17" lean-forward="false" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/pos-templates/login.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="77" column="17" lean-forward="true" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/license_server/main.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="9" lean-forward="false" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/back-end/engine.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="398" column="24" lean-forward="false" selection-start-line="398" selection-start-column="14" selection-end-line="398" selection-end-column="24" />
+          <folding>
+            <element signature="e#14#373#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/license_server/license_server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1120">
+          <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+          <folding>
+            <element signature="e#14#338#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/license_server/login.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="42" lean-forward="false" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
+          <folding />
         </state>
       </provider>
     </entry>
