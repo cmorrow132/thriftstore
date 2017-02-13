@@ -1232,6 +1232,13 @@ func pageHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		applyBtnName = "ExItemApply"
 		pageType = "exItem"
 		itemPrice = "$";
+	case "pos":
+		pageTitle="POS"
+		if (checkPerms(loggedInUser, "pos") == false) {
+			templateName = "access_denied.tpl"
+		} else {
+			templateName = "pos.tpl"
+		}
 	default:
 		pageTitle = "Inventory Management"
 		templateName = "main.tpl"
